@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RockGym Fitness Coaching — منصة العملاء</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0c0d; --bg-alt:#131315; --line:#2a2a2e; --ink:#f2efe9; --muted:#9a9aa2;
+    --accent:#ff4e2c; --accent-glow:rgba(255,78,44,.35);
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:'Cairo',system-ui,sans-serif; line-height:1.7; min-height:100vh;
+        padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); }
+  button,input,textarea,select{ font-family:inherit; }
+  a{ color:inherit; text-decoration:none; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  [hidden]{ display:none !important; }
+  .logo{ font-weight:900; font-size:1.4rem; letter-spacing:.5px; }
+  .logo span{ color:var(--accent); }
+
+  /* Login */
+  .login{ min-height:100vh; display:grid; place-items:center; padding:24px; }
+  .login-box{ width:100%; max-width:380px; }
+  .login-box .logo{ font-size:2rem; margin-bottom:6px; }
+  .login-box h1{ font-size:1.5rem; font-weight:800; margin:0 0 28px; color:var(--muted); }
+  .field{ display:block; margin-bottom:22px; color:var(--muted); font-size:.95rem; }
+  .field input, .field textarea, .field select{
+    display:block; width:100%; background:transparent; border:0; border-bottom:1.5px solid var(--line);
+    color:var(--ink); font-size:1.05rem; padding:8px 2px 12px; border-radius:0; outline:none; transition:border-color .2s;
+  }
+  .field select option{ background:var(--bg-alt); }
+  .field input:focus, .field textarea:focus, .field select:focus{ border-bottom-color:var(--accent); }
+  .field textarea{ resize:vertical; }
+  .btn{
+    background:var(--accent); color:#0c0c0d; border:0; border-radius:6px; cursor:pointer;
+    font-weight:800; font-size:1rem; padding:12px 26px; transition:box-shadow .25s, transform .25s;
+  }
+  .btn:hover{ box-shadow:0 0 28px 2px var(--accent-glow); transform:translateY(-2px); }
+  .btn:disabled{ opacity:.5; cursor:not-allowed; transform:none; box-shadow:none; }
+  .btn-sm{ padding:8px 16px; font-size:.9rem; }
+  .btn-full{ width:100%; }
+  .err{ color:var(--accent); font-weight:700; margin:0 0 14px; }
+  .cfg-warn{ margin:24px 0 0; padding:14px; border:1px dashed var(--accent); border-radius:8px; color:var(--ink); font-size:.9rem; }
+
+  /* Shell */
+  .topbar{ position:sticky; top:0; z-index:20; background:rgba(12,12,13,.92); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+  .topbar .in{ max-width:1080px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .who{ display:flex; align-items:center; gap:14px; }
+  .who span{ color:var(--muted); font-size:.95rem; }
+  .link-btn{ background:transparent; border:1.5px solid var(--line); color:var(--ink); font-weight:700; font-size:.85rem; padding:8px 14px; border-radius:6px; cursor:pointer; }
+  .link-btn:hover{ border-color:var(--accent); }
+  .link-btn.danger:hover{ border-color:#ff5a5a; color:#ff5a5a; }
+  .tabs{ max-width:1080px; margin:0 auto; padding:0 20px; display:flex; gap:4px; overflow-x:auto; border-bottom:1px solid var(--line); }
+  .tab{ background:transparent; border:0; color:var(--muted); font-weight:700; font-size:1rem; cursor:pointer; padding:16px 18px; white-space:nowrap; border-bottom:3px solid transparent; margin-bottom:-1px; }
+  .tab:hover{ color:var(--ink); }
+  .tab[aria-selected="true"]{ color:var(--ink); border-bottom-color:var(--accent); }
+  main{ max-width:1080px; margin:0 auto; padding:32px 20px 80px; }
+  h2{ font-size:1.6rem; font-weight:800; margin:0 0 6px; }
+  h3{ margin:0; }
+  .sub{ color:var(--muted); margin:0 0 28px; }
+  .empty{ border:1px dashed var(--line); border-radius:8px; padding:28px; color:var(--muted); max-width:720px; }
+
+  /* Videos */
+  .videos{ display:grid; grid-template-columns:1.6fr 1fr; gap:28px; align-items:start; }
+  .player{ aspect-ratio:16/9; background:#000; border:1px solid var(--line); border-radius:8px; display:grid; place-items:center; text-align:center; overflow:hidden; }
+  .player video{ width:100%; height:100%; display:block; background:#000; }
+  .player .ext{ padding:20px; }
+  .now{ margin:16px 0 0; font-size:1.2rem; font-weight:800; }
+  .now-sub{ color:var(--muted); margin:2px 0 0; }
+  .playlist{ list-style:none; margin:0; padding:0; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  .playlist button{ width:100%; text-align:start; background:var(--bg); border:0; border-bottom:1px solid var(--line); color:var(--ink); padding:14px 16px; cursor:pointer; display:flex; justify-content:space-between; gap:12px; align-items:center; }
+  .playlist li:last-child button{ border-bottom:0; }
+  .playlist button:hover{ background:var(--bg-alt); }
+  .playlist button[aria-current="true"]{ background:var(--bg-alt); box-shadow:inset -3px 0 0 var(--accent); }
+  .playlist .t{ font-weight:700; }
+  .playlist .d{ color:var(--muted); font-size:.85rem; white-space:nowrap; }
+  .group-h{ padding:10px 16px; background:var(--bg-alt); color:var(--muted); font-size:.85rem; font-weight:700; border-bottom:1px solid var(--line); }
+
+  /* Docs */
+  .docs{ border:1px solid var(--line); border-radius:8px; overflow:hidden; max-width:720px; }
+  .doc{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 20px; border-bottom:1px solid var(--line); background:var(--bg); }
+  .doc:last-child{ border-bottom:0; }
+  .doc h3{ font-size:1.05rem; font-weight:800; }
+  .doc p{ margin:2px 0 0; color:var(--muted); font-size:.9rem; }
+
+  /* Progress */
+  .stats{ display:grid; grid-template-columns:repeat(3,1fr); border:1px solid var(--line); border-radius:8px; overflow:hidden; margin-bottom:28px; }
+  .stat{ padding:18px 20px; border-inline-end:1px solid var(--line); background:var(--bg); }
+  .stat:last-child{ border-inline-end:0; }
+  .stat .k{ color:var(--muted); font-size:.9rem; }
+  .stat .v{ font-size:1.9rem; font-weight:900; line-height:1.3; }
+  .stat .v small{ font-size:.95rem; color:var(--muted); font-weight:600; }
+  .stat .v.good{ color:var(--accent); }
+  .chart{ border:1px solid var(--line); border-radius:8px; padding:20px; background:var(--bg-alt); overflow-x:auto; }
+  .chart h3{ margin:0 0 12px; font-size:1.05rem; }
+  .chart svg{ display:block; width:100%; min-width:520px; height:auto; }
+  .goal{ margin-top:28px; max-width:720px; }
+  .goal .row{ display:flex; justify-content:space-between; margin-bottom:8px; font-weight:700; }
+  .bar{ height:10px; background:var(--line); border-radius:99px; overflow:hidden; }
+  .bar i{ display:block; height:100%; background:var(--accent); border-radius:99px; }
+
+  /* History */
+  .hist{ list-style:none; margin:0 6px 0 0; padding:0; max-width:720px; border-inline-start:2px solid var(--line); margin-inline-start:6px; margin-inline-end:0; }
+  .hist li{ position:relative; padding:0 26px 30px; }
+  .hist li::before{ content:""; position:absolute; inset-inline-start:-7px; top:8px; width:12px; height:12px; border-radius:50%; background:var(--accent); }
+  .hist .when{ color:var(--muted); font-size:.85rem; }
+  .hist h3{ font-size:1.05rem; font-weight:800; }
+  .hist p{ margin:4px 0 0; color:var(--muted); white-space:pre-line; }
+
+  /* Admin */
+  .admin-pick{ max-width:420px; margin-bottom:28px; }
+  .admin-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  .box{ border:1px solid var(--line); border-radius:8px; padding:20px; background:var(--bg-alt); }
+  .box h3{ font-size:1.05rem; font-weight:800; margin-bottom:16px; }
+  .box .field{ margin-bottom:16px; }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .mini{ list-style:none; margin:18px 0 0; padding:0; border-top:1px solid var(--line); }
+  .mini li{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); font-size:.92rem; }
+  .mini .m{ color:var(--muted); font-size:.82rem; }
+  .how{ border:1px solid var(--line); border-radius:8px; padding:16px 18px; margin-bottom:28px; color:var(--muted); font-size:.92rem; max-width:720px; }
+  .how b{ color:var(--ink); }
+
+  .toast{ position:fixed; bottom:calc(20px + env(safe-area-inset-bottom,0px)); left:50%; transform:translateX(-50%); background:var(--ink); color:#0c0c0d; font-weight:700; padding:12px 20px; border-radius:8px; z-index:50; max-width:90vw; text-align:center; }
+  .toast.bad{ background:#ff5a5a; }
+
+  @media (max-width:820px){
+    .videos, .admin-grid{ grid-template-columns:1fr; }
+    .stats{ grid-template-columns:1fr; }
+    .stat{ border-inline-end:0; border-bottom:1px solid var(--line); }
+    .stat:last-child{ border-bottom:0; }
+    .who span{ display:none; }
+    .doc{ flex-direction:column; align-items:flex-start; }
+  }
+  @media (prefers-reduced-motion:reduce){ *{ transition:none !important; } }
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<section class="login" id="loginView">
+  <form class="login-box" id="loginForm" novalidate>
+    <div class="logo">ROCK<span>GYM</span></div>
+    <h1>دخول العملاء</h1>
+    <label class="field">اسم المستخدم
+      <input id="u" type="text" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" style="text-align:right">
+    </label>
+    <label class="field">كلمة المرور
+      <input id="p" type="password" autocomplete="current-password" dir="ltr" style="text-align:right">
+    </label>
+    <p class="err" id="loginErr" hidden></p>
+    <button class="btn btn-full" type="submit" id="loginBtn">دخول</button>
+    <p class="cfg-warn" id="cfgWarn" hidden>المنصة لسه مش موصّلة بـ Supabase. حط الـ URL والـ Key في أول السكريبت (SUPABASE_URL و SUPABASE_ANON_KEY).</p>
+  </form>
+</section>
+
+<!-- ============ APP ============ -->
+<div id="appView" hidden>
+  <header class="topbar">
+    <div class="in">
+      <div class="logo">ROCK<span>GYM</span></div>
+      <div class="who"><span id="hello"></span><button class="link-btn" id="logout" type="button">تسجيل خروج</button></div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="أقسام المنصة" id="tabsBar"></div>
+  </header>
+
+  <main>
+    <!-- Client panels -->
+    <section id="p-videos" role="tabpanel" hidden>
+      <h2>فيديوهاتي</h2>
+      <p class="sub">شروحات التمارين اللي كابتنك اختارها لخطتك.</p>
+      <div id="videosBody"></div>
+    </section>
+
+    <section id="p-plans" role="tabpanel" hidden>
+      <h2>أنظمتي</h2>
+      <p class="sub">ملفات خطتك. بتتحدث لما الكابتن يعدّل عليك.</p>
+      <div id="plansBody"></div>
+    </section>
+
+    <section id="p-progress" role="tabpanel" hidden>
+      <h2>تطوري</h2>
+      <p class="sub">وزنك وقياساتك من أول يوم لحد النهارده.</p>
+      <div id="progressBody"></div>
+    </section>
+
+    <section id="p-history" role="tabpanel" hidden>
+      <h2>تاريخي معانا</h2>
+      <p class="sub">كل مراجعة أسبوعية وملاحظات الكابتن.</p>
+      <div id="historyBody"></div>
+    </section>
+
+    <!-- Coach panel -->
+    <section id="p-admin" role="tabpanel" hidden>
+      <h2>لوحة الكابتن</h2>
+      <div class="how">
+        <b>عميل جديد؟</b> اعمله حساب من Supabase: Authentication ← Users ← Add user، والإيميل يبقى <b>اسمه@rockgym.app</b> وحدد Auto Confirm. هيظهر هنا لوحده في القايمة.
+      </div>
+      <label class="field admin-pick">اختار العميل
+        <select id="clientSel"></select>
+      </label>
+
+      <div id="adminBody" hidden>
+        <div class="admin-grid">
+
+          <div class="box">
+            <h3>بيانات العميل</h3>
+            <form id="fProfile">
+              <label class="field">الاسم اللي هيظهر له<input name="full_name" type="text"></label>
+              <div class="row2">
+                <label class="field">وزن البداية (كجم)<input name="start_weight" type="number" step="0.1" inputmode="decimal"></label>
+                <label class="field">الوزن المستهدف (كجم)<input name="goal_weight" type="number" step="0.1" inputmode="decimal"></label>
+              </div>
+              <button class="btn btn-sm" type="submit">حفظ</button>
+            </form>
+          </div>
+
+          <div class="box">
+            <h3>تسجيل قياس أسبوعي</h3>
+            <form id="fMeasure">
+              <div class="row2">
+                <label class="field">التاريخ<input name="week_date" type="date" required></label>
+                <label class="field">الوزن (كجم)<input name="weight" type="number" step="0.1" inputmode="decimal" required></label>
+              </div>
+              <label class="field">محيط الوسط (سم)<input name="waist" type="number" step="0.1" inputmode="decimal"></label>
+              <button class="btn btn-sm" type="submit">إضافة</button>
+            </form>
+            <ul class="mini" id="listMeasure"></ul>
+          </div>
+
+          <div class="box">
+            <h3>إضافة فيديو</h3>
+            <form id="fVideo">
+              <label class="field">عنوان الفيديو<input name="title" type="text" required></label>
+              <div class="row2">
+                <label class="field">المجموعة (مثلا: تمارين الظهر)<input name="group_name" type="text" placeholder="عام"></label>
+                <label class="field">المدة (مثلا 5:30)<input name="duration" type="text" dir="ltr" style="text-align:right"></label>
+              </div>
+              <label class="field">لينك الفيديو (Cloudinary)<input name="url" type="url" required dir="ltr" style="text-align:right" placeholder="https://res.cloudinary.com/..."></label>
+              <button class="btn btn-sm" type="submit">إضافة</button>
+            </form>
+            <ul class="mini" id="listVideo"></ul>
+          </div>
+
+          <div class="box">
+            <h3>إضافة ملف PDF</h3>
+            <form id="fDoc">
+              <label class="field">اسم الملف<input name="title" type="text" required></label>
+              <label class="field">ملاحظة قصيرة (اختياري)<input name="note" type="text" placeholder="اتحدث النهارده"></label>
+              <label class="field">لينك الملف<input name="url" type="url" required dir="ltr" style="text-align:right" placeholder="https://..."></label>
+              <button class="btn btn-sm" type="submit">إضافة</button>
+            </form>
+            <ul class="mini" id="listDoc"></ul>
+          </div>
+
+          <div class="box" style="grid-column:1/-1">
+            <h3>مراجعة أسبوعية / ملاحظة للعميل</h3>
+            <form id="fReview">
+              <div class="row2">
+                <label class="field">الأسبوع (مثلا: الأسبوع 3)<input name="week_label" type="text"></label>
+                <label class="field">العنوان (مثلا: نزلت 0.9 كجم)<input name="title" type="text" required></label>
+              </div>
+              <label class="field">ملاحظاتك<textarea name="body" rows="3"></textarea></label>
+              <button class="btn btn-sm" type="submit">إضافة</button>
+            </form>
+            <ul class="mini" id="listReview"></ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(function () {
+  /* ====== حط بيانات مشروعك هنا (من Supabase: Project Settings ← API) ====== */
+  var SUPABASE_URL = "https://eijxjjbzawzqulfreihf.supabase.co";
+  var SUPABASE_ANON_KEY = "sb_publishable_pQBpK-yPFTimcV021IIVpw_BFsYrBKm";
+  var EMAIL_DOMAIN = "rockgym.app";
+  /* ======================================================================== */
+
+  var configured = SUPABASE_URL.indexOf("http") === 0 && SUPABASE_ANON_KEY.indexOf("PASTE") === -1;
+  var $ = function (id) { return document.getElementById(id); };
+  var loginView = $("loginView"), appView = $("appView"), loginErr = $("loginErr");
+  var sb = null, profile = null, coachTarget = null;
+
+  if (!configured) { $("cfgWarn").hidden = false; }
+  else { sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); }
+
+  /* ---------- helpers ---------- */
+  function el(tag, attrs, kids) {
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) {
+      if (k === "text") e.textContent = attrs[k];
+      else if (k === "class") e.className = attrs[k];
+      else e.setAttribute(k, attrs[k]);
+    }
+    (kids || []).forEach(function (c) { if (c) e.appendChild(c); });
+    return e;
+  }
+  function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); }
+  var tt;
+  function toast(msg, bad) {
+    var t = $("toast"); t.textContent = msg; t.className = "toast" + (bad ? " bad" : ""); t.hidden = false;
+    clearTimeout(tt); tt = setTimeout(function () { t.hidden = true; }, 2600);
+  }
+  function fail(e) { console.error(e); toast("حصلت مشكلة: " + ((e && e.message) || "جرّب تاني"), true); }
+  function num(v) { var n = parseFloat(v); return isNaN(n) ? null : n; }
+  function fmt(n) { return (Math.round(n * 10) / 10).toString(); }
+  function fmtDate(s) { try { return new Date(s).toLocaleDateString("ar-EG", { day: "numeric", month: "long" }); } catch (e) { return s; } }
+  function emptyBox(t) { return el("div", { class: "empty", text: t }); }
+  function isVideoFile(u) { return /\.(mp4|webm|mov|m4v)(\?.*)?$/i.test(u) || u.indexOf("res.cloudinary.com") > -1 && u.indexOf("/video/") > -1; }
+
+  /* ---------- login / logout ---------- */
+  $("loginForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!configured) return;
+    var u = $("u").value.trim().toLowerCase().replace(/\s+/g, "");
+    var p = $("p").value;
+    if (!u || !p) { showLoginErr("اكتب اسم المستخدم وكلمة المرور."); return; }
+    $("loginBtn").disabled = true;
+    sb.auth.signInWithPassword({ email: u + "@" + EMAIL_DOMAIN, password: p }).then(function (r) {
+      $("loginBtn").disabled = false;
+      if (r.error) { showLoginErr("اسم المستخدم أو كلمة المرور غلط. جرّب تاني."); return; }
+      loginErr.hidden = true; $("p").value = "";
+      boot();
+    });
+  });
+  function showLoginErr(t) { loginErr.textContent = t; loginErr.hidden = false; }
+  $("logout").addEventListener("click", function () {
+    sb.auth.signOut().then(function () { profile = null; appView.hidden = true; loginView.hidden = false; });
+  });
+
+  /* ---------- boot ---------- */
+  function boot() {
+    sb.auth.getSession().then(function (r) {
+      var s = r.data && r.data.session;
+      if (!s) { loginView.hidden = false; appView.hidden = true; return; }
+      return sb.from("profiles").select("*").eq("id", s.user.id).single().then(function (pr) {
+        if (pr.error || !pr.data) { fail(pr.error || new Error("مفيش بروفايل لليوزر ده")); return; }
+        profile = pr.data;
+        loginView.hidden = true; appView.hidden = false;
+        $("hello").textContent = "أهلًا " + (profile.full_name || profile.username);
+        buildTabs();
+      });
+    }).catch(fail);
+  }
+  if (configured) boot();
+
+  /* ---------- tabs ---------- */
+  var CLIENT_TABS = [["videos", "فيديوهاتي"], ["plans", "أنظمتي"], ["progress", "تطوري"], ["history", "تاريخي معانا"]];
+  function buildTabs() {
+    var bar = $("tabsBar"); clear(bar);
+    var list = profile.is_admin ? [["admin", "لوحة الكابتن"]] : CLIENT_TABS;
+    list.forEach(function (t, i) {
+      var b = el("button", { class: "tab", role: "tab", "aria-selected": i === 0 ? "true" : "false", "data-k": t[0], text: t[1] });
+      b.addEventListener("click", function () { selectTab(t[0]); });
+      bar.appendChild(b);
+    });
+    selectTab(list[0][0]);
+  }
+  function selectTab(k) {
+    [].forEach.call($("tabsBar").children, function (b) { b.setAttribute("aria-selected", b.getAttribute("data-k") === k ? "true" : "false"); });
+    ["videos", "plans", "progress", "history", "admin"].forEach(function (n) { $("p-" + n).hidden = n !== k; });
+    if (k === "admin") loadClients(); else loadClientData(k);
+  }
+
+  /* ================= CLIENT VIEWS ================= */
+  function loadClientData(k) {
+    var id = profile.id;
+    if (k === "videos") sb.from("videos").select("*").eq("client_id", id).order("created_at").then(function (r) { r.error ? fail(r.error) : renderVideos(r.data); });
+    if (k === "plans") sb.from("documents").select("*").eq("client_id", id).order("created_at", { ascending: false }).then(function (r) { r.error ? fail(r.error) : renderPlans(r.data); });
+    if (k === "progress") sb.from("measurements").select("*").eq("client_id", id).order("week_date").then(function (r) { r.error ? fail(r.error) : renderProgress(r.data); });
+    if (k === "history") sb.from("reviews").select("*").eq("client_id", id).order("created_at", { ascending: false }).then(function (r) { r.error ? fail(r.error) : renderHistory(r.data); });
+  }
+
+  function renderVideos(rows) {
+    var body = $("videosBody"); clear(body);
+    if (!rows.length) { body.appendChild(emptyBox("لسه مفيش فيديوهات. الكابتن هيضيفلك فيديوهات خطتك هنا.")); return; }
+    var player = el("div", { class: "player" });
+    var nowT = el("p", { class: "now" }), nowS = el("p", { class: "now-sub" });
+    var list = el("ul", { class: "playlist" });
+    function pick(btn, v) {
+      [].forEach.call(list.querySelectorAll("button"), function (b) { b.removeAttribute("aria-current"); });
+      btn.setAttribute("aria-current", "true");
+      clear(player);
+      if (isVideoFile(v.url)) {
+        var vid = el("video", { controls: "", playsinline: "", preload: "metadata", src: v.url });
+        player.appendChild(vid);
+      } else {
+        player.appendChild(el("div", { class: "ext" }, [
+          el("a", { class: "btn", href: v.url, target: "_blank", rel: "noopener", text: "افتح الفيديو" })
+        ]));
+      }
+      nowT.textContent = v.title; nowS.textContent = v.group_name + (v.duration ? " · " + v.duration : "");
+    }
+    var groups = {}, order = [];
+    rows.forEach(function (v) { var g = v.group_name || "عام"; if (!groups[g]) { groups[g] = []; order.push(g); } groups[g].push(v); });
+    var first = true;
+    order.forEach(function (g) {
+      list.appendChild(el("li", { class: "group-h", text: g }));
+      groups[g].forEach(function (v) {
+        var b = el("button", { type: "button" }, [el("span", { class: "t", text: v.title }), el("span", { class: "d", text: v.duration || "" })]);
+        b.addEventListener("click", function () { pick(b, v); });
+        list.appendChild(el("li", null, [b]));
+        if (first) { pick(b, v); first = false; }
+      });
+    });
+    body.appendChild(el("div", { class: "videos" }, [el("div", null, [player, nowT, nowS]), list]));
+  }
+
+  function renderPlans(rows) {
+    var body = $("plansBody"); clear(body);
+    if (!rows.length) { body.appendChild(emptyBox("لسه مفيش ملفات. الكابتن هيرفعلك نظام التمرين والتغذية هنا.")); return; }
+    var box = el("div", { class: "docs" });
+    rows.forEach(function (d) {
+      box.appendChild(el("div", { class: "doc" }, [
+        el("div", null, [el("h3", { text: d.title }), d.note ? el("p", { text: d.note }) : null]),
+        el("a", { class: "btn btn-sm", href: d.url, target: "_blank", rel: "noopener", text: "فتح" })
+      ]));
+    });
+    body.appendChild(box);
+  }
+
+  function renderProgress(rows) {
+    var body = $("progressBody"); clear(body);
+    var pts = rows.filter(function (r) { return r.weight != null; });
+    if (!pts.length) { body.appendChild(emptyBox("لسه مفيش قياسات. بعد أول مراجعة أسبوعية هتلاقي وزنك ورسمك البياني هنا.")); return; }
+    var start = profile.start_weight != null ? Number(profile.start_weight) : Number(pts[0].weight);
+    var cur = Number(pts[pts.length - 1].weight);
+    var lost = start - cur;
+    var wPts = rows.filter(function (r) { return r.waist != null; });
+    var waistNow = wPts.length ? Number(wPts[wPts.length - 1].waist) : null;
+    var waistStart = wPts.length ? Number(wPts[0].waist) : null;
+
+    function stat(k, vNode, cls) { return el("div", { class: "stat" }, [el("div", { class: "k", text: k }), el("div", { class: "v" + (cls ? " " + cls : "") }, vNode)]); }
+    function tn(t) { return document.createTextNode(t); }
+    var stats = el("div", { class: "stats" }, [
+      stat("الوزن الحالي", [tn(fmt(cur) + " "), el("small", { text: "كجم" })]),
+      stat(lost >= 0 ? "اللي نزل من أول يوم" : "الفرق من أول يوم", [tn((lost >= 0 ? "−" : "+") + fmt(Math.abs(lost)) + " "), el("small", { text: "كجم" })], "good"),
+      waistNow != null ? stat("محيط الوسط", [tn(fmt(waistNow) + " "), el("small", { text: "سم" + (waistStart != null && wPts.length > 1 ? " (كان " + fmt(waistStart) + ")" : "") })]) : null
+    ]);
+    body.appendChild(stats);
+
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 640 260"); svg.setAttribute("role", "img"); svg.setAttribute("aria-label", "رسم بياني للوزن");
+    drawChart(svg, pts.map(function (r) { return Number(r.weight); }));
+    body.appendChild(el("div", { class: "chart" }, [el("h3", { text: "الوزن كل أسبوع" }), svg]));
+
+    if (profile.goal_weight != null && start !== Number(profile.goal_weight)) {
+      var goal = Number(profile.goal_weight);
+      var pct = Math.max(0, Math.min(100, Math.round(((start - cur) / (start - goal)) * 100)));
+      var bar = el("div", { class: "bar" }, [el("i", { style: "width:" + pct + "%" })]);
+      body.appendChild(el("div", { class: "goal" }, [
+        el("div", { class: "row" }, [el("span", { text: "الهدف: " + fmt(goal) + " كجم" }), el("span", { text: pct + "%" })]), bar
+      ]));
+    }
+  }
+
+  function drawChart(svg, W) {
+    var NS = "http://www.w3.org/2000/svg", w = 640, h = 260, L = 44, R = 20, T = 16, B = 36;
+    var lo = Math.floor(Math.min.apply(null, W) - 1), hi = Math.ceil(Math.max.apply(null, W) + 1);
+    if (hi - lo < 4) hi = lo + 4;
+    function X(i) { return W.length === 1 ? (R + (w - L - R) / 2) : R + (w - L - R) * (1 - i / (W.length - 1)); }
+    function Y(v) { return T + (h - T - B) * (1 - (v - lo) / (hi - lo)); }
+    function mk(n, a) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); return e; }
+    var step = Math.max(1, Math.round((hi - lo) / 4));
+    for (var v = lo; v <= hi; v += step) {
+      svg.appendChild(mk("line", { x1: R, x2: w - L + 20, y1: Y(v), y2: Y(v), stroke: "#2a2a2e", "stroke-width": 1 }));
+      var t = mk("text", { x: w - L + 26, y: Y(v) + 4, fill: "#9a9aa2", "font-size": 12 }); t.textContent = v; svg.appendChild(t);
+    }
+    if (W.length > 1) {
+      var d = W.map(function (val, i) { return (i ? "L" : "M") + X(i) + " " + Y(val); }).join(" ");
+      svg.appendChild(mk("path", { d: d, fill: "none", stroke: "#ff4e2c", "stroke-width": 3, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+    }
+    W.forEach(function (val, i) {
+      var last = i === W.length - 1;
+      svg.appendChild(mk("circle", { cx: X(i), cy: Y(val), r: last ? 6 : 4, fill: last ? "#ff4e2c" : "#0c0c0d", stroke: "#ff4e2c", "stroke-width": 2 }));
+      var t2 = mk("text", { x: X(i), y: h - 12, fill: "#9a9aa2", "font-size": 12, "text-anchor": "middle" }); t2.textContent = "أ" + (i + 1); svg.appendChild(t2);
+    });
+  }
+
+  function renderHistory(rows) {
+    var body = $("historyBody"); clear(body);
+    if (!rows.length) { body.appendChild(emptyBox("لسه مفيش مراجعات. بعد أول أسبوع هتلاقي ملاحظات الكابتن هنا.")); return; }
+    var ul = el("ul", { class: "hist" });
+    rows.forEach(function (r) {
+      ul.appendChild(el("li", null, [
+        el("div", { class: "when", text: r.week_label || fmtDate(r.created_at) }),
+        el("h3", { text: r.title }),
+        r.body ? el("p", { text: r.body }) : null
+      ]));
+    });
+    body.appendChild(ul);
+  }
+
+  /* ================= COACH PANEL ================= */
+  function loadClients() {
+    sb.from("profiles").select("id,username,full_name").eq("is_admin", false).order("created_at").then(function (r) {
+      if (r.error) return fail(r.error);
+      var sel = $("clientSel"); var keep = coachTarget; clear(sel);
+      sel.appendChild(el("option", { value: "", text: r.data.length ? "— اختار عميل —" : "لسه مفيش عملاء" }));
+      r.data.forEach(function (c) { sel.appendChild(el("option", { value: c.id, text: (c.full_name ? c.full_name + " — " : "") + c.username })); });
+      if (keep) { sel.value = keep; }
+      onClientChange();
+    });
+  }
+  $("clientSel").addEventListener("change", onClientChange);
+  function onClientChange() {
+    coachTarget = $("clientSel").value || null;
+    $("adminBody").hidden = !coachTarget;
+    if (!coachTarget) return;
+    sb.from("profiles").select("*").eq("id", coachTarget).single().then(function (r) {
+      if (r.error) return fail(r.error);
+      var f = $("fProfile");
+      f.full_name.value = r.data.full_name || "";
+      f.start_weight.value = r.data.start_weight != null ? r.data.start_weight : "";
+      f.goal_weight.value = r.data.goal_weight != null ? r.data.goal_weight : "";
+    });
+    $("fMeasure").week_date.value = new Date().toISOString().slice(0, 10);
+    refreshLists();
+  }
+
+  function delBtn(table, id) {
+    var b = el("button", { class: "link-btn danger", type: "button", text: "حذف" });
+    b.addEventListener("click", function () {
+      if (!confirm("متأكد إنك عايز تحذف؟")) return;
+      sb.from(table).delete().eq("id", id).then(function (r) { r.error ? fail(r.error) : (toast("اتحذف"), refreshLists()); });
+    });
+    return b;
+  }
+  function fillList(id, table, rows, label, meta) {
+    var ul = $(id); clear(ul);
+    rows.forEach(function (r) {
+      ul.appendChild(el("li", null, [el("div", null, [el("div", { text: label(r) }), meta ? el("div", { class: "m", text: meta(r) }) : null]), delBtn(table, r.id)]));
+    });
+  }
+  function refreshLists() {
+    var cid = coachTarget; if (!cid) return;
+    sb.from("measurements").select("*").eq("client_id", cid).order("week_date", { ascending: false }).then(function (r) {
+      if (!r.error) fillList("listMeasure", "measurements", r.data, function (m) { return fmtDate(m.week_date) + " — " + (m.weight != null ? fmt(m.weight) + " كجم" : ""); }, function (m) { return m.waist != null ? "الوسط " + fmt(m.waist) + " سم" : ""; });
+    });
+    sb.from("videos").select("*").eq("client_id", cid).order("created_at", { ascending: false }).then(function (r) {
+      if (!r.error) fillList("listVideo", "videos", r.data, function (v) { return v.title; }, function (v) { return v.group_name; });
+    });
+    sb.from("documents").select("*").eq("client_id", cid).order("created_at", { ascending: false }).then(function (r) {
+      if (!r.error) fillList("listDoc", "documents", r.data, function (d) { return d.title; }, function (d) { return d.note || ""; });
+    });
+    sb.from("reviews").select("*").eq("client_id", cid).order("created_at", { ascending: false }).then(function (r) {
+      if (!r.error) fillList("listReview", "reviews", r.data, function (v) { return v.title; }, function (v) { return v.week_label || ""; });
+    });
+  }
+
+  function bindForm(id, table, build, after) {
+    $(id).addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!coachTarget) return toast("اختار عميل الأول", true);
+      var f = e.target, row = build(f); row.client_id = coachTarget;
+      var btn = f.querySelector("button[type=submit]"); btn.disabled = true;
+      sb.from(table).insert(row).then(function (r) {
+        btn.disabled = false;
+        if (r.error) return fail(r.error);
+        toast("اتضاف"); f.reset(); if (after) after(f); refreshLists();
+      });
+    });
+  }
+  bindForm("fMeasure", "measurements", function (f) { return { week_date: f.week_date.value, weight: num(f.weight.value), waist: num(f.waist.value) }; },
+    function (f) { f.week_date.value = new Date().toISOString().slice(0, 10); });
+  bindForm("fVideo", "videos", function (f) { return { title: f.elements.title.value.trim(), group_name: f.group_name.value.trim() || "عام", duration: f.duration.value.trim() || null, url: f.url.value.trim() }; });
+  bindForm("fDoc", "documents", function (f) { return { title: f.elements.title.value.trim(), note: f.note.value.trim() || null, url: f.url.value.trim() }; });
+  bindForm("fReview", "reviews", function (f) { return { week_label: f.week_label.value.trim() || null, title: f.elements.title.value.trim(), body: f.body.value.trim() || null }; });
+
+  $("fProfile").addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!coachTarget) return;
+    var f = e.target;
+    sb.from("profiles").update({ full_name: f.full_name.value.trim() || null, start_weight: num(f.start_weight.value), goal_weight: num(f.goal_weight.value) })
+      .eq("id", coachTarget).then(function (r) { r.error ? fail(r.error) : (toast("اتحفظ"), loadClients()); });
+  });
+})();
+</script>
+</body>
+</html>
