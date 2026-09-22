@@ -1544,31 +1544,43 @@
       var link = waLink(c.phone);
       var row = el("div", { class: "doc" });
       row.appendChild(el("div", null, [el("h3", { text: c.full_name || c.username }), c.client_code ? el("p", { text: c.client_code }) : null]));
+      var actions = el("div", { style: "display:flex;gap:8px;flex-wrap:wrap" });
       if (link) {
+        /* رابط واتساب عادي زي أي لينك، بدون أي تدخل من الكود، عشان يفتح 100% من غير أي مشاكل توقيت */
         var a = el("a", { class: "btn btn-sm", href: link, target: "_blank", rel: "noopener", text: "واتساب" });
-        a.addEventListener("click", function (ev) {
-          ev.preventDefault();
-          /* نفتح تبويب فاضي فورًا (عشان المتصفح يسمح بيه كـ pop-up لأنه جوه ضغطة المستخدم مباشرة)،
-             ونسجل المتابعة في القاعدة الأول، وبعدين نحوّل التبويب ده لرابط واتساب.
-             كده التسجيل بيحصل قبل ما اليوزر يسيب الصفحة أو يقفلها وهو داخل واتساب. */
-          var winRef = window.open("", "_blank");
-          sb.from("daily_followups").upsert({ client_id: c.id, followup_date: todayStr() }, { onConflict: "client_id,followup_date", ignoreDuplicates: true }).then(function (r) {
-            if (winRef) { try { winRef.location = link; } catch (e) { winRef.location.href = link; } }
-            if (r.error) return fail(r.error);
+        actions.appendChild(a);
+      } else {
+        actions.appendChild(el("p", { class: "sub", text: "مفيش رقم واتساب مسجل" }));
+      }
+      /* زرار منفصل يدوس عليه الكابتن بنفسه بعد ما يرجع من واتساب، عشان يسجل إنه تابع مع العميل ده */
+      var doneBtn = el("button", { type: "button", class: "btn btn-sm", style: "background:transparent;border:1.5px solid var(--accent);color:var(--accent)", text: "تمت المتابعة ✅" });
+      doneBtn.addEventListener("click", function () {
+        doneBtn.disabled = true; doneBtn.textContent = "بتسجل...";
+        sb.from("daily_followups").upsert({ client_id: c.id, followup_date: todayStr() }, { onConflict: "client_id,followup_date", ignoreDuplicates: true }).then(function (r) {
+          if (r.error) {
+            /* فشل التسجيل: نرجّع الزرار لشكله الأصلي (أحمر/برتقالي) عشان يبان إنه لسه معلّق، ونوريه رسالة الخطأ */
+            doneBtn.disabled = false; doneBtn.textContent = "تمت المتابعة ✅";
+            doneBtn.style.background = "transparent"; doneBtn.style.borderColor = "var(--accent)"; doneBtn.style.color = "var(--accent)";
+            return fail(r.error);
+          }
+          /* نجح التسجيل: نلوّن الزرار أخضر كتأكيد بصري فوري، وبعدها بلحظة بسيطة يختفي العميل من القايمة */
+          doneBtn.disabled = true; doneBtn.textContent = "تم ✅";
+          doneBtn.style.background = "#1fae5c"; doneBtn.style.borderColor = "#1fae5c"; doneBtn.style.color = "#fff";
+          setTimeout(function () {
             row.remove();
             var left = box.querySelectorAll(".doc").length;
             var note = $("dailyPendingNote");
             if (note) note.textContent = left ? "باقيلك " + left + " من " + total + " النهاردة" : "";
             if (!left) loadDailyFollowup();
-          }).catch(function (e) {
-            if (winRef) { try { winRef.location = link; } catch (er) { winRef.location.href = link; } }
-            fail(e);
-          });
+          }, 600);
+        }).catch(function (e) {
+          doneBtn.disabled = false; doneBtn.textContent = "تمت المتابعة ✅";
+          doneBtn.style.background = "transparent"; doneBtn.style.borderColor = "var(--accent)"; doneBtn.style.color = "var(--accent)";
+          fail(e);
         });
-        row.appendChild(a);
-      } else {
-        row.appendChild(el("p", { class: "sub", text: "مفيش رقم واتساب مسجل" }));
-      }
+      });
+      actions.appendChild(doneBtn);
+      row.appendChild(actions);
       box.appendChild(row);
     });
     body.appendChild(box);
