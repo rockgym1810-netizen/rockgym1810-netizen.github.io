@@ -890,9 +890,6 @@
       });
     }).catch(fail);
   }
-  if (DEMO_MODE) initDemoMode();
-  else if (configured) boot();
-
   /* ---------- tabs ---------- */
   var CLIENT_TABS = [["videos", "فيديوهاتي"], ["plans", "أنظمتي"], ["progress", "تطوري"], ["history", "تاريخي مع روك جيم"]];
   var ALL_PANELS = ["videos", "plans", "progress", "history", "daily", "today", "admin", "expired"];
@@ -915,6 +912,10 @@
     else if (k === "expired") loadExpiredClients();
     else loadClientData(k);
   }
+
+  /* ---------- boot (runs after CLIENT_TABS/ALL_PANELS/buildTabs/selectTab are defined) ---------- */
+  if (DEMO_MODE) initDemoMode();
+  else if (configured) boot();
 
   /* ================= CLIENT VIEWS ================= */
   function loadClientData(k) {
