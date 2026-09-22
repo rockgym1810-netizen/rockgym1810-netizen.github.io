@@ -543,7 +543,7 @@
     }
     var DEMO = {
       profile: {
-        id: "demo-client", username: "demo", full_name: "عميل تجريبي", client_code: "RG26-000-DEMO",
+        id: "demo-client", username: "demo", full_name: "محمد السيد", client_code: "RG26-000-DEMO",
         is_admin: false, phone: "201001234567", avatar_path: null,
         start_weight: 95, goal_weight: 80,
         subscription_start_date: daysAgo(20), subscription_end_date: daysFromNow(70)
@@ -602,8 +602,8 @@
         { id: "v3", title: "تعريف عام بالنظام", group_name: "عام (تعريف عام)", duration: "3:40", url: placeholderVideoCard("معاينة تجريبية للفيديو"), created_at: daysAgo(20) }
       ],
       documents: [
-        { id: "d1", title: "نظام PPL1 (PDF)", note: "نظامك الحالي", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", created_at: daysAgo(20) },
-        { id: "d2", title: "نظام التغذية", note: "السعرات والماكروز", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", created_at: daysAgo(18) }
+        { id: "d1", title: "نظام محمد السيد - الأسبوع الأول", note: "نظامك الحالي", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", created_at: daysAgo(20) },
+        { id: "d2", title: "نظام التغذية - محمد السيد", note: "السعرات والماكروز", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", created_at: daysAgo(18) }
       ],
       reviews: [
         { id: "r1", week_label: "الأسبوع 8", title: "نزلت 0.9 كجم", body: "أداء ممتاز في تمارين الرجل الأسبوع ده، كمّل كده.", created_at: daysAgo(0) },
@@ -656,7 +656,7 @@
     renderSubscriptionBanner();
     buildTabs();
     var badge = document.createElement("div");
-    badge.textContent = "وضع تجريبي — البيانات هنا وهمية للعرض بس، مش بيانات عميل حقيقي";
+    badge.textContent = "وضع تجريبي — \"محمد السيد\" شخصية وهمية للعرض بس، مش عميل حقيقي، وده بس عشان نوريك شكل المتابعة بيبقى إزاي";
     badge.style.cssText = "position:fixed;bottom:0;inset-inline:0;background:var(--accent);color:#0c0c0d;text-align:center;font-weight:800;font-size:.85rem;padding:9px;z-index:80";
     document.body.appendChild(badge);
     document.body.style.paddingBottom = "40px";
