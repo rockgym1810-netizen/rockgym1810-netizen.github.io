@@ -563,6 +563,25 @@
     .nav-login-item{ display:block; }
     .nav-login-item a{ color:var(--accent); font-weight:700; }
   }
+
+  /* ---------- Demo preview button ---------- */
+  .nav-demo{
+    display:inline-block;
+    border:1.5px solid var(--accent);
+    color:var(--accent);
+    font-weight:700;
+    font-size:.95rem;
+    padding:9px 18px;
+    border-radius:6px;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .nav-demo:hover{ background:rgba(255,78,44,.08); }
+  .nav-demo-item{ display:none; }
+  @media (max-width:1000px){
+    .nav-actions .nav-demo{ display:none; }
+    .nav-demo-item{ display:block; }
+    .nav-demo-item a{ color:var(--accent); font-weight:700; }
+  }
 </style>
 </head>
 <body>
@@ -579,10 +598,12 @@
         <li><a href="#results" data-i18n="navResults">نتايج العملاء</a></li>
         <li><a href="#pricing" data-i18n="navPricing">كيفية الاشتراك</a></li>
         <li><a href="#contact" data-i18n="navContact">تواصل معنا</a></li>
+        <li class="nav-demo-item"><a href="platform.html?demo=1" target="_blank" rel="noopener" data-i18n="navDemo">شوف المنصة شغالة إزاي</a></li>
         <li class="nav-login-item"><a href="platform.html" data-i18n="navLogin">دخول العملاء</a></li>
       </ul>
       <div class="nav-actions">
         <a href="https://wa.me/201041867696?text=%D9%85%D8%AD%D8%AA%D8%A7%D8%AC%20%D9%83%D9%88%D8%AF%20%D8%AA%D8%AC%D8%B1%D8%A8%D8%A9%20%D9%85%D8%AC%D8%A7%D9%86%D9%8A%D8%A9%20%D9%81%D9%8A%20ROCKGYM%20%F0%9F%92%AA" data-wa="trial" class="nav-cta" target="_blank" rel="noopener" data-i18n="navCta">جرّب ببلاش</a>
+        <a href="platform.html?demo=1" class="nav-demo" target="_blank" rel="noopener" data-i18n="navDemo">شوف المنصة شغالة إزاي</a>
         <a href="platform.html" class="nav-login" data-i18n="navLogin">دخول العملاء</a>
         <button id="langToggle" class="lang-toggle" type="button" aria-label="Toggle language">EN</button>
         <button id="navToggle" class="nav-toggle" type="button" aria-label="القائمة" aria-expanded="false" aria-controls="navLinks">
@@ -886,6 +907,7 @@
      ===================================================================== */
   var EN = {
     navCta: "Try it free",
+    navDemo: "See the platform in action",
     navLogin: "Client login",
     navHome: "Home",
     navHow: "How it works",
