@@ -325,6 +325,80 @@
     color:#0c0c0d;
   }
 
+  /* ---------- Payment methods ---------- */
+  .payment-methods{
+    margin-top:56px;
+    padding-top:44px;
+    border-top:1px solid var(--line);
+  }
+  .payment-methods > h3{
+    font-size:1.3rem;
+    font-weight:800;
+    margin-bottom:8px;
+  }
+  .payment-methods > .payment-sub{
+    color:var(--muted);
+    font-size:.95rem;
+    margin-bottom:26px;
+    max-width:56ch;
+  }
+  .payment-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+  }
+  .payment-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:20px;
+  }
+  .payment-card .payment-name{
+    font-weight:700;
+    font-size:1rem;
+    margin-bottom:10px;
+  }
+  .payment-card .payment-detail{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    margin-bottom:16px;
+  }
+  .payment-card .payment-detail span{
+    font-size:.92rem;
+    color:var(--ink);
+  }
+  .payment-card .payment-owner{
+    color:var(--muted) !important;
+    font-size:.85rem !important;
+  }
+  .payment-copy{
+    width:100%;
+    background:transparent;
+    border:1.5px solid var(--line);
+    color:var(--ink);
+    font-family:'Cairo', sans-serif;
+    font-weight:700;
+    font-size:.88rem;
+    padding:9px 14px;
+    border-radius:6px;
+    cursor:pointer;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .payment-copy:hover{ border-color:var(--accent); background:rgba(255,78,44,.08); }
+  .payment-copy.copied{ border-color:var(--accent); color:var(--accent); }
+  .payment-note{
+    margin-top:22px;
+    color:var(--muted);
+    font-size:.9rem;
+  }
+  @media (max-width:900px){
+    .payment-grid{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:560px){
+    .payment-grid{ grid-template-columns:1fr; }
+  }
+
   /* ---------- Transformations ---------- */
   .trans-grid{
     display:grid;
@@ -425,6 +499,10 @@
     .lang-toggle{ padding:8px 12px; margin-inline-start:0; }
     .nav-actions{ gap:6px; }
   }
+  @media (max-width:1000px){
+    nav{ flex-wrap:wrap; row-gap:10px; }
+    .nav-actions{ flex-wrap:wrap; justify-content:flex-end; row-gap:8px; width:100%; order:3; }
+  }
 
   /* ---------- Final CTA ---------- */
   .final-cta{
@@ -469,6 +547,114 @@
   }
   footer .socials a:hover{ color:var(--accent); }
   footer .socials a:hover svg{ fill:var(--accent); }
+
+  /* ---------- Footer legal links ---------- */
+  .footer-legal{
+    display:flex;
+    gap:22px;
+    flex-wrap:wrap;
+  }
+  .legal-link{
+    background:none;
+    border:0;
+    padding:0;
+    margin:0;
+    font-family:'Cairo', sans-serif;
+    font-size:.9rem;
+    color:var(--muted);
+    cursor:pointer;
+    transition:color .2s ease;
+  }
+  .legal-link:hover{ color:var(--accent); }
+
+  /* ---------- Site credit (very bottom of page) ---------- */
+  .site-credit{
+    border-top:1px solid var(--line);
+    padding:18px 0;
+    text-align:center;
+    font-size:.85rem;
+    color:var(--muted);
+  }
+  .site-credit .credit-name{
+    color:var(--ink);
+    font-weight:700;
+    margin-inline-start:8px;
+    direction:ltr;
+    unicode-bidi:isolate;
+    display:inline-block;
+    border-bottom:1px solid transparent;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  .site-credit .credit-name:hover{
+    color:var(--accent);
+    border-color:var(--accent);
+  }
+
+  /* ---------- Legal modals (Privacy Policy / Terms) ---------- */
+  .legal-modal{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    display:none;
+    align-items:flex-start;
+    justify-content:center;
+    padding:5vh 20px;
+    background:rgba(6,6,7,.72);
+    backdrop-filter:blur(3px);
+    overflow-y:auto;
+  }
+  .legal-modal.open{ display:flex; }
+  .legal-modal-box{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    max-width:760px;
+    width:100%;
+    padding:36px;
+    position:relative;
+  }
+  .legal-modal-box h2{
+    font-size:1.5rem;
+    font-weight:800;
+    margin-bottom:18px;
+    padding-inline-end:36px;
+  }
+  .legal-modal-box h3{
+    font-size:1.05rem;
+    font-weight:700;
+    margin:22px 0 8px;
+    color:var(--accent);
+  }
+  .legal-modal-box p, .legal-modal-box li{
+    color:var(--muted);
+    font-size:.96rem;
+    margin-bottom:8px;
+  }
+  .legal-modal-box ul{ padding-inline-start:20px; }
+  .legal-modal-box .legal-updated{
+    font-size:.82rem;
+    color:var(--muted);
+    margin-bottom:20px;
+    opacity:.8;
+  }
+  .legal-modal-close{
+    position:absolute;
+    top:18px;
+    inset-inline-end:18px;
+    width:34px; height:34px;
+    border-radius:50%;
+    border:1.5px solid var(--line);
+    background:transparent;
+    color:var(--ink);
+    font-size:1.1rem;
+    line-height:1;
+    cursor:pointer;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .legal-modal-close:hover{ border-color:var(--accent); background:rgba(255,78,44,.08); }
+  @media (max-width:560px){
+    .legal-modal-box{ padding:26px 20px; }
+  }
 
   /* ---------- Floating WhatsApp button ---------- */
   .float-wa{
@@ -557,12 +743,6 @@
     transition:border-color .2s ease, background .2s ease;
   }
   .nav-login:hover{ border-color:var(--accent); background:rgba(255,78,44,.08); }
-  .nav-login-item{ display:none; }
-  @media (max-width:1000px){
-    .nav-actions .nav-login{ display:none; }
-    .nav-login-item{ display:block; }
-    .nav-login-item a{ color:var(--accent); font-weight:700; }
-  }
 
   /* ---------- Demo preview button ---------- */
   .nav-demo{
@@ -576,11 +756,8 @@
     transition:border-color .2s ease, background .2s ease;
   }
   .nav-demo:hover{ background:rgba(255,78,44,.08); }
-  .nav-demo-item{ display:none; }
-  @media (max-width:1000px){
-    .nav-actions .nav-demo{ display:none; }
-    .nav-demo-item{ display:block; }
-    .nav-demo-item a{ color:var(--accent); font-weight:700; }
+  @media (max-width:640px){
+    .nav-demo, .nav-login{ padding:8px 12px; font-size:.85rem; }
   }
 </style>
 </head>
@@ -598,8 +775,6 @@
         <li><a href="#results" data-i18n="navResults">نتايج العملاء</a></li>
         <li><a href="#pricing" data-i18n="navPricing">كيفية الاشتراك</a></li>
         <li><a href="#contact" data-i18n="navContact">تواصل معنا</a></li>
-        <li class="nav-demo-item"><a href="platform.html?demo=1" target="_blank" rel="noopener" data-i18n="navDemo">شوف المنصة شغالة إزاي</a></li>
-        <li class="nav-login-item"><a href="platform.html" data-i18n="navLogin">دخول العملاء</a></li>
       </ul>
       <div class="nav-actions">
         <a href="https://wa.me/201041867696?text=%D9%85%D8%AD%D8%AA%D8%A7%D8%AC%20%D9%83%D9%88%D8%AF%20%D8%AA%D8%AC%D8%B1%D8%A8%D8%A9%20%D9%85%D8%AC%D8%A7%D9%86%D9%8A%D8%A9%20%D9%81%D9%8A%20ROCKGYM%20%F0%9F%92%AA" data-wa="trial" class="nav-cta" target="_blank" rel="noopener" data-i18n="navCta">جرّب ببلاش</a>
@@ -834,6 +1009,38 @@
         </div>
       </div>
     </div>
+
+    <div class="payment-methods">
+      <h3 data-i18n="paymentTitle">طرق الدفع المباشر</h3>
+      <p class="payment-sub" data-i18n="paymentSub">تقدر تدفع مباشرة بأي طريقة من دول، وابعتلنا صورة الإيصال على واتساب عشان نفعّل اشتراكك فورًا.</p>
+      <div class="payment-grid">
+        <div class="payment-card">
+          <div class="payment-name" data-i18n="paymentVfCash">فودافون كاش</div>
+          <div class="payment-detail">
+            <span dir="ltr">01095668225</span>
+            <span class="payment-owner">Ahmed M.A.H</span>
+          </div>
+          <button type="button" class="payment-copy" data-copy-value="01095668225" data-i18n="paymentCopy">نسخ</button>
+        </div>
+        <div class="payment-card">
+          <div class="payment-name" data-i18n="paymentInstapay">إنستا باي</div>
+          <div class="payment-detail">
+            <span dir="ltr">zeyadhamouda18@instapay</span>
+          </div>
+          <button type="button" class="payment-copy" data-copy-value="zeyadhamouda18@instapay" data-i18n="paymentCopy">نسخ</button>
+        </div>
+        <div class="payment-card">
+          <div class="payment-name" data-i18n="paymentBank">تحويل بنكي</div>
+          <div class="payment-detail">
+            <span data-i18n="paymentBankName">بنك الإسكندرية</span>
+            <span dir="ltr">4090000016068697</span>
+            <span class="payment-owner">Ziad Ahmed Mohamed</span>
+          </div>
+          <button type="button" class="payment-copy" data-copy-value="4090000016068697" data-i18n="paymentCopy">نسخ</button>
+        </div>
+      </div>
+      <p class="payment-note" data-i18n="paymentNote">تقدر برضو تشترك عن طريق واتساب وهنتابع معاك طريقة الدفع اللي تناسبك.</p>
+    </div>
   </div>
 </section>
 
@@ -892,8 +1099,100 @@
         WhatsApp
       </a>
     </div>
+    <div class="footer-legal">
+      <button type="button" class="legal-link" data-modal-open="privacyModal" data-i18n="footerPrivacy">سياسة الخصوصية</button>
+      <button type="button" class="legal-link" data-modal-open="termsModal" data-i18n="footerTerms">الشروط والأحكام</button>
+    </div>
   </div>
 </footer>
+
+<div class="site-credit">
+  <span data-i18n="creditPrefix">تم التصميم والتطوير بواسطة</span>
+  <a class="credit-name" href="https://www.instagram.com/don_zeyad_ahmed_?stkn=ZGE1ZGJoYjlsN2Rv" target="_blank" rel="noopener">Ziad Hammouda</a>
+</div>
+
+<div class="legal-modal" id="privacyModal" role="dialog" aria-modal="true" aria-labelledby="privacyModalTitle">
+  <div class="legal-modal-box">
+    <button type="button" class="legal-modal-close" data-modal-close aria-label="Close">✕</button>
+    <h2 id="privacyModalTitle" data-i18n="privacyTitle">سياسة الخصوصية</h2>
+    <p class="legal-updated" data-i18n="privacyUpdated">آخر تحديث: سبتمبر 2026</p>
+
+    <p data-i18n="privacyIntro">في ROCKGYM بنحترم خصوصيتك، وبنجمع بس البيانات اللي فعلاً محتاجينها عشان نقدملك متابعة تدريب أونلاين شخصية ومفيدة. السياسة دي بتشرح إيه البيانات اللي بنجمعها، وبنستخدمها إزاي، وحقوقك بالنسبة ليها.</p>
+
+    <h3 data-i18n="privacyH1">البيانات اللي بنجمعها</h3>
+    <ul>
+      <li data-i18n="privacyH1Li1">بيانات التواصل: الاسم، رقم الواتساب، والإيميل لو أرسلتهولنا عن طريق فورم التواصل.</li>
+      <li data-i18n="privacyH1Li2">بيانات الاشتراك: الباقة اللي اخترتها، وتفاصيل الدفع (زي طريقة الدفع)، من غير ما نحتفظ ببيانات كارتك البنكي — الدفع بيتم عن طريق PayPal أو تحويل مباشر.</li>
+      <li data-i18n="privacyH1Li3">بيانات المتابعة: وزنك، مقاساتك، وصورك التقدمية اللي بترسلها لنا أسبوعيًا لمتابعة تطورك، وأي معلومات صحية بتشاركها عشان نبني لك برنامج آمن ومناسب.</li>
+      <li data-i18n="privacyH1Li4">بيانات تقنية بسيطة: الدولة اللي بتدخل منها (عشان نعرض السعر بالعملة المناسبة)، ولغة تصفحك المفضلة (عربي/إنجليزي)، وده بيتحفظ محليًا على جهازك بس.</li>
+    </ul>
+
+    <h3 data-i18n="privacyH2">إزاي بنستخدم بياناتك</h3>
+    <ul>
+      <li data-i18n="privacyH2Li1">لبناء خطتك التدريبية والغذائية ومتابعتك يوم بيوم على واتساب.</li>
+      <li data-i18n="privacyH2Li2">للرد على استفساراتك وتنظيم اشتراكك وتجربتك المجانية.</li>
+      <li data-i18n="privacyH2Li3">لتحسين المنصة والتجربة العامة، من غير ما نبيع أو نأجر بياناتك لأي جهة تالتة لأغراض تسويقية.</li>
+    </ul>
+
+    <h3 data-i18n="privacyH3">مين بيشوف بياناتك</h3>
+    <p data-i18n="privacyH3Text">فريق ROCKGYM بس (الكابتن المسؤول عن متابعتك) هو اللي بيوصله بياناتك الصحية والتدريبية. بيانات الدفع بتتعامل معاها مباشرة شركة الدفع (زي PayPal) حسب سياستها الخاصة، وإحنا مش بنشوف أو بنحتفظ بتفاصيل كارتك.</p>
+
+    <h3 data-i18n="privacyH4">حقوقك</h3>
+    <p data-i18n="privacyH4Text">تقدر في أي وقت تطلب منا نبعتلك نسخة من بياناتك، أو نعدلها، أو نمسحها بالكامل من عندنا (بعد انتهاء أي التزام تعاقدي قائم)، وده عن طريق مراسلتنا على واتساب.</p>
+
+    <h3 data-i18n="privacyH5">أمان البيانات</h3>
+    <p data-i18n="privacyH5Text">بنحتفظ بمراسلاتك ومتابعتك على واتساب بشكل خاص، وبنتعامل مع صورك ومقاساتك بسرية تامة ومنستخدمهاش إلا بإذنك (مثلاً كـ"قبل/بعد" في صفحة النتائج، وبس لو وافقت صراحةً).</p>
+
+    <h3 data-i18n="privacyH6">تواصل معنا</h3>
+    <p data-i18n="privacyH6Text">لو عندك أي سؤال عن الخصوصية أو عايز تدير بياناتك، تقدر تراسلنا مباشرة على واتساب من نفس الرقم المستخدم في المتابعة.</p>
+  </div>
+</div>
+
+<div class="legal-modal" id="termsModal" role="dialog" aria-modal="true" aria-labelledby="termsModalTitle">
+  <div class="legal-modal-box">
+    <button type="button" class="legal-modal-close" data-modal-close aria-label="Close">✕</button>
+    <h2 id="termsModalTitle" data-i18n="termsTitle">الشروط والأحكام</h2>
+    <p class="legal-updated" data-i18n="termsUpdated">آخر تحديث: سبتمبر 2026</p>
+
+    <p data-i18n="termsIntro">استخدامك لمنصة ROCKGYM أو اشتراكك في أي باقة متابعة معانا معناه إنك موافق على الشروط دي. اقرأها كويس قبل ما تبدأ.</p>
+
+    <h3 data-i18n="termsH1">طبيعة الخدمة</h3>
+    <p data-i18n="termsH1Text">ROCKGYM بتقدم متابعة تدريب وتغذية أونلاين عن طريق واتساب، مش استشارة طبية. لو عندك أي حالة صحية أو إصابة مزمنة، لازم تستشير دكتورك الخاص قبل ما تبدأ أي برنامج تدريبي أو نظام غذائي معانا، وإنت المسؤول عن إبلاغنا بأي معلومة صحية مهمة بدقة.</p>
+
+    <h3 data-i18n="termsH2">التجربة المجانية والاشتراكات</h3>
+    <ul>
+      <li data-i18n="termsH2Li1">التجربة المجانية 3 أيام بتديك فكرة عن نظام المتابعة، ومش بتتضمن خطة كاملة أو نتائج مضمونة.</li>
+      <li data-i18n="termsH2Li2">باقات الشهر والشهرين والـ3 شهور بتشمل خطة مخصصة ومتابعة يومية ومراجعة أسبوعية طول مدة الاشتراك.</li>
+      <li data-i18n="termsH2Li3">الأسعار بتتعرض تلقائيًا بالعملة المناسبة حسب موقعك، وممكن تتحدث من وقت للتاني.</li>
+    </ul>
+
+    <h3 data-i18n="termsH3">الدفع والاسترداد</h3>
+    <p data-i18n="termsH3Text">الدفع بيتم مقدمًا عن طريق واتساب (تحويل محلي) أو PayPal حسب دولتك. سياسة الاسترداد عندنا محددة بالتوقيت، والمدة بتتحسب من تاريخ استلامك للكود وبيانات الدخول على المنصة:</p>
+    <ul>
+      <li data-i18n="termsH3Li1">قبل استلام الكود وبيانات الدخول: استرداد كامل للمبلغ في أي وقت.</li>
+      <li data-i18n="termsH3Li2">باقة الشهر: بعد استلام الكود، استرداد نص المبلغ متاح خلال أول أسبوع بس من تاريخ الاستلام. بعد ما يعدي الأسبوع، مفيش استرداد نهائيًا.</li>
+      <li data-i18n="termsH3Li3">باقي الباقات (شهرين، 3 شهور، وغيرها): بعد استلام الكود، استرداد نص المبلغ متاح خلال أول أسبوعين بس من تاريخ الاستلام. بعد ما يعدي الأسبوعين، مفيش استرداد نهائيًا.</li>
+      <li data-i18n="termsH3Li4">يعني الاسترداد بعد استلام الكود بيبقى نص المبلغ لو في المدة المحددة، أو معدوم لو عداها — مفيش نسبة تانية غير كده.</li>
+    </ul>
+    <p data-i18n="termsH3Note">الاستثناء الوحيد من الجدول ده هو لو حصل خطأ واضح من جانبنا في تقديم الخدمة.</p>
+
+    <h3 data-i18n="termsH4">التزامات العميل</h3>
+    <ul>
+      <li data-i18n="termsH4Li1">تقديم معلومات صحيحة عن وزنك وقياساتك وحالتك الصحية.</li>
+      <li data-i18n="termsH4Li2">الالتزام بالتواصل الأسبوعي عشان نقدر نعدل خطتك بشكل صحيح.</li>
+      <li data-i18n="termsH4Li3">استخدام البرنامج التدريبي بشكل آمن، والتوقف فورًا والتواصل معنا لو حسيت بأي ألم غير طبيعي.</li>
+    </ul>
+
+    <h3 data-i18n="termsH5">النتائج</h3>
+    <p data-i18n="termsH5Text">النتائج بتختلف من شخص للتاني حسب الالتزام والاستجابة الجسدية، وإحنا بنضمن المتابعة والمجهود المهني، مش رقم معين تحققه في وقت معين.</p>
+
+    <h3 data-i18n="termsH6">إنهاء الخدمة</h3>
+    <p data-i18n="termsH6Text">بنحتفظ بحقنا في إيقاف أو إنهاء أي اشتراك في حالة إساءة استخدام المنصة أو عدم الالتزام بأساسيات التواصل المحترم مع فريق العمل.</p>
+
+    <h3 data-i18n="termsH7">تعديل الشروط</h3>
+    <p data-i18n="termsH7Text">ممكن نحدّث الشروط والأحكام دي من وقت للتاني، وأي تحديث هيتم نشره على نفس الصفحة، واستمرارك في استخدام الخدمة بعد التحديث معناه موافقتك عليه.</p>
+  </div>
+</div>
 
 <script>
 (function () {
@@ -965,6 +1264,15 @@
     priceTitle: "Start without committing to anything",
     priceSub: "Try first, subscribe when you're convinced.",
     offerNote: "🔥 These are opening prices, celebrating the launch of RockGym online coaching — available to the first 100 clients and to Royal Card holders at RockGym.",
+
+    paymentTitle: "Direct payment options",
+    paymentSub: "You can pay directly using any of these, then send us a screenshot of the receipt on WhatsApp and we'll activate your subscription right away.",
+    paymentVfCash: "Vodafone Cash",
+    paymentInstapay: "InstaPay",
+    paymentBank: "Bank transfer",
+    paymentBankName: "Bank of Alexandria",
+    paymentCopy: "Copy",
+    paymentNote: "You can also subscribe over WhatsApp and we'll walk you through whichever payment method suits you.",
     trialTag: "Trial",
     trialName: "3-day trial",
     trialAmount: "Free",
@@ -1002,7 +1310,59 @@
 
     finalTitle: "Ready to start your transformation?",
     finalSub: "Message us on WhatsApp now and start your 3-day free trial.",
-    finalBtn: "Chat with us on WhatsApp"
+    finalBtn: "Chat with us on WhatsApp",
+
+    footerPrivacy: "Privacy Policy",
+    footerTerms: "Terms & Conditions",
+    creditPrefix: "Designed & developed by",
+
+    privacyTitle: "Privacy Policy",
+    privacyUpdated: "Last updated: September 2026",
+    privacyIntro: "At ROCKGYM we respect your privacy, and we only collect the data we actually need to give you a useful, personal online coaching experience. This policy explains what data we collect, how we use it, and your rights over it.",
+    privacyH1: "Data we collect",
+    privacyH1Li1: "Contact details: your name, WhatsApp number, and email if you send them to us through the contact form.",
+    privacyH1Li2: "Subscription details: the plan you chose and payment details (such as payment method) — we never store your card details ourselves; payment is handled via PayPal or a direct transfer.",
+    privacyH1Li3: "Coaching data: your weight, measurements, and the progress photos you send us weekly to track your progress, plus any health information you share so we can build you a safe, suitable program.",
+    privacyH1Li4: "Basic technical data: the country you're browsing from (so we can show pricing in the right currency) and your preferred language (Arabic/English), stored locally on your own device only.",
+    privacyH2: "How we use your data",
+    privacyH2Li1: "To build your training and nutrition plan and follow up with you day by day on WhatsApp.",
+    privacyH2Li2: "To answer your questions and manage your subscription and free trial.",
+    privacyH2Li3: "To improve the platform and overall experience — we never sell or rent your data to any third party for marketing purposes.",
+    privacyH3: "Who sees your data",
+    privacyH3Text: "Only the ROCKGYM team member responsible for your coaching sees your health and training data. Payment details are handled directly by the payment provider (such as PayPal) under its own policy — we never see or store your card details.",
+    privacyH4: "Your rights",
+    privacyH4Text: "You can ask us at any time for a copy of your data, to correct it, or to delete it completely from our records (once any active contractual obligation ends), simply by messaging us on WhatsApp.",
+    privacyH5: "Data security",
+    privacyH5Text: "We keep your WhatsApp conversations and follow-up private, and we treat your photos and measurements with full confidentiality — we never use them (for example as a public before/after) unless you explicitly agree to it.",
+    privacyH6: "Contact us",
+    privacyH6Text: "If you have any question about privacy or want to manage your data, message us directly on the same WhatsApp number used for your coaching.",
+
+    termsTitle: "Terms & Conditions",
+    termsUpdated: "Last updated: September 2026",
+    termsIntro: "By using the ROCKGYM platform or subscribing to any of our coaching plans, you agree to the following terms. Please read them carefully before you start.",
+    termsH1: "Nature of the service",
+    termsH1Text: "ROCKGYM provides online training and nutrition coaching via WhatsApp — this is not medical advice. If you have any health condition or chronic injury, you must consult your own doctor before starting any training program or nutrition plan with us, and you are responsible for accurately disclosing any important health information.",
+    termsH2: "Free trial and subscriptions",
+    termsH2Li1: "The 3-day free trial gives you a feel for how our follow-up system works; it does not include a full plan or guaranteed results.",
+    termsH2Li2: "The 1, 2 and 3-month plans include a custom plan, daily follow-up, and a weekly review for the full length of the subscription.",
+    termsH2Li3: "Prices are shown automatically in the appropriate currency based on your location, and may be updated from time to time.",
+    termsH3: "Payment and refunds",
+    termsH3Text: "Payment is made in advance via WhatsApp (local transfer) or PayPal, depending on your country. Our refund policy is time-based, counted from the date you receive your access code and login details:",
+    termsH3Li1: "Before you receive your access code and login details: a full refund is available at any time.",
+    termsH3Li2: "1-month plan: after receiving your code, a refund of half the amount is available only within the first week from the date you received it. Once that week has passed, no refund is available.",
+    termsH3Li3: "All other plans (2 months, 3 months, etc.): after receiving your code, a refund of half the amount is available only within the first two weeks from the date you received it. Once those two weeks have passed, no refund is available.",
+    termsH3Li4: "In other words, once you've received your code, the refund is either half the amount (within the window above) or nothing at all — there's no other rate.",
+    termsH3Note: "The only exception to this schedule is if there has been a clear error on our part in providing the service.",
+    termsH4: "Client responsibilities",
+    termsH4Li1: "Provide accurate information about your weight, measurements and health condition.",
+    termsH4Li2: "Keep up with the weekly check-ins so we can adjust your plan correctly.",
+    termsH4Li3: "Use the training program safely, and stop immediately and contact us if you feel any unusual pain.",
+    termsH5: "Results",
+    termsH5Text: "Results vary from person to person depending on commitment and individual response. We guarantee professional follow-up and effort, not a specific number achieved by a specific date.",
+    termsH6: "Ending the service",
+    termsH6Text: "We reserve the right to pause or end any subscription in cases of platform misuse or a failure to communicate respectfully with our team.",
+    termsH7: "Changes to these terms",
+    termsH7Text: "We may update these terms from time to time; any update will be published on this same page, and continuing to use the service after an update means you accept it."
   };
   var AR = {};
 
@@ -1248,6 +1608,76 @@
 </script>
 <script>
 (function () {
+  var openBtns = [].slice.call(document.querySelectorAll("[data-modal-open]"));
+  var modals = [].slice.call(document.querySelectorAll(".legal-modal"));
+  if (!openBtns.length || !modals.length) return;
+
+  function closeAll() {
+    modals.forEach(function (m) { m.classList.remove("open"); });
+    document.body.style.overflow = "";
+  }
+
+  openBtns.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var id = btn.getAttribute("data-modal-open");
+      var modal = document.getElementById(id);
+      if (!modal) return;
+      closeAll();
+      modal.classList.add("open");
+      document.body.style.overflow = "hidden";
+    });
+  });
+
+  modals.forEach(function (modal) {
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) closeAll();
+    });
+    var closeBtn = modal.querySelector("[data-modal-close]");
+    if (closeBtn) closeBtn.addEventListener("click", closeAll);
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeAll();
+  });
+})();
+</script>
+<script>
+(function () {
+  var buttons = [].slice.call(document.querySelectorAll(".payment-copy"));
+  if (!buttons.length) return;
+  buttons.forEach(function (btn) {
+    var defaultLabel = btn.textContent;
+    btn.addEventListener("click", function () {
+      var value = btn.getAttribute("data-copy-value") || "";
+      function done(ok) {
+        btn.textContent = ok ? "✓" : defaultLabel;
+        btn.classList.toggle("copied", ok);
+        setTimeout(function () {
+          btn.textContent = defaultLabel;
+          btn.classList.remove("copied");
+        }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(value).then(function () { done(true); }, function () { done(false); });
+      } else {
+        try {
+          var ta = document.createElement("textarea");
+          ta.value = value;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+          done(true);
+        } catch (e) { done(false); }
+      }
+    });
+  });
+})();
+</script>
+<script>
+(function () {
   var header = document.querySelector("header");
   var toggle = document.getElementById("navToggle");
   var links = [].slice.call(document.querySelectorAll(".nav-links a"));
@@ -1264,7 +1694,11 @@
   });
   window.addEventListener("resize", function () { if (window.innerWidth > 1000) setOpen(false); });
 
-  var targets = links.map(function (a) { return document.querySelector(a.getAttribute("href")); });
+  var targets = links.map(function (a) {
+    var href = a.getAttribute("href") || "";
+    if (href.charAt(0) !== "#") return null;
+    try { return document.querySelector(href); } catch (e) { return null; }
+  });
   function markActive() {
     var y = window.scrollY + 120, cur = 0;
     targets.forEach(function (t, i) { if (t && t.offsetTop <= y) cur = i; });
