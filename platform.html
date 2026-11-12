@@ -33,6 +33,16 @@
     display:block; width:100%; background:transparent; border:0; border-bottom:1.5px solid var(--line);
     color:var(--ink); font-size:1.05rem; padding:8px 2px 12px; border-radius:0; outline:none; transition:border-color .2s;
   }
+  .pw-wrap{ position:relative; display:block; }
+  .pw-wrap input{ padding-left:42px; }
+  .pw-eye{ position:absolute; left:4px; top:50%; transform:translateY(-62%); background:none; border:0; padding:6px; cursor:pointer; color:var(--muted); display:flex; align-items:center; justify-content:center; border-radius:6px; }
+  .pw-eye svg{ width:22px; height:22px; }
+  .pw-eye .off{ display:none; }
+  .pw-eye[aria-pressed="true"]{ color:var(--accent); }
+  .pw-eye[aria-pressed="true"] .on{ display:none; }
+  .pw-eye[aria-pressed="true"] .off{ display:block; }
+  .pw-eye:hover{ color:var(--accent); }
+  input[type="password"]::-ms-reveal, input[type="password"]::-ms-clear{ display:none; }
   .field select option{ background:var(--bg-alt); }
   .field input:focus, .field textarea:focus, .field select:focus{ border-bottom-color:var(--accent); }
   .field textarea{ resize:vertical; }
@@ -191,6 +201,27 @@
   .apho-btns button.clear-btn{ flex:0 0 auto; padding:5px 8px; }
 
   /* History */
+  .fp-err{ border:1px solid #6b5a1e; background:rgba(245,196,81,.08); color:#f5c451; border-radius:8px; padding:10px 14px; margin-bottom:16px; font-size:.92rem; }
+  .fp-sum{ margin:12px 0 8px; font-weight:800; color:var(--ink); }
+  .fp-sum.warn{ color:#f5c451; }
+  .fp-list{ display:flex; flex-direction:column; gap:8px; max-width:720px; }
+  .fp-row{ border:1px solid var(--line); border-radius:8px; padding:10px 14px; background:var(--bg-alt); }
+  .fp-row.warn{ border-color:#6b5a1e; background:rgba(245,196,81,.06); }
+  .fp-head{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+  .fp-arrow{ color:var(--muted); }
+  .fp-tag{ font-size:.75rem; padding:1px 8px; border-radius:20px; border:1px solid var(--line); color:var(--muted); }
+  .fp-row.warn .fp-tag{ border-color:#6b5a1e; color:#f5c451; }
+  .fp-acts{ display:flex; gap:8px; margin-top:8px; }
+  .fp-ghost{ background:transparent; color:var(--ink); border:1px solid var(--line); box-shadow:none; }
+  .fp-pick{ margin-top:10px; }
+  .fp-pick input{ width:100%; padding:9px 12px; background:var(--bg); color:var(--ink); border:1px solid var(--line); border-radius:6px; }
+  .fp-res{ display:flex; flex-direction:column; gap:4px; margin-top:6px; }
+  .fp-opt{ display:flex; justify-content:space-between; gap:10px; text-align:start; padding:8px 12px; background:var(--bg); color:var(--ink); border:1px solid var(--line); border-radius:6px; cursor:pointer; }
+  .fp-opt:hover{ border-color:var(--accent); }
+  .fp-opt .m{ color:var(--muted); font-size:.8rem; }
+  .fp-none{ color:var(--muted); font-size:.88rem; padding:6px 2px; }
+  .fp-chips{ display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+  .fp-chip{ padding:2px 12px; border-radius:20px; border:1px solid var(--line); color:var(--muted); font-size:.9rem; }
   .hist{ list-style:none; margin:0 6px 0 0; padding:0; max-width:720px; border-inline-start:2px solid var(--line); margin-inline-start:6px; margin-inline-end:0; }
   .hist li{ position:relative; padding:0 26px 30px; }
   .hist li::before{ content:""; position:absolute; inset-inline-start:-7px; top:8px; width:12px; height:12px; border-radius:50%; background:var(--accent); }
@@ -252,6 +283,19 @@
     .doc{ flex-direction:column; align-items:flex-start; }
   }
   @media (prefers-reduced-motion:reduce){ *{ transition:none !important; } }
+  .mic-on{ border-color:var(--accent); color:var(--accent); }
+  .pl-meal{ border:1px solid var(--line); border-radius:8px; padding:12px 14px; background:var(--bg); margin-bottom:10px; }
+  .pl-meal h4{ margin:0 0 8px; }
+  .pl-it{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; padding:6px 0; border-top:1px solid var(--line); }
+  .pl-it:first-of-type{ border-top:0; }
+  .pl-it .n{ flex:1 1 180px; font-weight:700; }
+  .pl-it.new .n{ color:var(--accent); }
+  .pl-it input{ width:76px; padding:6px 8px; }
+  .pl-it .m,.pl-it .u{ color:var(--muted); font-size:.85rem; }
+  .pl-tot{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  .pl-t{ border:1px solid var(--line); border-radius:8px; padding:8px 14px; display:flex; flex-direction:column; align-items:center; gap:2px; min-width:96px; font-size:.85rem; color:var(--muted); }
+  .pl-t strong{ color:var(--ink); font-size:1rem; }
+  .pl-t.off{ border-color:#6b5a1e; } .pl-t.off strong{ color:#f5c451; }
 </style>
 </head>
 <body>
@@ -265,7 +309,13 @@
       <input id="u" type="text" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" style="text-align:right">
     </label>
     <label class="field">كلمة المرور
-      <input id="p" type="password" autocomplete="current-password" dir="ltr" style="text-align:right">
+      <span class="pw-wrap">
+        <input id="p" type="password" autocomplete="current-password" dir="ltr" style="text-align:right">
+        <button type="button" class="pw-eye" id="pwToggle" aria-label="إظهار كلمة المرور" aria-pressed="false">
+          <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </span>
     </label>
     <p class="err" id="loginErr" hidden></p>
     <button class="btn btn-full" type="submit" id="loginBtn">دخول</button>
@@ -328,6 +378,12 @@
       <div id="photosBody" class="photos"></div>
     </section>
 
+    <section id="p-food" role="tabpanel" hidden>
+      <h2>أكلي</h2>
+      <p class="sub">اكتب أنواع الأكل اللي بتاكلها في الأسبوع، من غير كميات، على قد ما تقدر. الكابتن هو اللي بيحدد الكميات. كل ما تكتب أنواع أكتر، الخطة بتبقى أقرب لأكلك.</p>
+      <div id="foodBody"></div>
+    </section>
+
     <section id="p-history" role="tabpanel" hidden>
       <h2>تاريخي مع روك جيم</h2>
       <p class="sub">كل مراجعة أسبوعية وملاحظات الكابتن.</p>
@@ -355,7 +411,7 @@
         <b>عميل جديد؟</b> اعمله حساب من Supabase: Authentication ← Users ← Add user، والإيميل يبقى <b>اسمه@rockgym.app</b> وحدد Auto Confirm. هيظهر هنا لوحده في القايمة.
       </div>
       <label class="field admin-pick">ابحث بكود العميل
-        <input id="clientSearch" type="text" dir="ltr" style="text-align:right" placeholder="مثال: RG26-001-09" autocomplete="off">
+        <input id="clientSearch" type="text" dir="ltr" inputmode="numeric" style="text-align:right" placeholder="مثال: 26 001 09" autocomplete="off">
       </label>
       <label class="field admin-pick">اختار العميل
         <select id="clientSel"></select>
@@ -395,6 +451,22 @@
                 <label class="field">بداية الاشتراك<input name="subscription_start_date" type="date"></label>
                 <label class="field">تاريخ انتهاء الاشتراك<input name="subscription_end_date" type="date"></label>
               </div>
+              <div class="row2">
+                <label class="field">الطول (سم)<input name="height_cm" type="number" step="1" inputmode="numeric"></label>
+                <label class="field">السن<input name="age" type="number" step="1" inputmode="numeric"></label>
+              </div>
+              <div class="row2">
+                <label class="field">النوع
+                  <select name="sex"><option value="male">ذكر</option><option value="female">أنثى</option></select>
+                </label>
+                <label class="field">مستوى النشاط
+                  <select name="activity">
+                    <option value="light">خفيف (تمرين 2-3 أيام، شغل مكتبي)</option>
+                    <option value="moderate" selected>متوسط (تمرين 4-5 أيام)</option>
+                    <option value="high">عالي (تمرين مكثف أو شغل بدني)</option>
+                  </select>
+                </label>
+              </div>
               <button class="btn btn-sm" type="submit">حفظ</button>
             </form>
           </div>
@@ -410,6 +482,70 @@
               <button class="btn btn-sm" type="submit">إضافة</button>
             </form>
             <ul class="mini" id="listMeasure"></ul>
+          </div>
+
+          <div class="box" style="grid-column:1/-1">
+            <h3>أكل العميل (اللي كتبه بنفسه)</h3>
+            <div id="coachFoodBody"></div>
+          </div>
+
+          <div class="box" style="grid-column:1/-1">
+            <h3>خطة أسبوعية من القوالب والوصفات (اقتراح المنصة — إنت اللي بتعدّل وتعتمد)</h3>
+            <div id="coachWeekBody"></div>
+          </div>
+
+          <div class="box" style="grid-column:1/-1">
+            <h3>خطة يوم بسيطة من أصناف العميل (اقتراح المنصة — إنت اللي بتعدّل وتعتمد)</h3>
+            <div id="coachPlanBody"></div>
+          </div>
+
+          <div class="box" style="grid-column:1/-1">
+            <h3>التغذية والأهداف (اقتراح المنصة — إنت اللي بتعدّل وتوافق)</h3>
+            <form id="fNutri" novalidate>
+              <p class="sub" id="nutProfileNote" style="margin:0 0 14px"></p>
+              <div class="row2">
+                <label class="field">الهدف
+                  <select name="goal_type">
+                    <option value="loss">خسارة وزن (دهون زيادة)</option>
+                    <option value="cut">تنشيف (الحفاظ على العضل)</option>
+                    <option value="bulk">تضخيم / زيادة عضل</option>
+                    <option value="maintain">ثبات</option>
+                  </select>
+                </label>
+                <label class="field">السرعة
+                  <select name="rate_choice"></select>
+                </label>
+              </div>
+              <div class="row2">
+                <label class="field">مستوى التمرين (للتضخيم)
+                  <select name="training_level">
+                    <option value="beginner">مبتدئ (أول سنة)</option>
+                    <option value="intermediate" selected>متوسط (1-3 سنين)</option>
+                    <option value="advanced">متقدم (3+ سنين)</option>
+                  </select>
+                </label>
+                <label class="field">زيادة فوق الفائض الطبيعي (للتضخيم)
+                  <select name="bulk_pct"><option value="0">بدون</option><option value="20">20%</option><option value="30">30%</option></select>
+                </label>
+              </div>
+              <label class="field">الوزن المستخدم في الحساب (كجم) — تقدر تعدّله بإيدك
+                <input name="calc_weight" type="number" step="0.1" inputmode="decimal">
+              </label>
+              <p class="sub" id="nutWeightNote" style="margin:0 0 8px"></p>
+              <button class="btn btn-sm" type="button" id="nutSuggestBtn">اقترح الأهداف</button>
+              <div id="nutSuggestOut" class="how" style="margin-top:12px" hidden></div>
+              <div class="row2" style="margin-top:14px">
+                <label class="field">السعرات (يوميًا)<input name="target_kcal" type="number" step="1" inputmode="numeric"></label>
+                <label class="field">بروتين (جم)<input name="target_protein" type="number" step="1" inputmode="numeric"></label>
+              </div>
+              <div class="row2">
+                <label class="field">كارب (جم)<input name="target_carb" type="number" step="1" inputmode="numeric"></label>
+                <label class="field">دهون (جم)<input name="target_fat" type="number" step="1" inputmode="numeric"></label>
+              </div>
+              <p class="sub" id="nutSumNote" style="margin:0 0 8px"></p>
+              <p class="sub" id="nutWeeklyNote" style="margin:0 0 12px"></p>
+              <button class="btn btn-sm" type="submit">حفظ الأهداف</button>
+            </form>
           </div>
 
           <div class="box" style="grid-column:1/-1">
@@ -502,6 +638,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>if(!window.supabase){document.write('<script src="https://unpkg.com/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"><\/script>');}</script>
+<script>if(!window.supabase){document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/supabase-js/2.45.4/umd/supabase.min.js"><\/script>');}</script>
 <script>
 (function () {
   /* ====== حط بيانات مشروعك هنا (من Supabase: Project Settings ← API) ====== */
@@ -516,8 +654,21 @@
   var $ = function (id) { return document.getElementById(id); };
   var loginView = $("loginView"), appView = $("appView"), loginErr = $("loginErr");
   var sb = null, profile = null, coachTarget = null;
+  $("pwToggle").addEventListener("click", function () {
+    var inp = $("p"), show = inp.type === "password";
+    inp.type = show ? "text" : "password";
+    this.setAttribute("aria-pressed", show ? "true" : "false");
+    this.setAttribute("aria-label", show ? "إخفاء كلمة المرور" : "إظهار كلمة المرور");
+  });
 
+  var LIB_MISSING = configured && !window.supabase && !/[?&]demo=1(&|$)/.test(location.search);
   if (!configured) { $("cfgWarn").hidden = false; }
+  else if (LIB_MISSING) {
+    configured = false;
+    $("loginForm").addEventListener("submit", function (e) { e.preventDefault(); });
+    loginErr.textContent = "مكتبة تسجيل الدخول ما اتحمّلتش. اتأكد إن النت شغال، وقفّل أي ad blocker أو VPN، أو جرّب متصفح تاني، وبعدين حدّث الصفحة.";
+    loginErr.hidden = false;
+  }
   else { sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); }
 
   /* ================= DEMO MODE (public preview link, fake data, no login/no DB) ================= */
@@ -605,6 +756,13 @@
         { id: "d1", title: "نظام محمد السيد - الأسبوع الأول", note: "نظامك الحالي", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", created_at: daysAgo(20) },
         { id: "d2", title: "نظام التغذية - محمد السيد", note: "السعرات والماكروز", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", created_at: daysAgo(18) }
       ],
+      food_submissions: [],
+      foods: [],
+      food_aliases: [],
+      meal_plans: [],
+      weekly_plans: [],
+      recipes: [],
+      meal_plan_templates: [],
       reviews: [
         { id: "r1", week_label: "الأسبوع 8", title: "نزلت 0.9 كجم", body: "أداء ممتاز في تمارين الرجل الأسبوع ده، كمّل كده.", created_at: daysAgo(0) },
         { id: "r2", week_label: "الأسبوع 5", title: "تحسن ملحوظ في القوة", body: "بدأنا نزود في الأوزان تدريجيًا، خليك مستمر على النظام الغذائي.", created_at: daysAgo(28) },
@@ -903,8 +1061,8 @@
     }).catch(fail);
   }
   /* ---------- tabs ---------- */
-  var CLIENT_TABS = [["videos", "فيديوهاتي"], ["plans", "أنظمتي"], ["progress", "تطوري"], ["history", "تاريخي مع روك جيم"]];
-  var ALL_PANELS = ["videos", "plans", "progress", "history", "daily", "today", "admin", "expired"];
+  var CLIENT_TABS = [["videos", "فيديوهاتي"], ["plans", "أنظمتي"], ["progress", "تطوري"], ["food", "أكلي"], ["history", "تاريخي مع روك جيم"]];
+  var ALL_PANELS = ["videos", "plans", "progress", "food", "history", "daily", "today", "admin", "expired"];
   function buildTabs() {
     var bar = $("tabsBar"); clear(bar);
     var list = profile.is_admin ? [["daily", "المتابعة اليومية (واتساب)"], ["today", "المراجعة الأسبوعية"], ["admin", "لوحة الكابتن"], ["expired", "اشتراكات منتهية"]] : CLIENT_TABS;
@@ -935,6 +1093,7 @@
     if (k === "videos") { showLoading("videosBody"); sb.from("videos").select("*").eq("client_id", id).order("created_at").then(function (r) { r.error ? fail(r.error) : renderVideos(r.data); }); }
     if (k === "plans") { showLoading("plansBody"); sb.from("documents").select("*").eq("client_id", id).order("created_at", { ascending: false }).then(function (r) { r.error ? fail(r.error) : renderPlans(r.data); }); }
     if (k === "progress") { showLoading("progressBody"); showLoading("liftsBody"); showLoading("photosBody"); loadLifts(); loadPhotos(); sb.from("measurements").select("*").eq("client_id", id).order("week_date").then(function (r) { r.error ? fail(r.error) : renderProgress(r.data); }); }
+    if (k === "food") loadFood();
     if (k === "history") { showLoading("historyBody"); sb.from("reviews").select("*").eq("client_id", id).order("created_at", { ascending: false }).then(function (r) { r.error ? fail(r.error) : renderHistory(r.data); }); }
   }
 
@@ -1083,6 +1242,979 @@
     body.appendChild(ul);
   }
 
+
+  /* ================= FOOD (أكلي): العميل يكتب أكله بكلامه ================= */
+  function foodEntry(r, withTitle) {
+    return el("li", null, [
+      el("div", { class: "when", text: fmtDate(r.created_at) }),
+      r.eats_text ? el("h3", { text: "باكل" }) : null,
+      r.eats_text ? el("p", { text: r.eats_text }) : null,
+      r.avoids_text ? el("h3", { text: "مش باكل" }) : null,
+      r.avoids_text ? el("p", { text: r.avoids_text }) : null
+    ]);
+  }
+  /* ---------- تسجيل صوتي: العميل يتكلم والمتصفح يحوّل كلامه لنص جوه الخانة (يراجعه ويعدّله قبل ما يبعت) ---------- */
+  function addMic(ta) {
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    var node = el("div", { style: "margin:-6px 0 18px" });
+    if (!SR) {
+      node.appendChild(el("p", { class: "sub", style: "margin:0;font-size:.85rem", text: "التسجيل الصوتي مش شغال في المتصفح ده. جرّب Chrome، أو دوس على ميكروفون كيبورد الموبايل وإنت جوه الخانة وتكلم." }));
+      return { node: node, stop: function () {} };
+    }
+    var rec = null, on = false, quick = 0, lastStart = 0;
+    var live = el("div", { class: "sub", style: "margin:6px 0 0;font-size:.88rem;min-height:1.3em" });
+    var btn = el("button", { type: "button", class: "btn btn-sm fp-ghost", text: "🎤 سجّل بصوتك" });
+    function add(txt) {
+      txt = String(txt || "").trim(); if (!txt) return;
+      var v = ta.value.replace(/\s+$/, "");
+      ta.value = v ? v + "، " + txt : txt;
+    }
+    function stop() {
+      on = false; try { if (rec) rec.stop(); } catch (e) {}
+      btn.textContent = "🎤 سجّل بصوتك"; btn.classList.remove("mic-on"); live.textContent = "";
+    }
+    function start() {
+      rec = new SR(); rec.lang = "ar-EG"; rec.continuous = true; rec.interimResults = true;
+      rec.onresult = function (e) {
+        var interim = "";
+        for (var i = e.resultIndex; i < e.results.length; i++) {
+          var r = e.results[i];
+          if (r.isFinal) add(r[0].transcript); else interim += r[0].transcript;
+        }
+        live.textContent = interim ? "بسمعك: " + interim : "بسمعك... قول الأكل واحدة واحدة";
+      };
+      rec.onerror = function (e) {
+        if (e.error === "not-allowed" || e.error === "service-not-allowed") { stop(); toast("لازم تسمح للميكروفون من إعدادات المتصفح", true); }
+        else if (e.error === "no-speech" || e.error === "aborted") { /* عادي: هيعيد السماع لوحده */ }
+        else { stop(); toast("التسجيل وقف (" + e.error + "). جرّب تاني أو اكتب بإيدك", true); }
+      };
+      rec.onend = function () {
+        if (!on) return;
+        var now = Date.now(); quick = (now - lastStart < 800) ? quick + 1 : 0;
+        if (quick > 4) { stop(); toast("التسجيل مش ثابت. جرّب تاني أو اكتب بإيدك", true); return; }
+        try { lastStart = now; rec.start(); } catch (e) { stop(); }
+      };
+      lastStart = Date.now(); quick = 0; on = true; rec.start();
+      btn.textContent = "⏹ وقّف التسجيل"; btn.classList.add("mic-on"); live.textContent = "بسمعك... قول الأكل واحدة واحدة";
+    }
+    btn.addEventListener("click", function () { if (on) stop(); else { try { start(); } catch (e) { stop(); toast("ما قدرتش أشغّل الميكروفون", true); } } });
+    node.appendChild(btn); node.appendChild(live);
+    node.appendChild(el("p", { class: "sub", style: "margin:4px 0 0;font-size:.8rem", text: "الكلام بيتحوّل لكتابة عن طريق خدمة المتصفح (في Chrome بتتم على سيرفرات جوجل). راجع النص وعدّله قبل ما تبعته." }));
+    return { node: node, stop: stop };
+  }
+  function loadFood() {
+    var body = $("foodBody"); showLoading("foodBody");
+    sb.from("food_submissions").select("*").eq("client_id", profile.id).order("created_at", { ascending: false }).then(function (r) {
+      if (r.error) return fail(r.error);
+      clear(body);
+      var planBox = el("div"); body.appendChild(planBox); showClientWeekly(planBox, function (has) { if (!has) showClientPlan(planBox); });
+      var form = el("form", { novalidate: "" });
+      var eats = el("textarea", { name: "eats", rows: "9", placeholder: "مثال: بيض، عيش فينو، عيش أسمر، فول، طعمية، كشري، محشي، رز، فرخة مشوية، زبادي..." });
+      var avoids = el("textarea", { name: "avoids", rows: "3", placeholder: "مثال: تونة، سمك، كوسة" });
+      var btn = el("button", { class: "btn", type: "submit", text: "إرسال للكابتن" });
+      var micEats = addMic(eats), micAvoids = addMic(avoids);
+      form.appendChild(el("label", { class: "field", style: "margin-bottom:8px" }, [el("span", { text: "الأكل اللي باكله" }), eats]));
+      form.appendChild(micEats.node);
+      form.appendChild(el("label", { class: "field", style: "margin-bottom:8px" }, [el("span", { text: "الأكل اللي مش باكله (لو فيه)" }), avoids]));
+      form.appendChild(micAvoids.node);
+      var mealsSel = el("select", { name: "meals" });
+      [3, 4, 5, 6].forEach(function (n) { mealsSel.appendChild(el("option", { value: String(n), text: n + " وجبات" })); });
+      form.appendChild(el("label", { class: "field" }, [el("span", { text: "عدد الوجبات اللي عايز تاكلها في اليوم (3 على الأقل)" }), mealsSel]));
+      form.appendChild(btn);
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        micEats.stop(); micAvoids.stop();
+        var a = eats.value.trim(), b = avoids.value.trim();
+        if (!a) return toast("اكتب الأكل اللي بتاكله الأول", true);
+        btn.disabled = true;
+        var row = { client_id: profile.id, eats_text: a, avoids_text: b || null, meals_count: Number(mealsSel.value) };
+        sb.from("food_submissions").insert(row).then(function (res) {
+          if (res.error && /meals_count/.test(res.error.message || "")) { delete row.meals_count; return sb.from("food_submissions").insert(row); }   /* لو عمود عدد الوجبات لسه ما اتضافش */
+          return res;
+        }).then(function (res) {
+          btn.disabled = false;
+          if (res.error) return fail(res.error);
+          toast("اتبعت للكابتن. تقدر تزوّد عليه في أي وقت");
+          loadFood();
+        });
+      });
+      body.appendChild(el("div", { class: "box", style: "max-width:720px;margin-bottom:28px" }, [form]));
+      if (r.data.length) {
+        body.appendChild(el("h3", { text: "اللي بعتّه قبل كده", style: "margin:0 0 14px" }));
+        var ul = el("ul", { class: "hist" });
+        r.data.forEach(function (x) { ul.appendChild(foodEntry(x)); });
+        body.appendChild(ul);
+      }
+    });
+  }
+  /* ---------- تحليل أكل العميل (الكابتن بس): مطابقة الكلام بجدول foods + تصحيحات food_aliases ---------- */
+  var FP = { vocab: {}, loaded: false, foods: [], byId: {}, exact: {}, aliasMap: {}, subs: [], err: null };
+  var QTY_WORDS = { "طبق": 1, "اطباق": 1, "رغيف": 1, "رغيفين": 1, "ارغفه": 1, "معلقه": 1, "معالق": 1, "ملعقه": 1, "ملاعق": 1, "كوبايه": 1, "كوب": 1, "قطعه": 1, "قطع": 1, "حبه": 1, "حبات": 1, "علبه": 1, "شويه": 1, "حاجه": 1, "جرام": 1, "جم": 1, "كيلو": 1 };
+  /* كلام زيادة بيقوله الناس قبل الأكل (بيتشال قبل المطابقة) */
+  var STOP = {}; "طيب طب يعني انا اني انه باكل بكل اكل ياكل باكله باكلها بياكل هاكل اكلت بحب ممكن مثلا زي كده كدا كل دايما غالبا احيانا بس علي علشان عشان في من مع لي هو هي ده دي دا دول غدا فطار عشا سحور وجبه وجبات عادي تقريبا كمان بعدين شويه حاجه حاليا يوميا لما لو يا".split(" ").forEach(function (w) { STOP[w] = 1; });
+  /* اختلافات الكتابة المصرية */
+  var DISH = { "محشي": 1, "محاشي": 1, "حشو": 1, "ملفوف": 1 };
+  var SYN = { "بتنجان": "بازنجان", "بيتنجان": "بازنجان", "بتنجانه": "بازنجان", "بطاطا": "بطاطس", "دجاج": "فراخ" };
+  function normAr(s) {
+    s = String(s == null ? "" : s).toLowerCase()
+      .replace(/[\u064B-\u0652\u0640]/g, "")
+      .replace(/[أإآٱ]/g, "ا").replace(/ذ/g, "ز").replace(/ظ/g, "ض").replace(/ى/g, "ي").replace(/ة/g, "ه").replace(/ؤ/g, "و").replace(/ئ/g, "ي")
+      .replace(/[٠-٩]/g, function (d) { return String(d.charCodeAt(0) - 1632); })
+      .replace(/[^a-z0-9\u0621-\u064A\s]/g, " ");
+    return s.split(/\s+/).filter(Boolean).map(function (t) {
+      if (t.length > 3 && t.indexOf("ال") === 0) t = t.slice(2);
+      if (t === "رز") t = "ارز";
+      if (SYN[t]) t = SYN[t];
+      return t;
+    }).join(" ");
+  }
+  function stemTok(t) {
+    if (FP.vocab[t]) return t;
+    var c = [];
+    if (/^(بال|وال)/.test(t) && t.length > 4) c.push(t.slice(3));
+    if (/^[بولف]/.test(t) && t.length > 3) c.push(t.slice(1));
+    for (var i = 0; i < c.length; i++) { var x = c[i]; if (x === "رز") x = "ارز"; if (SYN[x]) x = SYN[x]; if (FP.vocab[x]) return x; }
+    return t;
+  }
+  function phraseTokens(raw) {
+    return normAr(raw).split(" ").filter(function (t) { return t && !/^[0-9]+$/.test(t) && !QTY_WORDS[t] && !STOP[t]; }).map(stemTok);
+  }
+  function cleanPhrase(raw) {
+    var toks = phraseTokens(raw);
+    if (toks.length) return toks.join(" ");
+    return normAr(raw).split(" ").filter(function (t) { return t && !/^[0-9]+$/.test(t); }).join(" ");
+  }
+  function foodLabel(f) {
+    var n = f.name_ar || f.name_en || ("#" + f.id), x = [];
+    if (f.state === "raw") x.push("نيّ"); else if (f.state === "cooked") x.push("مطبوخ");
+    if (f.version === "light") x.push("لايت");
+    return n + (x.length ? " (" + x.join("، ") + ")" : "");
+  }
+  function foodRank(f) { return (f.state === "raw" ? 0 : 2) + (f.version === "light" ? 0 : 1); }   /* المطبوخ/الأصلي أول، لأن الناس بتقول الأكل زي ما بتاكله */
+  function buildFoodIndex(foods, aliases) {
+    FP.foods = foods; FP.byId = {}; FP.exact = {}; FP.aliasMap = {}; FP.vocab = {};
+    foods.forEach(function (f) {
+      FP.byId[String(f.id)] = f;
+      var keys = [f.name_ar, f.name_en];
+      var al = f.aliases;
+      if (Array.isArray(al)) keys = keys.concat(al); else if (al) keys = keys.concat(String(al).split("|"));
+      var seen = {}; f._keys = [];
+      keys.forEach(function (k) {
+        var n = normAr(k); if (!n || seen[n]) return;
+        seen[n] = 1; f._keys.push(n); n.split(" ").forEach(function (t) { FP.vocab[t] = 1; });
+        (FP.exact[n] = FP.exact[n] || []).push(f);
+      });
+    });
+    (aliases || []).forEach(function (a) { var n = normAr(a.alias); if (n) FP.aliasMap[n] = { id: a.id, foodId: a.food_id }; });
+  }
+  function pickBest(list) { return list.slice().sort(function (a, b) { return foodRank(b) - foodRank(a); })[0]; }
+  function matchPhrase(raw) {
+    var q = cleanPhrase(raw); if (!q) return null;
+    var a = FP.aliasMap[q];
+    if (a && FP.byId[String(a.foodId)]) return { kind: "alias", food: FP.byId[String(a.foodId)], q: q };
+    var ex = FP.exact[q];
+    if (ex && ex.length) return { kind: "exact", food: pickBest(ex), q: q };
+    var qt = q.split(" ").filter(function (t) { return FP.vocab[t]; });
+    if (!qt.length) return { kind: "none", food: null, q: q };
+    var best = null, bestSc = 0, sp = " " + qt.join(" ") + " ";   /* الكلمات اللي مش في قاعدة الأكل (زي "خميس") بتتشال */
+    FP.foods.forEach(function (f) {
+      f._keys.forEach(function (k) {
+        var sc = 0, kt = k.split(" ");
+        if (qt.every(function (t) { return kt.indexOf(t) > -1; })) sc = 0.5 + 0.5 * qt.length / kt.length;
+        else if ((" " + k + " ").indexOf(sp) > -1) sc = 0.1 + 0.9 * (sp.length - 2) / k.length;
+        else if (k.length >= 3 && sp.indexOf(" " + k + " ") > -1) sc = 0.8 * k.length / (sp.length - 2);
+        if (sc > bestSc || (sc === bestSc && best && foodRank(f) > foodRank(best))) { bestSc = sc; best = f; }
+      });
+    });
+    if (best && bestSc >= 0.3) return { kind: "guess", food: best, q: q };
+    return { kind: "none", food: null, q: q };
+  }
+  function isSure(m) { return m && (m.kind === "alias" || m.kind === "exact" || m.kind === "found"); }
+  /* بيدوّر جوه الجملة على أسماء أصناف موجودة (حتى لو الجملة فيها كلام زيادة، أو صنفين مع بعض) */
+  function extractFoods(toks) {
+    var present = {}, byKey = {}, cands = [];
+    toks.forEach(function (t) { present[t] = 1; });
+    FP.foods.forEach(function (f) {
+      f._keys.forEach(function (k) {
+        if (k.length < 3) return;
+        var kt = k.split(" ");
+        if (!kt.every(function (t) { return present[t]; })) return;
+        if (!byKey[k]) { byKey[k] = { k: k, kt: kt, foods: [] }; cands.push(byKey[k]); }
+        if (byKey[k].foods.indexOf(f) < 0) byKey[k].foods.push(f);
+      });
+    });
+    cands.sort(function (a, b) { return b.kt.length - a.kt.length || b.k.length - a.k.length; });
+    var used = {}, res = [];
+    cands.forEach(function (c) {
+      if (c.kt.some(function (t) { return used[t]; })) return;
+      c.kt.forEach(function (t) { used[t] = 1; });
+      res.push({ key: c.k, food: pickBest(c.foods) });
+    });
+    return res;
+  }
+  /* جمل الكابتن قال عليها "مش أكل" (بتتحفظ على اللابتوب ده) */
+  var IGN_KEY = "rg_food_ignore";
+  function getIgn() { try { return JSON.parse(localStorage.getItem(IGN_KEY) || "[]"); } catch (e) { return []; } }
+  function addIgn(chunk) { try { var a = getIgn(), n = normAr(chunk); if (n && a.indexOf(n) < 0) a.push(n); localStorage.setItem(IGN_KEY, JSON.stringify(a)); return true; } catch (e) { return false; } }
+  function analyzeText(text) {
+    var out = [], ign = getIgn();
+    String(text || "").split(/[\n\r,،؛;\/+]+/).map(function (x) { return x.trim(); }).filter(Boolean).forEach(function (chunk) {
+      if (ign.indexOf(normAr(chunk)) > -1) return;
+      var whole = matchPhrase(chunk);
+      if (isSure(whole)) { out.push({ phrase: chunk, m: whole }); return; }
+      var variants = [chunk.split(/\s+و\s+/), chunk.split(/\s+و(?=\S)/)];
+      for (var i = 0; i < variants.length; i++) {
+        var parts = variants[i].map(function (p) { return p.trim(); }).filter(Boolean);
+        if (parts.length < 2) continue;
+        var ms = parts.map(matchPhrase);
+        if (ms.every(isSure)) { parts.forEach(function (p, j) { out.push({ phrase: p, m: ms[j] }); }); return; }
+      }
+      var toks = phraseTokens(chunk), dishes = [];
+      /* أكلات مركبة (محشي...) مش موجودة في قاعدة الأكل: ما نخدش جزء من اسمها (زي "عنب") على إنه الأكلة */
+      for (var di = 0; di < toks.length; di++) {
+        if (DISH[toks[di]] && !FP.vocab[toks[di]]) {
+          var dn = toks.slice(di, di + 3); toks.splice(di, 3);
+          dishes.push({ phrase: dn.join(" "), m: { kind: "none", food: null, q: dn.join(" ") } }); di--;
+        }
+      }
+      dishes.forEach(function (d) { out.push(d); });
+      var ex = extractFoods(toks);
+      if (!ex.length && dishes.length) return;
+      if (ex.length) { ex.forEach(function (e) { out.push({ phrase: ex.length > 1 ? e.key : chunk, m: { kind: "found", food: e.food, q: e.key } }); }); return; }
+      if (whole) out.push({ phrase: chunk, m: whole });
+    });
+    return out;
+  }
+  function loadFoodData(cb) {
+    if (FP.loaded) return cb();
+    Promise.all([sb.from("foods").select("*"), sb.from("food_aliases").select("*")]).then(function (rs) {
+      if (rs[0].error) { FP.err = "ما قدرتش أقرا جدول foods: " + rs[0].error.message; return cb(); }
+      if (rs[1].error) { FP.err = "ما قدرتش أقرا جدول food_aliases: " + rs[1].error.message; return cb(); }
+      var foods = rs[0].data || [];
+      if (!foods.length) { FP.err = "جدول foods رجّع صفر صفوف. غالبًا صلاحيات (RLS) مش مدّياك قراءة، أو الجدول فاضي."; return cb(); }
+      if (!("name_ar" in foods[0])) { FP.err = "جدول foods مفيهوش عمود name_ar. الأعمدة الموجودة: " + Object.keys(foods[0]).join(", "); return cb(); }
+      buildFoodIndex(foods, rs[1].data || []);
+      FP.err = null; FP.loaded = true; cb();
+    }).catch(function (e) { FP.err = "مشكلة في تحميل الأصناف: " + ((e && e.message) || e); cb(); });
+  }
+  function reloadAliases(cb) {
+    sb.from("food_aliases").select("*").then(function (r) {
+      if (r.error) return fail(r.error);
+      FP.aliasMap = {};
+      (r.data || []).forEach(function (a) { var n = normAr(a.alias); if (n) FP.aliasMap[n] = { id: a.id, foodId: a.food_id }; });
+      cb();
+    });
+  }
+  function saveAlias(q, food, done) {
+    var old = FP.aliasMap[q];
+    var req = old && old.id != null
+      ? sb.from("food_aliases").update({ food_id: food.id }).eq("id", old.id)
+      : sb.from("food_aliases").insert({ alias: q, food_id: food.id });
+    req.then(function (r) {
+      if (r.error) return fail(r.error);
+      reloadAliases(function () {
+        var chk = FP.aliasMap[q];
+        if (!chk || String(chk.foodId) !== String(food.id)) { toast("التصحيح ما اتحفظش. راجع صلاحيات جدول food_aliases في Supabase", true); return done(); }
+        toast("اتحفظ. المنصة هتفهم \"" + q + "\" كده من هنا ورايح");
+        done();
+      });
+    });
+  }
+  function foodPicker(item, onPicked) {
+    var wrap = el("div", { class: "fp-pick" });
+    var inp = el("input", { type: "text", placeholder: "ابحث عن الصنف الصح (بالعربي أو الإنجليزي)", autocomplete: "off" });
+    var res = el("div", { class: "fp-res" });
+    function show() {
+      clear(res);
+      var q = normAr(inp.value), toks = q ? q.split(" ") : [];
+      var list = FP.foods.filter(function (f) {
+        if (!toks.length) return false;
+        var hay = " " + f._keys.join(" | ") + " ";
+        return toks.every(function (t) { return hay.indexOf(t) > -1; });
+      }).sort(function (a, b) { return foodRank(b) - foodRank(a); }).slice(0, 8);
+      if (toks.length && !list.length) res.appendChild(el("div", { class: "fp-none", text: "مفيش صنف بالاسم ده. لازم يتضاف لقاعدة الأكل." }));
+      list.forEach(function (f) {
+        var b = el("button", { type: "button", class: "fp-opt" }, [
+          el("span", { text: foodLabel(f) }),
+          el("span", { class: "m", text: f.kcal_100g != null ? (f.kcal_100g + " سعر / 100 جم") : "" })
+        ]);
+        b.addEventListener("click", function () { b.disabled = true; onPicked(f); });
+        res.appendChild(b);
+      });
+    }
+    inp.addEventListener("input", show);
+    wrap.appendChild(inp); wrap.appendChild(res);
+    setTimeout(function () { inp.focus(); }, 0);
+    return wrap;
+  }
+  function renderFoodAnalysis() {
+    var body = $("coachFoodBody"); if (!body) return; clear(body);
+    if (!FP.subs.length) { body.appendChild(emptyBox("العميل لسه ما كتبش أكله.")); return; }
+    if (FP.err) body.appendChild(el("div", { class: "fp-err", text: FP.err + " (تحت: النص الأصلي اللي كتبه العميل)" }));
+    var ul = el("ul", { class: "hist" });
+    FP.subs.forEach(function (x) {
+      var li = el("li", null, [el("div", { class: "when", text: fmtDate(x.created_at) })]);
+      if (x.eats_text) { li.appendChild(el("h3", { text: "باكل" })); li.appendChild(el("p", { text: x.eats_text })); }
+      if (FP.loaded && x.eats_text) {
+        var all = analyzeText(x.eats_text);
+        var items = all.filter(function (i) { return i.m.kind !== "none"; }), rest = all.filter(function (i) { return i.m.kind === "none"; });
+        var okN = items.filter(function (i) { return isSure(i.m); }).length, gN = items.length - okN;
+        li.appendChild(el("div", { class: "fp-sum" + (gN ? " warn" : ""), text: "لقيت " + items.length + " صنف" + (gN ? " — " + gN + " اقتراح محتاج تأكيدك" : "") }));
+        var guesses = [], seenQ = {};
+        items.forEach(function (i) { if (i.m.kind === "guess" && !seenQ[i.m.q]) { seenQ[i.m.q] = 1; guesses.push(i); } });
+        if (guesses.length) {
+          var allBtn = el("button", { type: "button", class: "btn btn-sm", text: "أكّد كل الاقتراحات (" + guesses.length + ")" });
+          allBtn.addEventListener("click", function () {
+            allBtn.disabled = true;
+            (function next(i) { if (i >= guesses.length) return renderFoodAnalysis(); saveAlias(guesses[i].m.q, guesses[i].m.food, function () { next(i + 1); }); })(0);
+          });
+          li.appendChild(allBtn);
+        }
+        var list = el("div", { class: "fp-list" });
+        items.forEach(function (it) {
+          var m = it.m, sure = isSure(m);
+          var row = el("div", { class: "fp-row" + (sure ? "" : " warn") });
+          var head = el("div", { class: "fp-head" }, [el("strong", { text: it.phrase })]);
+          var tag = m.kind === "guess" ? "اقتراح" : (m.kind === "none" ? "ما فهمتش" : (m.kind === "alias" ? "متعلّم" : ""));
+          if (m.food) head.appendChild(el("span", { class: "fp-arrow", text: "←" })), head.appendChild(el("span", { text: foodLabel(m.food) }));
+          if (tag) head.appendChild(el("span", { class: "fp-tag", text: tag }));
+          row.appendChild(head);
+          var acts = el("div", { class: "fp-acts" });
+          function openPicker() {
+            acts.hidden = true;
+            row.appendChild(foodPicker(it, function (f) { saveAlias(m.q, f, renderFoodAnalysis); }));
+          }
+          if (m.kind === "guess") {
+            var ok = el("button", { type: "button", class: "btn btn-sm", text: "أكّد" });
+            ok.addEventListener("click", function () { ok.disabled = true; saveAlias(m.q, m.food, renderFoodAnalysis); });
+            acts.appendChild(ok);
+          }
+          if (!sure) {
+            var no = el("button", { type: "button", class: "btn btn-sm fp-ghost", text: "مش أكل" });
+            no.addEventListener("click", function () { if (!addIgn(it.phrase)) toast("المتصفح مش سايبني أحفظ ده", true); renderFoodAnalysis(); });
+            acts.appendChild(no);
+          }
+          var ch = el("button", { type: "button", class: "btn btn-sm fp-ghost", text: m.food ? "غيّر" : "اختار الصنف" });
+          ch.addEventListener("click", openPicker);
+          acts.appendChild(ch);
+          row.appendChild(acts);
+          list.appendChild(row);
+        });
+        li.appendChild(list);
+        if (rest.length) {
+          var det = el("details", { class: "fp-rest" }, [el("summary", { text: "كلام ما لقيتش فيه أكل (" + rest.length + ") — اضغط لو عايز تراجعه" })]);
+          rest.forEach(function (it) {
+            var row = el("div", { class: "fp-row" }, [el("div", { class: "fp-head" }, [el("strong", { text: it.phrase })])]);
+            var acts = el("div", { class: "fp-acts" });
+            var ch2 = el("button", { type: "button", class: "btn btn-sm fp-ghost", text: "اختار الصنف" });
+            ch2.addEventListener("click", function () { acts.hidden = true; row.appendChild(foodPicker(it, function (f) { saveAlias(it.m.q, f, renderFoodAnalysis); })); });
+            acts.appendChild(ch2); row.appendChild(acts); det.appendChild(row);
+          });
+          li.appendChild(det);
+        }
+      }
+      if (x.avoids_text) {
+        li.appendChild(el("h3", { text: "مش باكل" }));
+        var chips = el("div", { class: "fp-chips" });
+        x.avoids_text.split(/[\n\r,،؛;\/+]+/).map(function (t) { return t.trim(); }).filter(Boolean).forEach(function (t) { chips.appendChild(el("span", { class: "fp-chip", text: t })); });
+        li.appendChild(chips);
+      }
+      ul.appendChild(li);
+    });
+    body.appendChild(ul);
+  }
+  function loadCoachFood() {
+    var body = $("coachFoodBody"); if (!body || !coachTarget) return;
+    showLoading("coachFoodBody");
+    var cid = coachTarget;
+    sb.from("food_submissions").select("*").eq("client_id", cid).order("created_at", { ascending: false }).then(function (r) {
+      if (r.error) return fail(r.error);
+      if (cid !== coachTarget) return;
+      FP.subs = r.data || [];
+      loadFoodData(function () { if (cid === coachTarget) renderFoodAnalysis(); });
+    });
+  }
+
+  /* ================= PLAN: خطة الأكل (الكابتن يبني ويعدّل ويعتمد، والعميل يشوف المعتمد بس) ================= */
+  var PL = { cid: null, tgt: {}, n: 3, meals: [], subs: [], pool: [], av: null, unsure: 0, dropped: [], draft: null, approved: null, work: null, dirty: false, err: null };
+  var PL_NAMES = ["الوجبة الأولى", "الوجبة الثانية", "الوجبة الثالثة", "الوجبة الرابعة", "الوجبة الخامسة", "الوجبة السادسة"];
+  var PL_SKIP_CAT = /sweet|drink|snack|packaged|حلو|مشروب|سناك|معلب/i;
+  function fv(f, k) { var v = Number(f[k]); return isNaN(v) ? 0 : v; }
+  function macrosOf(f, g) { var r = g / 100; return { k: fv(f, "kcal_100g") * r, p: fv(f, "protein_100g") * r, c: fv(f, "carb_100g") * r, f: fv(f, "fat_100g") * r }; }
+  /* دور الصنف حسب أكتر مغذي فيه (بروتين / كارب / دهون / خضار خفيفة) */
+  function foodRole(f) {
+    var k = fv(f, "kcal_100g"); if (k < 5) return null;
+    if (k < 60) return "v";
+    if (4 * fv(f, "protein_100g") / k >= 0.30) return "p";
+    if (9 * fv(f, "fat_100g") / k >= 0.60) return "f";
+    return "c";
+  }
+  function dens(f, role) { var k = fv(f, "kcal_100g") || 1; return (role === "p" ? 4 * fv(f, "protein_100g") : role === "f" ? 9 * fv(f, "fat_100g") : 4 * fv(f, "carb_100g")) / k; }
+  function lightTwin(f) {
+    if (f.version === "light") return null;
+    var n = normAr(f.name_ar), e = normAr(f.name_en);
+    for (var i = 0; i < FP.foods.length; i++) {
+      var g = FP.foods[i];
+      if (g.id !== f.id && g.version === "light" && g.state === f.state && (normAr(g.name_ar) === n || (e && normAr(g.name_en) === e))) return g;
+    }
+    return null;
+  }
+  function baseOf(f) {   /* لو الصنف لايت، الأصلي بتاعه (عشان زرار الرجوع) */
+    if (f.version !== "light") return null;
+    var n = normAr(f.name_ar), e = normAr(f.name_en);
+    for (var i = 0; i < FP.foods.length; i++) {
+      var g = FP.foods[i];
+      if (g.id !== f.id && g.version !== "light" && g.state === f.state && (normAr(g.name_ar) === n || (e && normAr(g.name_en) === e))) return g;
+    }
+    return null;
+  }
+  /* الممنوعات: اللي العميل كتبه في "مش باكل" بيتشال هو وأي صنف اسمه فيه نفس الكلمة (مثلا "سمك" بيشيل كل السمك) */
+  function avoidInfo(subs) {
+    var qs = [], ids = {};
+    subs.forEach(function (s) {
+      String(s.avoids_text || "").split(/[\n\r,،؛;\/+]+/).forEach(function (t) {
+        t = t.trim(); if (!t) return;
+        var q = cleanPhrase(t); if (q) qs.push(q);
+        analyzeText(t).forEach(function (it) { if (it.m.food) ids[String(it.m.food.id)] = 1; });
+      });
+    });
+    return { qs: qs, ids: ids };
+  }
+  function isAvoided(f, av) {
+    if (av.ids[String(f.id)]) return true;
+    return av.qs.some(function (q) {
+      var qt = q.split(" ");
+      return f._keys.some(function (k) { var kt = k.split(" "); return qt.every(function (t) { return kt.indexOf(t) > -1; }); });
+    });
+  }
+  function planPool(subs, av) {
+    var seen = {}, pool = [], unsure = 0, dropped = [];
+    subs.forEach(function (s) {
+      analyzeText(s.eats_text || "").forEach(function (it) {
+        var f = it.m.food; if (!f) return;
+        if (!isSure(it.m)) { unsure++; return; }   /* الاقتراحات اللي لسه ما اتأكدتش ما بتدخلش الخطة */
+        if (seen[f.id]) return; seen[f.id] = 1;
+        if (isAvoided(f, av)) { dropped.push(foodLabel(f)); return; }
+        if (foodRole(f)) pool.push(f);
+      });
+    });
+    return { pool: pool, unsure: unsure, dropped: dropped };
+  }
+  /* الفطار (الوجبة الأولى): ممنوع فيه الأكل التقيل (سمك/لحمة/فراخ/رز/مكرونة/بطاطس/باذنجان/كشري). الباقي تمام */
+  var PL_HEAVY_CAT = /fish|meat|poultry|seafood|سمك|لحم|لحوم|فراخ|دواجن|طيور|مأكولات بحرية/i;
+  var PL_HEAVY_NAME = /سمك|بلطي|بوري|سردين|تونة|جمبري|ممبار|كابوريا|سيبيا|سلمون|لحم|لحمة|كفتة|كبدة|كبده|كبد|فراخ|فرخة|دجاج|بانيه|صدر|حمام|بط|رز|أرز|ارز|مكرونة|مكرونه|بطاطس|بطاطا|باذنجان|بتنجان|كشري|ملوخية|ملوخيه|fish|tilapia|tuna|shrimp|salmon|sardine|beef|meat|chicken|liver|kofta|rice|pasta|macaroni|potato|eggplant|aubergine|koshari/i;
+  function bfOK(f) {
+    if (PL_HEAVY_CAT.test(String(f.category || ""))) return false;
+    return !PL_HEAVY_NAME.test(String(f.name_ar || "") + " " + String(f.name_en || ""));
+  }
+  function r5(g, lo, hi) { return Math.round(Math.min(hi, Math.max(lo, g)) / 5) * 5; }
+  function buildMeals(t, n, pool) {
+    var by = { p: [], c: [], f: [], v: [] }, bf = { p: [], c: [], f: [], v: [] };
+    pool.forEach(function (f) { var r = foodRole(f); if (r) { by[r].push(f); if (bfOK(f)) bf[r].push(f); } });
+    ["p", "c", "f"].forEach(function (r) {
+      by[r].sort(function (a, b) { return dens(b, r) - dens(a, r); });
+      bf[r].sort(function (a, b) { return dens(b, r) - dens(a, r); });
+    });
+    var meals = [], mP = t.p / n, mC = t.c / n, mF = t.f / n;
+    for (var i = 0; i < n; i++) {
+      var items = [], got = { p: 0, c: 0, f: 0 }, src = (i === 0) ? bf : by;   /* أول وجبة من أصناف الفطار بس */
+      var put = function (f, g) { var m = macrosOf(f, g); items.push({ fid: f.id, g: g, add: false }); got.p += m.p; got.c += m.c; got.f += m.f; };
+      var pick = function (list) { var f = list[(i === 0 ? 0 : i - 1) % list.length]; return lightTwin(f) || f; };   /* الأكل المقلي/الدسم بيتحط لايت لو له نسخة لايت */
+      if (src.p.length) { var fp = pick(src.p); put(fp, r5(0.7 * mP / ((fv(fp, "protein_100g") || 1) / 100), 30, 400)); }
+      var remC = mC - got.c;
+      if (src.c.length && remC >= 10) { var fc = pick(src.c); put(fc, r5(remC / ((fv(fc, "carb_100g") || 1) / 100), 30, 500)); }
+      var remF = mF - got.f;
+      if (src.f.length && remF >= 4) { var ff = pick(src.f); put(ff, r5(remF / ((fv(ff, "fat_100g") || 1) / 100), 5, 40)); }
+      if (by.v.length && i > 0) put(pick(by.v), 100);
+      meals.push({ name: PL_NAMES[i], items: items });
+    }
+    return meals;
+  }
+  function planTotals(meals) {
+    var T = { k: 0, p: 0, c: 0, f: 0, newK: 0 };
+    meals.forEach(function (m) { m.items.forEach(function (it) {
+      var f = FP.byId[String(it.fid)]; if (!f) return;
+      var x = macrosOf(f, it.g); T.k += x.k; T.p += x.p; T.c += x.c; T.f += x.f; if (it.add) T.newK += x.k;
+    }); });
+    return T;
+  }
+  /* بيكمّل الناقص بأصناف جديدة (مش في أكل العميل، ومش من الممنوعات) */
+  function fillGaps() {
+    var t = PL.tgt, T = planTotals(PL.meals), used = {}, added = [];
+    PL.meals.forEach(function (m) { m.items.forEach(function (it) { used[String(it.fid)] = 1; }); });
+    [["p", "protein_100g", t.p, T.p, 400], ["c", "carb_100g", t.c, T.c, 500], ["f", "fat_100g", t.f, T.f, 40]].forEach(function (g) {
+      var role = g[0], gap = g[2] - g[3];
+      if (gap < Math.max(10, 0.08 * g[2])) return;
+      var cand = FP.foods.filter(function (f) {
+        return foodRole(f) === role && !used[String(f.id)] && !isAvoided(f, PL.av) && !PL_SKIP_CAT.test(String(f.category || "")) && f.state !== "raw";
+      }).sort(function (a, b) { return dens(b, role) - dens(a, role); });
+      if (!cand.length) return;
+      var f = cand[0]; used[String(f.id)] = 1;
+      var totalG = Math.min(g[4] * 1.5, gap / ((fv(f, g[1]) || 1) / 100));
+      var el = [];   /* الوجبات المناسبة للصنف (الفطار بس للأصناف الخفيفة) */
+      for (var q = PL.meals.length - 1; q >= 0; q--) if (q > 0 || bfOK(f)) el.push(PL.meals[q]);
+      if (!el.length) return;
+      var spread = Math.min(el.length, Math.max(1, Math.ceil(totalG / 150)));
+      for (var j = 0; j < spread; j++) {
+        el[j].items.push({ fid: f.id, g: r5(totalG / spread, 5, 500), add: true });
+      }
+      added.push(foodLabel(f));
+    });
+    return added;
+  }
+  function snapPlan(meals) {
+    var T = planTotals(meals);
+    return {
+      meals: meals.map(function (m) { return { name: m.name, items: m.items.map(function (it) {
+        var f = FP.byId[String(it.fid)] || {}, x = macrosOf(f, it.g);
+        return { fid: it.fid, n: foodLabel(f), g: it.g, k: Math.round(x.k), p: Math.round(x.p), c: Math.round(x.c), f: Math.round(x.f), add: !!it.add };
+      }) }; }),
+      totals: { k: Math.round(T.k), p: Math.round(T.p), c: Math.round(T.c), f: Math.round(T.f) }
+    };
+  }
+  function rowToMeals(row) {
+    return (row.meals || []).map(function (m) { return { name: m.name, items: (m.items || []).filter(function (it) { return FP.byId[String(it.fid)]; }).map(function (it) { return { fid: it.fid, g: Number(it.g), add: !!it.add }; }) }; });
+  }
+  function savePlan(status) {
+    if (!PL.meals.length) return toast("ابنِ الخطة الأول", true);
+    var s = snapPlan(PL.meals), now = new Date().toISOString();
+    var row = { client_id: PL.cid, status: status, meals_count: PL.meals.length, meals: s.meals, totals: s.totals, updated_at: now };
+    if (status === "approved") row.approved_at = now;
+    sb.from("meal_plans").upsert(row, { onConflict: "client_id,status" }).then(function (r) {
+      if (r.error) return fail(r.error);
+      PL[status === "approved" ? "approved" : "draft"] = row; PL.work = status; PL.dirty = false;
+      toast(status === "approved" ? "اتعتمدت. العميل بيشوفها دلوقتي" : "اتحفظت كمسودة (العميل مش شايفها)");
+      renderPlan();
+    });
+  }
+  function planStatusText() {
+    if (!PL.meals.length) return "";
+    if (PL.dirty) return "فيه تعديلات لسه ما اتحفظتش";
+    if (PL.work === "approved") return "معتمدة وظاهرة للعميل";
+    return PL.approved ? "مسودة — العميل لسه شايف النسخة المعتمدة القديمة" : "مسودة — العميل مش شايف حاجة لسه";
+  }
+  function renderPlan() {
+    var body = $("coachPlanBody"); if (!body) return; clear(body);
+    if (PL.err) body.appendChild(el("div", { class: "fp-err", text: PL.err }));
+    if (FP.err) { body.appendChild(el("div", { class: "fp-err", text: FP.err })); return; }
+    var t = PL.tgt;
+    if (!t.k || !t.p || t.c == null || t.f == null) { body.appendChild(emptyBox("اكتب الأهداف (سعرات وماكروز) واحفظها في كارت \"التغذية والأهداف\" الأول، وبعدين اختار العميل تاني.")); return; }
+    body.appendChild(el("p", { class: "sub", style: "margin:0 0 6px", text: "هدف اليوم المعتمد: " + t.k + " سعر — بروتين " + t.p + " — كارب " + t.c + " — دهون " + t.f }));
+    body.appendChild(el("p", { class: "sub", style: "margin:0 0 14px", text: "اتفهم من أكله: " + PL.pool.length + " صنف صالح للخطة" + (PL.dropped.length ? " — اتشال بسبب \"مش باكل\": " + PL.dropped.length : "") + (PL.unsure ? " — " + PL.unsure + " اقتراح مش مؤكد ما دخلش (أكّده من كارت أكل العميل)" : "") }));
+    var bar = el("div", { style: "display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px" });
+    var sel = el("select", { "aria-label": "عدد الوجبات" });
+    [3, 4, 5, 6].forEach(function (n) { sel.appendChild(el("option", { value: String(n), text: n + " وجبات" })); });
+    sel.value = String(Math.min(6, Math.max(3, PL.n)));
+    sel.addEventListener("change", function () { PL.n = Number(sel.value); });
+    bar.appendChild(sel);
+    var build = el("button", { type: "button", class: "btn btn-sm", text: PL.meals.length ? "ابنِ من جديد" : "ابنِ الخطة من أكله" });
+    build.addEventListener("click", function () {
+      if (PL.meals.length && !confirm("ده هيمسح تعديلاتك الحالية ويبني من الأول. متأكد؟")) return;
+      if (!PL.pool.length) return toast("مفيش أصناف مفهومة من أكل العميل. صحّح الأصناف من كارت أكل العميل الأول", true);
+      PL.n = Number(sel.value); PL.meals = buildMeals(t, PL.n, PL.pool); PL.dirty = true; renderPlan();
+    });
+    bar.appendChild(build);
+    if (PL.meals.length) {
+      var fill = el("button", { type: "button", class: "btn btn-sm fp-ghost", text: "كمّل الناقص بأصناف جديدة" });
+      fill.addEventListener("click", function () { var a = fillGaps(); PL.dirty = true; renderPlan(); toast(a.length ? "اتضاف: " + a.join("، ") : "مفيش ناقص يستاهل إضافة"); });
+      var sd = el("button", { type: "button", class: "btn btn-sm fp-ghost", text: "حفظ مسودة" });
+      sd.addEventListener("click", function () { savePlan("draft"); });
+      var ap = el("button", { type: "button", class: "btn btn-sm", text: "اعتماد وإظهار للعميل" });
+      ap.addEventListener("click", function () { savePlan("approved"); });
+      bar.appendChild(fill); bar.appendChild(sd); bar.appendChild(ap);
+    }
+    body.appendChild(bar);
+    if (!PL.meals.length) { body.appendChild(emptyBox("لسه مفيش خطة. دوس \"ابنِ الخطة من أكله\" والمنصة تقترح، وإنت تعدّل وتعتمد.")); return; }
+    body.appendChild(el("div", { class: "fp-sum", text: planStatusText() }));
+    var totBox = el("div", { class: "pl-tot" });
+    function updTot() {
+      var T = planTotals(PL.meals); clear(totBox);
+      [["السعرات", T.k, t.k], ["بروتين", T.p, t.p], ["كارب", T.c, t.c], ["دهون", T.f, t.f]].forEach(function (x) {
+        var d = Math.round(x[1] - x[2]), off = Math.abs(d) > 0.1 * x[2];
+        totBox.appendChild(el("div", { class: "pl-t" + (off ? " off" : "") }, [el("span", { text: x[0] }), el("strong", { text: Math.round(x[1]) + " / " + x[2] }), el("span", { text: (d > 0 ? "+" : "") + d })]));
+      });
+      if (T.k > 0 && T.newK > 0) totBox.appendChild(el("div", { class: "pl-t" }, [el("span", { text: "أصناف جديدة" }), el("strong", { text: Math.round(100 * T.newK / T.k) + "%" }), el("span", { text: "من السعرات" })]));
+    }
+    PL.meals.forEach(function (m) {
+      var box = el("div", { class: "pl-meal" }, [el("h4", { text: m.name })]);
+      m.items.forEach(function (it, idx) {
+        var f = FP.byId[String(it.fid)]; if (!f) return;
+        var row = el("div", { class: "pl-it" + (it.add ? " new" : "") });
+        var mac = el("span", { class: "m" });
+        function upd() { var x = macrosOf(f, it.g); mac.textContent = Math.round(x.k) + " سعر — ب " + Math.round(x.p) + " — ك " + Math.round(x.c) + " — د " + Math.round(x.f); }
+        upd();
+        var gi = el("input", { type: "number", min: "0", step: "5", value: String(it.g), "aria-label": "الجرامات" });
+        gi.addEventListener("input", function () { var v = num(gi.value); it.g = v == null || v < 0 ? 0 : v; upd(); PL.dirty = true; updTot(); });
+        row.appendChild(el("span", { class: "n", text: foodLabel(f) + (it.add ? " (جديد)" : "") }));
+        row.appendChild(gi); row.appendChild(el("span", { class: "u", text: "جم" })); row.appendChild(mac);
+        var tw = f.version === "light" ? baseOf(f) : lightTwin(f);
+        if (tw) {
+          var sw = el("button", { type: "button", class: "btn btn-sm fp-ghost", text: f.version === "light" ? "الأصلي" : "لايت" });
+          sw.addEventListener("click", function () { it.fid = tw.id; PL.dirty = true; renderPlan(); });
+          row.appendChild(sw);
+        }
+        var rm = el("button", { type: "button", class: "link-btn danger", text: "شيل" });
+        rm.addEventListener("click", function () { m.items.splice(idx, 1); PL.dirty = true; renderPlan(); });
+        row.appendChild(rm);
+        box.appendChild(row);
+      });
+      body.appendChild(box);
+    });
+    updTot(); body.appendChild(totBox);
+    body.appendChild(el("p", { class: "sub", style: "margin:12px 0 0", text: "الأرقام تقديرية من قاعدة الأكل. الزيت والإضافات لازم تتحط كأصناف بالجرام عشان تتحسب." }));
+  }
+  function loadCoachPlan() {
+    var body = $("coachPlanBody"); if (!body || !coachTarget) return;
+    showLoading("coachPlanBody"); var cid = coachTarget;
+    Promise.all([
+      sb.from("profiles").select("*").eq("id", cid).single(),
+      sb.from("meal_plans").select("*").eq("client_id", cid),
+      sb.from("food_submissions").select("*").eq("client_id", cid).order("created_at", { ascending: false })
+    ]).then(function (rs) {
+      if (cid !== coachTarget) return;
+      if (rs[0].error) return fail(rs[0].error);
+      if (rs[2].error) return fail(rs[2].error);
+      var p = rs[0].data || {};
+      PL.cid = cid; PL.tgt = { k: p.target_kcal, p: p.target_protein, c: p.target_carb, f: p.target_fat };
+      PL.err = rs[1].error ? "جدول meal_plans مش جاهز. شغّل SQL الخطة في Supabase الأول (" + rs[1].error.message + ")" : null;
+      var rows = rs[1].error ? [] : (rs[1].data || []);
+      PL.approved = null; PL.draft = null;
+      rows.forEach(function (r) { PL[r.status === "approved" ? "approved" : "draft"] = r; });
+      PL.subs = rs[2].data || []; PL.dirty = false; PL.meals = []; PL.work = null;
+      var mc = null; PL.subs.forEach(function (s) { if (mc == null && s.meals_count != null) mc = Number(s.meals_count); });
+      PL.n = Math.min(6, Math.max(3, mc || 3));
+      loadFoodData(function () {
+        if (cid !== coachTarget) return;
+        if (FP.loaded) {
+          PL.av = avoidInfo(PL.subs);
+          var pp = planPool(PL.subs, PL.av); PL.pool = pp.pool; PL.unsure = pp.unsure; PL.dropped = pp.dropped;
+          var w = PL.draft && PL.approved ? (new Date(PL.draft.updated_at) > new Date(PL.approved.updated_at) ? PL.draft : PL.approved) : (PL.draft || PL.approved);
+          if (w) { PL.meals = rowToMeals(w); PL.work = w.status; PL.n = w.meals_count || PL.meals.length || PL.n; }
+        }
+        renderPlan();
+      });
+    }).catch(fail);
+  }
+  /* الخطة المعتمدة عند العميل (جوه تبويب أكلي) */
+  function showClientPlan(box) {
+    sb.from("meal_plans").select("*").eq("client_id", profile.id).eq("status", "approved").then(function (r) {
+      if (r.error || !r.data || !r.data.length) return;
+      var pl = r.data[0];
+      var wrap = el("div", { style: "max-width:720px;margin-bottom:28px" }, [el("h3", { text: "خطة أكلك", style: "margin:0 0 6px" }), el("p", { class: "sub", style: "margin:0 0 14px", text: "الخطة دي الكابتن اعتمدها ليك. الأرقام تقريبية." })]);
+      (pl.meals || []).forEach(function (m) {
+        var b = el("div", { class: "pl-meal" }, [el("h4", { text: m.name })]);
+        (m.items || []).forEach(function (it) {
+          b.appendChild(el("div", { class: "pl-it" + (it.add ? " new" : "") }, [el("span", { class: "n", text: it.n + (it.add ? " (جديد)" : "") }), el("strong", { text: it.g + " جم" }), el("span", { class: "m", text: it.k + " سعر — ب " + it.p + " — ك " + it.c + " — د " + it.f })]));
+        });
+        wrap.appendChild(b);
+      });
+      var t = pl.totals || {};
+      wrap.appendChild(el("div", { class: "fp-sum", text: "مجموع اليوم تقريبًا: " + t.k + " سعر — بروتين " + t.p + " — كارب " + t.c + " — دهون " + t.f }));
+      box.appendChild(wrap);
+    });
+  }
+
+  /* ================= WEEKLY: خطة أسبوعية من القوالب والوصفات (الكابتن يختار قالب، المنصة تشيل الممنوع وتظبط الكميات على السعرات، وإنت تعدّل وتعتمد) ================= */
+  var WK = { cid: null, tgt: {}, recipes: [], rById: {}, templates: [], subs: [], av: null, tags: {}, poolIds: {}, poolNames: {}, fk: {}, tplId: null, days: null, open: 0, dirty: false, work: null, draft: null, approved: null, err: null, notes: [] };
+  var WK_SLOTS = ["فطار", "غداء", "عشاء", "سناك"];
+  var WK_TAGS = [
+    [/سمك|بلطي|بوري|سردين|فيليه|جمبري|ربيان|ممبار|كابوريا|سلمون|مأكولات بحرية/, ["fish", "shrimp"]],
+    [/تونة|تونه/, ["tuna"]], [/جمبري|ربيان|جمبرى/, ["shrimp"]],
+    [/بيض|بيضة|بيضه/, ["egg"]], [/لبن|ألبان|البان|جبنة|جبنه|زبادي|زبادى|حليب|لبنة|قشطة/, ["dairy"]],
+    [/كبدة|كبده|كبد/, ["liver"]], [/لحمة|لحم|بقري|كفتة|كفته|برجر/, ["beef"]], [/فراخ|فرخة|دجاج|بانيه/, ["chicken"]],
+    [/فول|عدس|حمص|لوبيا|بقول|طعمية|فلافل/, ["legumes"]], [/جلوتين|قمح|عيش|مكرونة|مكرونه/, ["gluten"]], [/مكسرات|فول سوداني|لوز|عين جمل|بندق/, ["nuts"]]
+  ];
+  function wkAvoidTags(subs) {
+    var tags = {};
+    subs.forEach(function (s) {
+      String(s.avoids_text || "").split(/[\n\r,،؛;\/+]+/).forEach(function (t) {
+        t = t.trim(); if (!t) return;
+        WK_TAGS.forEach(function (x) { if (x[0].test(t)) x[1].forEach(function (g) { tags[g] = 1; }); });
+      });
+    });
+    return tags;
+  }
+  function wkFoodOf(ing) { return WK.fk[String(ing.name_en || "").toLowerCase() + "|" + (ing.state || "") + "|" + (ing.version || "")] || null; }
+  function wkPrep(r) {   /* بيحسب لكل وصفة: أصنافها من جدول foods، وتطابقها مع أكل العميل */
+    var main = 0, hit = 0;
+    r._foods = (r.ings || []).map(function (i) { return wkFoodOf(i); });
+    r._foods.forEach(function (f) {
+      if (!f) return; var role = foodRole(f); if (role !== "p" && role !== "c" && role !== "f") return;
+      main++; if (WK.poolIds[String(f.id)] || WK.poolNames[normAr(f.name_ar)]) hit++;
+    });
+    r._match = main ? hit / main : 0;
+  }
+  function wkBlocked(r) {
+    var tg = WK.tags;
+    if ((r.contains || []).some(function (c) { return tg[c]; })) return true;
+    if (WK.av && r._foods.some(function (f) { return f && isAvoided(f, WK.av); })) return true;
+    if (WK.av && WK.av.qs.length) {
+      var nm = " " + normAr(r.name) + " ";
+      if (WK.av.qs.some(function (q) { return q.length >= 3 && nm.indexOf(" " + q + " ") > -1; })) return true;
+    }
+    return false;
+  }
+  function wkMac(r, m) { m = m == null ? 1 : m; return { k: Number(r.kcal) * m || 0, p: Number(r.protein) * m || 0, c: Number(r.carb) * m || 0, f: Number(r.fat) * m || 0 }; }
+  function wkDayTot(day) {
+    var T = { k: 0, p: 0, c: 0, f: 0 };
+    day.forEach(function (ml) { var r = WK.rById[ml.rid]; if (!r) return; var x = wkMac(r, ml.mult); T.k += x.k; T.p += x.p; T.c += x.c; T.f += x.f; });
+    return T;
+  }
+  function wkWeekAvg() {
+    var T = { k: 0, p: 0, c: 0, f: 0 }, n = (WK.days || []).length || 1;
+    (WK.days || []).forEach(function (d) { var x = wkDayTot(d); T.k += x.k; T.p += x.p; T.c += x.c; T.f += x.f; });
+    return { k: T.k / n, p: T.p / n, c: T.c / n, f: T.f / n };
+  }
+  function wkReplacement(slot, orig, used) {
+    var base = Number(orig.kcal) || 1;
+    var cand = WK.recipes.filter(function (r) {
+      return r.slot === slot && r.type === orig.type && r.id !== orig.id && !wkBlocked(r) && (used[r.id] || 0) < 2 && Number(r.kcal) >= 0.7 * base && Number(r.kcal) <= 1.4 * base;
+    });
+    cand.sort(function (a, b) { return (b._match - a._match) || (Math.abs(a.kcal - base) - Math.abs(b.kcal - base)); });
+    return cand[0] || null;
+  }
+  function wkScoreTemplates() {
+    WK.templates.forEach(function (t) {
+      var blocked = 0, m = 0, n = 0;
+      (t.days || []).forEach(function (d) { WK_SLOTS.forEach(function (s) { var r = WK.rById[d[s]]; if (!r) return; n++; m += r._match; if (wkBlocked(r)) blocked++; }); });
+      t._blocked = blocked; t._match = n ? m / n : 0; t._n = n;
+    });
+    var best = null;
+    WK.templates.forEach(function (t) { if (!best || t._blocked < best._blocked || (t._blocked === best._blocked && t._match > best._match)) best = t; });
+    return best;
+  }
+  function wkAutoScale() {
+    var k = WK.tgt.k, warn = [];
+    WK.days.forEach(function (d, i) {
+      var raw = 0; d.forEach(function (ml) { var r = WK.rById[ml.rid]; if (r) raw += Number(r.kcal) || 0; });
+      if (!raw) return;
+      var f = k / raw, c = Math.min(2, Math.max(0.5, f));
+      if (c !== f) warn.push("اليوم " + (i + 1));
+      f = Math.round(c * 20) / 20;
+      d.forEach(function (ml) { ml.mult = f; });
+    });
+    return warn;
+  }
+  function wkBuild(tpl) {
+    var used = {}, notes = [];
+    WK.days = (tpl.days || []).map(function (d, di) {
+      var meals = [];
+      WK_SLOTS.forEach(function (s) {
+        var r = WK.rById[d[s]]; if (!r) return;
+        var sw = false;
+        if (wkBlocked(r)) {
+          var alt = wkReplacement(s, r, used);
+          if (alt) { notes.push("اليوم " + (di + 1) + " (" + s + "): اتبدّلت \"" + r.name + "\" بـ \"" + alt.name + "\""); r = alt; sw = true; }
+          else notes.push("اليوم " + (di + 1) + " (" + s + "): \"" + r.name + "\" فيها حاجة ممنوعة ومفيش بديل مناسب، بدّلها بإيدك");
+        }
+        used[r.id] = (used[r.id] || 0) + 1;
+        meals.push({ slot: s, rid: r.id, mult: 1, swapped: sw, blocked: wkBlocked(r) });
+      });
+      return meals;
+    });
+    var w = wkAutoScale(); if (w.length) notes.push("سعرات الأيام دي بعيدة عن الهدف حتى بعد أقصى تكبير/تصغير للكميات: " + w.join("، "));
+    WK.notes = notes; WK.tplId = tpl.id; WK.open = 0;
+  }
+  function wkSnap() {
+    var days = WK.days.map(function (d) {
+      var meals = d.map(function (ml) {
+        var r = WK.rById[ml.rid], x = wkMac(r, ml.mult);
+        return {
+          slot: ml.slot, rid: r.id, name: r.name, mult: ml.mult,
+          k: Math.round(x.k), p: Math.round(x.p), c: Math.round(x.c), f: Math.round(x.f),
+          ings: (r.ings || []).map(function (i) { return { n: i.name_ar, g: r5(Number(i.grams) * ml.mult, 0, 2000) }; }),
+          steps: Array.isArray(r.steps) ? r.steps.filter(function (s) { return typeof s === "string"; }) : []
+        };
+      });
+      var t = wkDayTot(d);
+      return { meals: meals, totals: { k: Math.round(t.k), p: Math.round(t.p), c: Math.round(t.c), f: Math.round(t.f) } };
+    });
+    var a = wkWeekAvg();
+    return { days: days, week_avg: { k: Math.round(a.k), p: Math.round(a.p), c: Math.round(a.c), f: Math.round(a.f) } };
+  }
+  function wkSave(status) {
+    if (!WK.days) return toast("ابنِ الأسبوع الأول", true);
+    if (WK.days.some(function (d) { return d.some(function (ml) { return ml.blocked; }); }) && status === "approved" && !confirm("فيه وجبة فيها حاجة العميل كاتبها في \"مش باكل\". تعتمد برضه؟")) return;
+    var s = wkSnap(), now = new Date().toISOString();
+    var row = { client_id: WK.cid, status: status, template_id: WK.tplId, days: s.days, week_avg: s.week_avg, target: WK.tgt, updated_at: now };
+    if (status === "approved") row.approved_at = now;
+    sb.from("weekly_plans").upsert(row, { onConflict: "client_id,status" }).then(function (r) {
+      if (r.error) return fail(r.error);
+      WK[status === "approved" ? "approved" : "draft"] = row; WK.work = status; WK.dirty = false;
+      toast(status === "approved" ? "اتعتمدت. العميل بيشوفها دلوقتي" : "اتحفظت كمسودة (العميل مش شايفها)");
+      renderWeek();
+    });
+  }
+  function wkLoadSaved(row) {   /* بيرجّع خطة محفوظة للشاشة (بالوصفات الحالية، والكميات اللي اتحفظت) */
+    WK.tplId = row.template_id;
+    WK.days = (row.days || []).map(function (d) {
+      return (d.meals || []).filter(function (ml) { return WK.rById[ml.rid]; }).map(function (ml) { return { slot: ml.slot, rid: ml.rid, mult: Number(ml.mult) || 1, swapped: false, blocked: wkBlocked(WK.rById[ml.rid]) }; });
+    });
+    WK.work = row.status; WK.open = 0; WK.notes = [];
+  }
+  function wkStatusText() {
+    if (!WK.days) return "";
+    if (WK.dirty) return "فيه تعديلات لسه ما اتحفظتش";
+    if (WK.work === "approved") return "معتمدة وظاهرة للعميل";
+    return WK.approved ? "مسودة — العميل لسه شايف النسخة المعتمدة القديمة" : "مسودة — العميل مش شايف حاجة لسه";
+  }
+  function renderWeek() {
+    var body = $("coachWeekBody"); if (!body) return; clear(body);
+    if (WK.err) body.appendChild(el("div", { class: "fp-err", text: WK.err }));
+    if (FP.err) { body.appendChild(el("div", { class: "fp-err", text: FP.err })); return; }
+    var t = WK.tgt;
+    if (!t.k || !t.p || t.c == null || t.f == null) { body.appendChild(emptyBox("اكتب الأهداف (سعرات وماكروز) واحفظها في كارت \"التغذية والأهداف\" الأول، وبعدين اختار العميل تاني.")); return; }
+    if (!WK.recipes.length || !WK.templates.length) { body.appendChild(emptyBox("الوصفات أو القوالب مش موجودة في Supabase. شغّل ملفّي supabase_recipes.sql و supabase_plan_templates.sql.")); return; }
+    body.appendChild(el("p", { class: "sub", style: "margin:0 0 6px", text: "هدف اليوم المعتمد: " + t.k + " سعر — بروتين " + t.p + " — كارب " + t.c + " — دهون " + t.f }));
+    var avTxt = Object.keys(WK.tags).length || (WK.av && WK.av.qs.length) ? " — ممنوعات العميل متحسوبة (وجبات فيها حاجة ممنوعة بتتبدّل)" : " — العميل ما كتبش ممنوعات";
+    body.appendChild(el("p", { class: "sub", style: "margin:0 0 14px", text: "فهمت من أكله " + Object.keys(WK.poolIds).length + " صنف" + avTxt }));
+    var best = wkScoreTemplates();
+    var bar = el("div", { style: "display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px" });
+    var sel = el("select", { "aria-label": "القالب" });
+    WK.templates.forEach(function (tp) {
+      sel.appendChild(el("option", { value: String(tp.id), text: tp.name + " — تتبدّل " + tp._blocked + " وجبة، تطابق مع أكله " + Math.round(tp._match * 100) + "%" + (best && tp.id === best.id ? " ★ الأنسب" : "") }));
+    });
+    sel.value = String(WK.tplId != null ? WK.tplId : (best ? best.id : WK.templates[0].id));
+    bar.appendChild(sel);
+    var build = el("button", { type: "button", class: "btn btn-sm", text: WK.days ? "ابنِ من القالب من جديد" : "ابنِ الأسبوع" });
+    build.addEventListener("click", function () {
+      if (WK.days && !confirm("ده هيمسح تعديلاتك الحالية ويبني من القالب من الأول. متأكد؟")) return;
+      var tp = WK.templates.filter(function (x) { return String(x.id) === sel.value; })[0];
+      wkBuild(tp); WK.dirty = true; renderWeek();
+    });
+    bar.appendChild(build);
+    if (WK.days) {
+      var sc = el("button", { type: "button", class: "btn btn-sm fp-ghost", text: "ظبّط الكميات على السعرات" });
+      sc.addEventListener("click", function () { var w = wkAutoScale(); WK.dirty = true; renderWeek(); toast(w.length ? "فيه أيام بعيدة عن الهدف: " + w.join("، ") : "اتظبطت الكميات", !!w.length); });
+      var sd = el("button", { type: "button", class: "btn btn-sm fp-ghost", text: "حفظ مسودة" });
+      sd.addEventListener("click", function () { wkSave("draft"); });
+      var ap = el("button", { type: "button", class: "btn btn-sm", text: "اعتماد وإظهار للعميل" });
+      ap.addEventListener("click", function () { wkSave("approved"); });
+      bar.appendChild(sc); bar.appendChild(sd); bar.appendChild(ap);
+    }
+    body.appendChild(bar);
+    if (!WK.days) { body.appendChild(emptyBox("لسه مفيش خطة أسبوعية. اختار قالب (الأنسب عليه ★) ودوس \"ابنِ الأسبوع\".")); return; }
+    body.appendChild(el("div", { class: "fp-sum", text: wkStatusText() }));
+    if (WK.notes.length) body.appendChild(el("div", { class: "fp-err", style: "color:var(--ink)", text: WK.notes.join(" | ") }));
+    /* ملخص الأسبوع */
+    var wkBox = el("div", { class: "pl-tot" }); var dayBox = el("div");
+    function updWeek() {
+      clear(wkBox); var a = wkWeekAvg();
+      [["متوسط السعرات", a.k, t.k], ["بروتين", a.p, t.p], ["كارب", a.c, t.c], ["دهون", a.f, t.f]].forEach(function (x) {
+        var d = Math.round(x[1] - x[2]), off = Math.abs(d) > 0.1 * x[2];
+        wkBox.appendChild(el("div", { class: "pl-t" + (off ? " off" : "") }, [el("span", { text: x[0] + " (أسبوع)" }), el("strong", { text: Math.round(x[1]) + " / " + x[2] }), el("span", { text: (d > 0 ? "+" : "") + d })]));
+      });
+    }
+    updWeek(); body.appendChild(wkBox);
+    var tabs = el("div", { style: "display:flex;gap:6px;flex-wrap:wrap;margin:14px 0" });
+    WK.days.forEach(function (d, i) {
+      var b = el("button", { type: "button", class: "btn btn-sm" + (i === WK.open ? "" : " fp-ghost"), text: "يوم " + (i + 1) });
+      b.addEventListener("click", function () { WK.open = i; renderWeek(); });
+      tabs.appendChild(b);
+    });
+    body.appendChild(tabs); body.appendChild(dayBox);
+    var day = WK.days[WK.open] || [];
+    var dayTot = el("div", { class: "pl-tot", style: "margin:0 0 10px" });
+    function updDay() {
+      clear(dayTot); var x = wkDayTot(day);
+      [["السعرات", x.k, t.k], ["بروتين", x.p, t.p], ["كارب", x.c, t.c], ["دهون", x.f, t.f]].forEach(function (g) {
+        var d = Math.round(g[1] - g[2]), off = Math.abs(d) > 0.1 * g[2];
+        dayTot.appendChild(el("div", { class: "pl-t" + (off ? " off" : "") }, [el("span", { text: g[0] + " (اليوم)" }), el("strong", { text: Math.round(g[1]) + " / " + g[2] }), el("span", { text: (d > 0 ? "+" : "") + d })]));
+      });
+    }
+    updDay(); dayBox.appendChild(dayTot);
+    day.forEach(function (ml) {
+      var r = WK.rById[ml.rid];
+      var box = el("div", { class: "pl-meal" }, [el("h4", { text: ml.slot + (ml.swapped ? " (اتبدّلت عشان الممنوعات)" : "") + (ml.blocked ? " — فيها حاجة ممنوعة!" : "") })]);
+      var row = el("div", { class: "pl-it" });
+      var rs = el("select", { "aria-label": "الوصفة", style: "flex:1 1 220px;max-width:100%" });
+      WK.recipes.filter(function (x) { return x.slot === ml.slot && x.type === r.type && (x.id === ml.rid || !wkBlocked(x)); })
+        .sort(function (a, b) { return b._match - a._match; })
+        .forEach(function (x) { rs.appendChild(el("option", { value: x.id, text: x.name + " (" + Math.round(x.kcal) + " سعر)" })); });
+      rs.value = ml.rid;
+      var mi = el("input", { type: "number", min: "0.3", max: "3", step: "0.05", value: String(ml.mult), "aria-label": "الكمية" });
+      var mac = el("span", { class: "m" });
+      function upd() { var x = wkMac(WK.rById[ml.rid], ml.mult); mac.textContent = Math.round(x.k) + " سعر — ب " + Math.round(x.p) + " — ك " + Math.round(x.c) + " — د " + Math.round(x.f); }
+      upd();
+      mi.addEventListener("input", function () { var v = num(mi.value); ml.mult = v == null || v < 0 ? 0 : v; upd(); updDay(); updWeek(); WK.dirty = true; });
+      rs.addEventListener("change", function () { ml.rid = rs.value; ml.swapped = false; ml.blocked = wkBlocked(WK.rById[ml.rid]); WK.dirty = true; renderWeek(); });
+      row.appendChild(rs); row.appendChild(el("span", { class: "u", text: "× الكمية" })); row.appendChild(mi); row.appendChild(mac);
+      box.appendChild(row);
+      var det = el("details", { style: "margin-top:6px" }, [el("summary", { text: "المكونات بالجرام (للحصة دي)", style: "cursor:pointer;color:var(--muted);font-size:.88rem" })]);
+      det.appendChild(el("div", { class: "sub", style: "margin:8px 0 0;font-size:.9rem", text: (r.ings || []).map(function (i) { return i.name_ar + " " + r5(Number(i.grams) * ml.mult, 0, 2000) + " جم"; }).join(" — ") }));
+      if (r.estimate_note) det.appendChild(el("div", { class: "sub", style: "margin:6px 0 0;font-size:.82rem", text: "ملاحظة: " + r.estimate_note }));
+      box.appendChild(det);
+      dayBox.appendChild(box);
+    });
+    body.appendChild(el("p", { class: "sub", style: "margin:12px 0 0", text: "الأرقام تقديرية (محسوبة من قاعدة الأكل). الكمية 1 = الحصة الأصلية للوصفة. الزيت والإضافات محسوبة كمكونات." }));
+  }
+  function loadCoachWeek() {
+    var body = $("coachWeekBody"); if (!body || !coachTarget) return;
+    showLoading("coachWeekBody"); var cid = coachTarget;
+    Promise.all([
+      sb.from("profiles").select("*").eq("id", cid).single(),
+      sb.from("weekly_plans").select("*").eq("client_id", cid),
+      sb.from("food_submissions").select("*").eq("client_id", cid).order("created_at", { ascending: false }),
+      sb.from("recipes").select("*"),
+      sb.from("meal_plan_templates").select("*").order("id")
+    ]).then(function (rs) {
+      if (cid !== coachTarget) return;
+      if (rs[0].error) return fail(rs[0].error);
+      if (rs[2].error) return fail(rs[2].error);
+      var p = rs[0].data || {};
+      WK.cid = cid; WK.tgt = { k: p.target_kcal, p: p.target_protein, c: p.target_carb, f: p.target_fat };
+      WK.err = rs[1].error ? "جدول weekly_plans مش جاهز. شغّل ملف supabase_weekly_plans.sql في Supabase الأول (" + rs[1].error.message + ")" : (rs[3].error ? "جدول recipes: " + rs[3].error.message : (rs[4].error ? "جدول meal_plan_templates: " + rs[4].error.message : null));
+      WK.subs = rs[2].data || [];
+      WK.recipes = rs[3].error ? [] : (rs[3].data || []); WK.templates = rs[4].error ? [] : (rs[4].data || []);
+      WK.rById = {}; WK.recipes.forEach(function (r) { WK.rById[r.id] = r; });
+      WK.draft = null; WK.approved = null; WK.days = null; WK.work = null; WK.tplId = null; WK.dirty = false; WK.notes = [];
+      (rs[1].error ? [] : (rs[1].data || [])).forEach(function (r) { WK[r.status === "approved" ? "approved" : "draft"] = r; });
+      loadFoodData(function () {
+        if (cid !== coachTarget) return;
+        if (FP.loaded) {
+          WK.fk = {}; FP.foods.forEach(function (f) { WK.fk[String(f.name_en || "").toLowerCase() + "|" + (f.state || "") + "|" + (f.version || "")] = f; });
+          WK.av = avoidInfo(WK.subs); WK.tags = wkAvoidTags(WK.subs);
+          WK.poolIds = {}; WK.poolNames = {};
+          planPool(WK.subs, WK.av).pool.forEach(function (f) { WK.poolIds[String(f.id)] = 1; WK.poolNames[normAr(f.name_ar)] = 1; });
+          WK.recipes.forEach(wkPrep);
+          var w = WK.draft && WK.approved ? (new Date(WK.draft.updated_at) > new Date(WK.approved.updated_at) ? WK.draft : WK.approved) : (WK.draft || WK.approved);
+          if (w) wkLoadSaved(w);
+        }
+        renderWeek();
+      });
+    }).catch(fail);
+  }
+  /* الخطة الأسبوعية المعتمدة عند العميل (جوه تبويب أكلي). cb(true) لو لقى خطة */
+  function showClientWeekly(box, cb) {
+    sb.from("weekly_plans").select("*").eq("client_id", profile.id).eq("status", "approved").then(function (r) {
+      if (r.error || !r.data || !r.data.length) return cb(false);
+      var pl = r.data[0], days = pl.days || [], open = 0;
+      var wrap = el("div", { style: "max-width:720px;margin-bottom:28px" }, [el("h3", { text: "خطة أكلك للأسبوع", style: "margin:0 0 6px" }), el("p", { class: "sub", style: "margin:0 0 14px", text: "الخطة دي الكابتن اعتمدها ليك. الأرقام تقريبية، والكمية بالجرام." })]);
+      var tabs = el("div", { style: "display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px" }), out = el("div");
+      function draw() {
+        clear(tabs); clear(out);
+        days.forEach(function (d, i) {
+          var b = el("button", { type: "button", class: "btn btn-sm" + (i === open ? "" : " fp-ghost"), text: "يوم " + (i + 1) });
+          b.addEventListener("click", function () { open = i; draw(); }); tabs.appendChild(b);
+        });
+        var d = days[open] || { meals: [], totals: {} };
+        (d.meals || []).forEach(function (m) {
+          var b = el("div", { class: "pl-meal" }, [el("h4", { text: m.slot + ": " + m.name })]);
+          b.appendChild(el("div", { class: "pl-it" }, [el("span", { class: "m", text: m.k + " سعر — ب " + m.p + " — ك " + m.c + " — د " + m.f })]));
+          b.appendChild(el("div", { class: "sub", style: "margin:6px 0 0;font-size:.92rem", text: (m.ings || []).map(function (i) { return i.n + " " + i.g + " جم"; }).join(" — ") }));
+          if ((m.steps || []).length) {
+            var det = el("details", { style: "margin-top:6px" }, [el("summary", { text: "طريقة التحضير", style: "cursor:pointer;color:var(--muted);font-size:.88rem" })]);
+            det.appendChild(el("div", { class: "sub", style: "margin:8px 0 0;font-size:.9rem", text: m.steps.join(" ← ") }));
+            b.appendChild(det);
+          }
+          out.appendChild(b);
+        });
+        var t = d.totals || {};
+        out.appendChild(el("div", { class: "fp-sum", text: "مجموع اليوم تقريبًا: " + t.k + " سعر — بروتين " + t.p + " — كارب " + t.c + " — دهون " + t.f }));
+      }
+      draw(); wrap.appendChild(tabs); wrap.appendChild(out); box.appendChild(wrap); cb(true);
+    });
+  }
 
   /* ================= LIFTS (تتبع أوزان التمارين) ================= */
   var SYSTEMS = {"PPL1": [{"day": "Push", "ex": ["Incline Dumbbell Press", "Chest Dips", "Machine Chest Press", "Cable Crunch (ختام)", "Cable Lateral Raise", "Cable Pushdown"]}, {"day": "Pull", "ex": ["Pull-Ups", "Barbell Row", "Seated Cable Row (Wide)", "Reverse Pec Deck", "Incline Dumbbell Curl", "Hammer Curl"]}, {"day": "Legs", "ex": ["Hack Squat", "Seated Leg Curl", "Leg Extension", "Adductor Machine", "Standing Calf Raise"]}], "PPL2": [{"day": "Push", "ex": ["Flat Barbell Bench Press", "Seated DB Shoulder Press", "Incline Smith Machine Press", "Skull Crusher", "Machine Lateral Raise", "Cable Crossover"]}, {"day": "Pull", "ex": ["Deadlift", "Lat Pulldown (Wide)", "Single-Arm Cable Row", "Cable Rear Delt Fly", "Preacher Curl", "Cable Crunch (ختام)"]}, {"day": "Legs", "ex": ["Front/High-Bar Squat", "Romanian Deadlift", "Leg Extension", "Sumo Squat", "Seated Calf Raise"]}], "PPL3": [{"day": "Push", "ex": ["Flat Dumbbell Press", "Incline Dumbbell Press", "Seated DB Shoulder Press", "Cable Crunch (ختام)", "Dumbbell Lateral Raise", "Pec Deck"]}, {"day": "Pull", "ex": ["Pull-Ups", "Romanian Deadlift", "Chest-Supported Wide-Grip Row", "Face Pull", "Spider Curl", "Cable Shrug"]}, {"day": "Legs", "ex": ["Bulgarian Split Squat", "Hip Thrust", "Cable Pull-Through", "Lying Leg Curl", "Standing Calf Raise"]}], "PPL4": [{"day": "Push", "ex": ["Chest Dips", "Incline Dumbbell Press", "Seated DB Shoulder Press", "Cable Crunch (ختام)", "Overhead Cable Extension"]}, {"day": "Pull", "ex": ["Barbell Row", "Lat Pulldown (Narrow/Neutral)", "Chest-Supported Row (T-Bar)", "Reverse Pec Deck", "Cable Curl", "Cable Shrug"]}, {"day": "Legs", "ex": ["Walking Lunges", "Stiff-Leg Deadlift", "Leg Press", "Seated Leg Curl", "Leg Press Calf Raise"]}], "UL1": [{"day": "Upper A", "ex": ["Incline Dumbbell Press", "Barbell Row", "Seated DB Shoulder Press", "Lat Pulldown (Wide)", "Incline Dumbbell Curl", "Cable Crunch (ختام)"]}, {"day": "Lower A", "ex": ["Front/High-Bar Squat", "Romanian Deadlift", "Leg Extension", "Seated Leg Curl", "Standing Calf Raise"]}, {"day": "Upper B", "ex": ["Flat Barbell Bench Press", "Pull-Ups", "Machine Shoulder Press", "Reverse Pec Deck", "Hammer Curl", "Skull Crusher"]}, {"day": "Lower B", "ex": ["Hip Thrust", "Bulgarian Split Squat", "Cable Pull-Through", "Lying Leg Curl", "Seated Calf Raise"]}], "AS1": [{"day": "Chest & Back", "ex": ["Incline Dumbbell Press", "Barbell Row", "Lat Pulldown (Narrow/Neutral)", "Machine Chest Press", "Cable Crossover", "Straight-Arm Pulldown"]}, {"day": "Shoulders & Arms", "ex": ["Seated DB Shoulder Press", "Cable Lateral Raise", "Reverse Pec Deck", "Incline Dumbbell Curl", "Overhead Cable Extension", "Cable Crunch (ختام)"]}, {"day": "Legs", "ex": ["Hack Squat", "Romanian Deadlift", "Leg Extension", "Seated Leg Curl", "Standing Calf Raise"]}], "FB1": [{"day": "Full Body A", "ex": ["Front/High-Bar Squat", "Incline Dumbbell Press", "Barbell Row", "Seated DB Shoulder Press", "Seated Leg Curl", "Incline Dumbbell Curl", "Cable Crunch (ختام)"]}, {"day": "Full Body B", "ex": ["Romanian Deadlift", "Pull-Ups", "Flat Dumbbell Press", "Machine Shoulder Press", "Leg Extension", "Hammer Curl", "Skull Crusher"]}, {"day": "Full Body C", "ex": ["Hack Squat", "Chest Dips", "Chest-Supported Row (Machine)", "Cable Lateral Raise", "Lying Leg Curl", "Preacher Curl", "Overhead Cable Extension"]}], "UL2": [{"day": "Upper A", "ex": ["Chest Dips", "Chest-Supported Row (Machine)", "Cable Lateral Raise", "Cable Crunch (ختام)", "Preacher Curl", "Close-Grip Bench Press"]}, {"day": "Lower A", "ex": ["Leg Press", "Bulgarian Split Squat", "Seated Leg Curl", "Adductor Machine", "Leg Press Calf Raise"]}, {"day": "Upper B", "ex": ["Flat Dumbbell Press", "Single-Arm Cable Row", "Machine Shoulder Press", "Cable Rear Delt Fly", "Spider Curl", "Overhead Dumbbell Extension"]}, {"day": "Lower B", "ex": ["Hip Thrust", "Stiff-Leg Deadlift", "Cable Pull-Through", "Lying Leg Curl", "Standing Calf Raise"]}], "AS2": [{"day": "Chest & Back", "ex": ["Flat Barbell Bench Press", "Pull-Ups", "Incline Smith Machine Press", "Chest-Supported Wide-Grip Row", "Pec Deck", "Dumbbell Shrug"]}, {"day": "Shoulders & Arms", "ex": ["Machine Shoulder Press", "Machine Lateral Raise", "Bent-Over Dumbbell Reverse Fly", "Spider Curl", "Skull Crusher", "Cable Crunch (ختام)"]}, {"day": "Legs", "ex": ["Front/High-Bar Squat", "Stiff-Leg Deadlift", "Leg Extension", "Lying Leg Curl", "Seated Calf Raise"]}], "FB2": [{"day": "Full Body A", "ex": ["Hip Thrust", "Pull-Ups", "Incline Smith Machine Press", "Cable Lateral Raise", "Leg Extension", "Cable Crunch (ختام)", "Close-Grip Bench Press"]}, {"day": "Full Body B", "ex": ["Walking Lunges", "Barbell Row", "Flat Dumbbell Press", "Face Pull", "Seated Leg Curl", "Drag Curl", "Overhead Dumbbell Extension"]}, {"day": "Full Body C", "ex": ["Stiff-Leg Deadlift", "Chest Dips", "Single-Arm Cable Row", "Machine Lateral Raise", "Adductor Machine", "Hammer Curl", "Cable Pushdown"]}], "SPEC-BACK": [{"day": "Back Focus 1", "ex": ["Deadlift", "Pull-Ups", "Barbell Row", "Lat Pulldown (Wide)", "Cable Crunch (ختام)"]}, {"day": "Push", "ex": ["Flat Barbell Bench Press", "Seated DB Shoulder Press", "Cable Pushdown", "Cable Lateral Raise"]}, {"day": "Legs", "ex": ["Hack Squat", "Romanian Deadlift", "Leg Extension", "Seated Leg Curl", "Standing Calf Raise"]}, {"day": "Back Focus 2", "ex": ["Chest-Supported Row (T-Bar)", "Seated Cable Row (Wide)", "Straight-Arm Pulldown", "Reverse Pec Deck", "Cable Crunch (ختام)"]}], "SPEC-CHEST": [{"day": "Chest Focus 1", "ex": ["Incline Dumbbell Press", "Flat Barbell Bench Press", "Chest Dips", "Cable Crossover", "Cable Pushdown", "Cable Crunch (ختام)"]}, {"day": "Back", "ex": ["Pull-Ups", "Seated Cable Row (Wide)", "Face Pull", "Hammer Curl"]}, {"day": "Legs", "ex": ["Leg Press", "Romanian Deadlift", "Leg Extension", "Seated Leg Curl", "Standing Calf Raise"]}, {"day": "Chest Focus 2", "ex": ["Flat Dumbbell Press", "Incline Smith Machine Press", "Low-to-High Cable Fly", "Pec Deck", "Seated DB Shoulder Press", "Cable Crunch (ختام)"]}], "SPEC-LEGS": [{"day": "Legs Focus 1", "ex": ["Front/High-Bar Squat", "Romanian Deadlift", "Leg Extension", "Seated Leg Curl", "Adductor Machine", "Standing Calf Raise"]}, {"day": "Push", "ex": ["Flat Barbell Bench Press", "Seated DB Shoulder Press", "Cable Pushdown", "Cable Crunch (ختام)"]}, {"day": "Pull", "ex": ["Pull-Ups", "Seated Cable Row (Wide)", "Incline Dumbbell Curl", "Wrist Curl (ختام)"]}, {"day": "Legs Focus 2", "ex": ["Hack Squat", "Hip Thrust", "Lying Leg Curl", "Cable Pull-Through", "Seated Calf Raise"]}], "SPEC-ARMS": [{"day": "Arms Focus 1", "ex": ["Incline Dumbbell Curl", "Preacher Curl", "Hammer Curl", "Overhead Cable Extension", "Cable Pushdown", "Wrist Curl / Reverse Wrist Curl"]}, {"day": "Push", "ex": ["Incline Dumbbell Press", "Machine Chest Press", "Machine Shoulder Press", "Cable Lateral Raise", "Cable Crunch (ختام)"]}, {"day": "Pull", "ex": ["Barbell Row", "Lat Pulldown (Wide)", "Seated Cable Row (Wide)", "Face Pull"]}, {"day": "Legs", "ex": ["Leg Press", "Romanian Deadlift", "Leg Extension", "Seated Leg Curl", "Standing Calf Raise"]}, {"day": "Arms Focus 2 + أكتاف", "ex": ["Farmer's Walk", "Close-Grip Bench Press", "Skull Crusher", "Spider Curl", "Drag Curl", "Dumbbell Lateral Raise"]}], "SPORT-FOOTBALL": [{"day": "Legs Power", "ex": ["Box Jumps (تمرين من بره القائمة)", "Front/High-Bar Squat", "Romanian Deadlift", "Bulgarian Split Squat", "Standing Calf Raise", "Cable Crunch"]}, {"day": "Upper (Support)", "ex": ["Incline Dumbbell Press", "Barbell Row", "Seated DB Shoulder Press", "Cable Pushdown"]}, {"day": "Posterior Chain & Core", "ex": ["Hip Thrust", "Stiff-Leg Deadlift", "Lying Leg Curl", "Cable Woodchopper", "Standing Calf Raise", "Lateral Bound (تنطيط جانبي - من بره القائمة)"]}], "SPORT-MMA": [{"day": "Lower Body Power", "ex": ["Front/High-Bar Squat", "Romanian Deadlift", "Bulgarian Split Squat", "Standing Calf Raise"]}, {"day": "Upper Push & Pull", "ex": ["Flat Barbell Bench Press", "Barbell Row", "Seated DB Shoulder Press", "Pull-Ups", "Cable Pushdown"]}, {"day": "Grip & Rotational Core", "ex": ["Farmer's Walk", "Cable Woodchopper", "Wrist Curl / Reverse Wrist Curl", "Hanging Leg Raise", "Neck Harness / مقاومة يدوية للرقبة (من بره القائمة)"]}, {"day": "Full Body Power", "ex": ["Medicine Ball Rotational Throw (من بره القائمة)", "Deadlift", "Chest Dips", "Single-Arm Cable Row", "Hip Thrust", "Cable Crunch"]}], "SPORT-BOXING": [{"day": "Legs & Hips", "ex": ["Front/High-Bar Squat", "Bulgarian Split Squat", "Hip Thrust", "Standing Calf Raise"]}, {"day": "Push Power", "ex": ["Medicine Ball Rotational Throw (من بره القائمة)", "Flat Dumbbell Press", "Seated DB Shoulder Press", "Cable Pushdown", "Cable Woodchopper"]}, {"day": "Pull & Posture", "ex": ["Barbell Row", "Lat Pulldown (Wide)", "Face Pull", "Hanging Leg Raise"]}, {"day": "Conditioning & Grip", "ex": ["Farmer's Walk", "Chest Dips", "Single-Arm Cable Row", "Cable Crunch", "Battle Ropes (من بره القائمة)"]}], "SPORT-BJJ": [{"day": "Pull & Grip", "ex": ["Pull-Ups", "Barbell Row", "Farmer's Walk", "Wrist Curl / Reverse Wrist Curl"]}, {"day": "Legs & Base", "ex": ["Front/High-Bar Squat", "Hip Thrust", "Bulgarian Split Squat", "Standing Calf Raise", "Neck Bridge (تقوية الرقبة - من بره القائمة)"]}, {"day": "Push & Core", "ex": ["Flat Barbell Bench Press", "Seated DB Shoulder Press", "Cable Pushdown", "Cable Woodchopper"]}, {"day": "Grip Endurance", "ex": ["Deadlift", "Chest-Supported Row (Machine)", "Single-Arm Cable Row", "Hanging Leg Raise", "Sled Drag / Push (من بره القائمة)"]}], "SPORT-SWIMMING": [{"day": "Pull-Dominant Upper", "ex": ["Lat Pulldown (Wide)", "Seated Cable Row (Wide)", "Face Pull", "Reverse Pec Deck", "Band External Rotation (كفة مدورة - من بره القائمة)"]}, {"day": "Legs & Core", "ex": ["Leg Press", "Romanian Deadlift", "Standing Calf Raise", "Cable Crunch"]}, {"day": "Light Push & Rotation", "ex": ["Single-Arm Cable Row", "Straight-Arm Pulldown", "Machine Lateral Raise (خفيف)", "Cable Woodchopper", "Band Internal Rotation (كفة مدورة - من بره القائمة)"]}]};
@@ -1385,7 +2517,7 @@
     ALL_PANELS.forEach(function (n) { $("p-" + n).hidden = n !== "admin"; });
     loadClients(function () { $("clientSel").value = id; onClientChange(); });
   }
-  $("clientSearch").addEventListener("input", filterClientSel);
+  $("clientSearch").addEventListener("input", function () { this.value = this.value.replace(/\D/g, ""); filterClientSel(); });
   /* ---------- client code split-input (RG-YY-SEQ-MM) ---------- */
   function pad(v, n) { return String(v || "").padStart(n, "0"); }
   function codeInputs() { return { yy: $("codeYY"), seq: $("codeSeq"), mm: $("codeMM"), hid: $("fProfile").client_code }; }
@@ -1410,11 +2542,11 @@
   $("codeSeq").addEventListener("input", function () { this.value = this.value.replace(/\D/g, "").slice(0, 3); if (this.value.length === 3) $("codeMM").focus(); syncHiddenCode(); });
   $("codeMM").addEventListener("input", function () { this.value = this.value.replace(/\D/g, "").slice(0, 2); syncHiddenCode(); });
   function filterClientSel() {
-    var q = $("clientSearch").value.trim().toLowerCase();
+    var q = $("clientSearch").value.replace(/\D/g, "");
     var sel = $("clientSel");
     [].forEach.call(sel.options, function (o) {
       if (!o.value) { o.hidden = false; return; }
-      var code = o.getAttribute("data-code") || "";
+      var code = (o.getAttribute("data-code") || "").replace(/\D/g, "");
       o.hidden = !!q && code.indexOf(q) === -1;
     });
   }
@@ -1446,10 +2578,167 @@
       if (link) { wa.href = link; wa.hidden = false; wa.textContent = "واتساب " + (r.data.full_name || r.data.username); }
       else { wa.hidden = true; }
       renderClientAvatar(r.data);
+      fillNutri(r.data);
     });
     $("fMeasure").week_date.value = new Date().toISOString().slice(0, 10);
     refreshLists();
+    loadCoachFood();
+    loadCoachPlan();
+    loadCoachWeek();
   }
+
+  /* ---------- nutrition targets card (coach) ---------- */
+  var NUT_W = null, NUT_GOAL_W = null, NUT_LAST = null;
+  var ACT_F = { light: 1.375, moderate: 1.55, high: 1.725 };
+  var KCAL_PER_KG = 7700;
+  var DEFICIT_MAX = 1000;                          /* أقصى عجز يومي (سعر) */
+  var KCAL_FLOOR = { male: 1500, female: 1200 };   /* أدنى سعرات يومية */
+  var LOSS_CAP_PCT = 0.01;                         /* أقصى نزول أسبوعي: 1% من الوزن */
+  var BULK_BASE = { beginner: 400, intermediate: 250, advanced: 150 };  /* الفائض الطبيعي حسب خبرة التمرين (سعر/يوم) */
+  var BULK_CAP_PCT = 0.20;                         /* أقصى فائض: 20% من احتياج الثبات */
+  var RATE_OPTS = {
+    loss: { def: "1000", list: [["1000", "عجز 1000 سعر (حوالي 4 كجم/شهر)"], ["750", "عجز 750 سعر (حوالي 3 كجم/شهر)"], ["500", "عجز 500 سعر (حوالي 2 كجم/شهر)"]] },
+    cut: { def: "0.75", list: [["0.5", "نزول 0.5% من الوزن/أسبوع (أبطأ، أحسن للعضل)"], ["0.75", "نزول 0.75% من الوزن/أسبوع (حوالي 2.5 كجم/شهر)"], ["1", "نزول 1% من الوزن/أسبوع (الحد الأقصى)"]] }
+  };
+  function setRateOptions(goal, cur) {
+    var sel = $("fNutri").rate_choice; clear(sel);
+    var o = RATE_OPTS[goal];
+    if (!o) { sel.appendChild(el("option", { value: "", text: "— (مش مطلوبة)" })); sel.disabled = true; return; }
+    sel.disabled = false;
+    o.list.forEach(function (x) { sel.appendChild(el("option", { value: x[0], text: x[1] })); });
+    sel.value = (cur != null && o.list.some(function (x) { return Number(x[0]) === Number(cur); })) ? String(cur) : o.def;
+  }
+  function nutSuggest(i) {
+    var w = i.w, notes = [], kcal, monthly = 0, protPerKg = 2.0, surplusInfo = null;
+    var bmr = 10 * w + 6.25 * i.h - 5 * i.age + (i.sex === "male" ? 5 : -161);
+    var tdee = bmr * (ACT_F[i.act] || 1.55);
+    kcal = tdee;
+    if (i.goal === "loss" || i.goal === "cut") {
+      var deficit;
+      if (i.goal === "loss") {
+        deficit = i.rate || 1000; protPerKg = 1.8;
+      } else {
+        deficit = w * (i.rate || 0.75) / 100 * KCAL_PER_KG / 7; protPerKg = 2.4;
+      }
+      var capW = w * LOSS_CAP_PCT * KCAL_PER_KG / 7;
+      if (i.goal === "cut" && deficit > capW) { deficit = capW; notes.push("العجز اتقلل لـ " + Math.round(capW) + " سعر عشان النزول ما يزيدش عن 1% من وزنه في الأسبوع."); }
+      if (i.age < 18 && deficit > 500) { deficit = 500; notes.push("السن أقل من 18: العجز اتقلل لـ 500 سعر كحد أقصى."); }
+      if (i.goal === "loss" && deficit > capW) notes.push("النزول هنا أسرع من 1% من وزنه في الأسبوع. ده مقبول بس لو عنده دهون كتير، وإنت اللي تقرر.");
+      if (deficit > DEFICIT_MAX) { deficit = DEFICIT_MAX; notes.push("العجز اتقلل لـ 1000 سعر (الحد الأقصى)."); }
+      kcal = tdee - deficit;
+      var floor = KCAL_FLOOR[i.sex];
+      if (kcal < floor) { kcal = floor; notes.push("السعرات وصلت للحد الأدنى الآمن (" + floor + ")، فالنزول هيبقى أبطأ."); }
+      monthly = (tdee - kcal) * 30 / KCAL_PER_KG;
+    } else if (i.goal === "bulk") {
+      var base = BULK_BASE[i.level] || 250;
+      var surplus = base * (1 + i.pct / 100);
+      var cap = tdee * BULK_CAP_PCT;
+      if (surplus > cap) { surplus = cap; notes.push("الفائض اتقلل لـ 20% من احتياجه (" + Math.round(cap) + " سعر) عشان الزيادة ما تروحش دهون."); }
+      kcal = tdee + surplus;
+      monthly = surplus * 30 / KCAL_PER_KG;
+      surplusInfo = { base: base, surplus: Math.round(surplus) };
+    }
+    if (i.age < 18) notes.push("السن أقل من 18: المعادلة متظبطة للكبار فالأرقام تقريبية أكتر، والأفضل موافقة ولي الأمر ومراجعة طبيب قبل أي تخسيس.");
+    var p = Math.round(protPerKg * w);
+    var f = Math.round(Math.max(0.8 * w, 0.2 * kcal / 9));
+    var c = Math.round((kcal - 4 * p - 9 * f) / 4);
+    if (c < 50) { c = 50; notes.push("الكارب اتثبّت على 50 جم كحد أدنى، فالسعرات زادت شوية."); }
+    return { kcal: Math.round(4 * p + 4 * c + 9 * f), p: p, c: c, f: f, tdee: Math.round(tdee), bmr: bmr, actF: (ACT_F[i.act] || 1.55), monthly: monthly, notes: notes, surplusInfo: surplusInfo };
+  }
+  var ACT_LABEL = { light: "خفيف", moderate: "متوسط", high: "عالي" };
+  function nutProfileSummary() {
+    var pf = $("fProfile"), h = num(pf.height_cm.value), a = num(pf.age.value);
+    var missing = [];
+    if (h == null) missing.push("الطول");
+    if (a == null) missing.push("السن");
+    var note = $("nutProfileNote");
+    if (missing.length) { note.textContent = "ناقص في بيانات العميل (فوق): " + missing.join(" و") + ". اكتبهم هناك ودوس حفظ، وبعدين اقترح الأهداف."; return; }
+    note.textContent = "المأخوذ من بيانات العميل: طول " + h + " سم — سن " + a + " — " + (pf.sex.value === "male" ? "ذكر" : "أنثى") + " — نشاط " + (ACT_LABEL[pf.activity.value] || "");
+  }
+  ["height_cm", "age", "sex", "activity"].forEach(function (n) {
+    var e = $("fProfile")[n]; e.addEventListener("input", nutProfileSummary); e.addEventListener("change", nutProfileSummary);
+  });
+  function nutUpdateNotes() {
+    var f = $("fNutri");
+    var k = num(f.target_kcal.value), p = num(f.target_protein.value), c = num(f.target_carb.value), fa = num(f.target_fat.value);
+    var sum = $("nutSumNote"), wk = $("nutWeeklyNote");
+    if (p != null && c != null && fa != null) {
+      var calc = Math.round(4 * p + 4 * c + 9 * fa);
+      sum.textContent = "مجموع الماكروز = " + calc + " سعر" + (k != null && Math.abs(calc - k) > 30 ? " (مختلف عن خانة السعرات بـ " + Math.abs(calc - k) + ")" : "");
+    } else sum.textContent = "";
+    wk.textContent = (k != null && p != null && c != null && fa != null)
+      ? "هدف الأسبوع: " + (k * 7) + " سعر — بروتين " + (p * 7) + " جم — كارب " + (c * 7) + " جم — دهون " + (fa * 7) + " جم" : "";
+  }
+  function fillNutri(row) {
+    var f = $("fNutri");
+    var pf = $("fProfile");
+    pf.height_cm.value = row.height_cm != null ? row.height_cm : "";
+    pf.age.value = row.age != null ? row.age : "";
+    pf.sex.value = row.sex || "male";
+    pf.activity.value = row.activity || "moderate";
+    nutProfileSummary();
+    f.goal_type.value = row.goal_type || "loss";
+    f.training_level.value = row.training_level || "intermediate";
+    setRateOptions(f.goal_type.value, row.rate_choice);
+    f.bulk_pct.value = String(row.bulk_pct != null ? row.bulk_pct : 20);
+    f.target_kcal.value = row.target_kcal != null ? row.target_kcal : "";
+    f.target_protein.value = row.target_protein != null ? row.target_protein : "";
+    f.target_carb.value = row.target_carb != null ? row.target_carb : "";
+    f.target_fat.value = row.target_fat != null ? row.target_fat : "";
+    var startW = row.start_weight != null ? Number(row.start_weight) : null;
+    NUT_GOAL_W = row.goal_weight != null ? Number(row.goal_weight) : null;
+    f.calc_weight.value = startW != null ? startW : "";
+    f.calc_weight.removeAttribute("data-touched");
+    $("nutSuggestOut").hidden = true;
+    $("nutWeightNote").textContent = startW != null ? "مصدر الوزن: وزن البداية المسجّل (" + fmt(startW) + " كجم). بيتحدّث تلقائيًا لو فيه قياس أحدث." : "مفيش وزن مسجّل. اكتب الوزن هنا بإيدك.";
+    nutUpdateNotes();
+    sb.from("measurements").select("*").eq("client_id", row.id).order("week_date", { ascending: false }).then(function (r) {
+      if (r.error || !r.data || !r.data.length || coachTarget !== row.id) return;
+      var m = r.data[0];
+      if (m.weight != null && !f.calc_weight.getAttribute("data-touched")) {
+        f.calc_weight.value = Number(m.weight);
+        $("nutWeightNote").textContent = "مصدر الوزن: آخر قياس مسجّل (" + m.week_date + ") = " + fmt(Number(m.weight)) + " كجم. لو الرقم ده غلط، اكتب الوزن الصح هنا أو صلّح القياس من كارت \"تسجيل قياس أسبوعي\".";
+      }
+    });
+  }
+  $("fNutri").calc_weight.addEventListener("input", function () {
+    this.setAttribute("data-touched", "1");
+    $("nutWeightNote").textContent = "الوزن اتكتب يدويًا. دوس \"اقترح الأهداف\" تاني عشان الأرقام تتحسب عليه.";
+  });
+  $("nutSuggestBtn").addEventListener("click", function () {
+    var f = $("fNutri"), pf = $("fProfile"), h = num(pf.height_cm.value), a = num(pf.age.value);
+    var w = num(f.calc_weight.value);
+    if (w == null || w < 30 || w > 300) return toast("اكتب وزن صحيح في خانة الوزن المستخدم", true);
+    if (h == null || a == null) return toast("اكتب الطول والسن في بيانات العميل فوق الأول", true);
+    var goal = f.goal_type.value;
+    var s = nutSuggest({ w: w, h: h, age: a, sex: pf.sex.value, act: pf.activity.value, goal: goal, rate: num(f.rate_choice.value), level: f.training_level.value, pct: Number(f.bulk_pct.value) });
+    NUT_LAST = s;
+    f.target_kcal.value = s.kcal; f.target_protein.value = s.p; f.target_carb.value = s.c; f.target_fat.value = s.f;
+    var out = $("nutSuggestOut"); clear(out); out.hidden = false;
+    out.appendChild(el("div", { text: "اتحسب على: وزن " + fmt(w) + " كجم، طول " + h + " سم، سن " + a + "، " + (pf.sex.value === "male" ? "ذكر" : "أنثى") + "." }));
+    out.appendChild(el("div", { text: "احتياج الثبات: " + Math.round(s.bmr) + " (معدل الأيض الأساسي) × " + s.actF + " (النشاط) = " + s.tdee + " سعر." }));
+    if (goal === "loss" || goal === "cut") {
+      out.appendChild(el("div", { text: "عجز حوالي " + (Math.round((s.tdee - s.kcal) / 10) * 10) + " سعر في اليوم، والنزول المتوقع حوالي " + fmt(s.monthly) + " كجم في الشهر." }));
+      if (NUT_GOAL_W != null && w > NUT_GOAL_W && s.monthly > 0) out.appendChild(el("div", { text: "للوصول لهدفه (" + fmt(NUT_GOAL_W) + " كجم): حوالي " + fmt((w - NUT_GOAL_W) / s.monthly) + " شهر." }));
+    } else if (goal === "bulk") {
+      out.appendChild(el("div", { text: "فائض " + s.surplusInfo.surplus + " سعر (الطبيعي لمستواه " + s.surplusInfo.base + (Number(f.bulk_pct.value) ? " + " + f.bulk_pct.value + "%" : "") + "). الزيادة المتوقعة حوالي " + fmt(s.monthly) + " كجم في الشهر." }));
+    }
+    s.notes.forEach(function (n) { out.appendChild(el("div", { text: "⚠ " + n })); });
+    out.appendChild(el("div", { text: "ده اقتراح تقديري. عدّل الأرقام تحت براحتك وبعدين دوس حفظ." }));
+    nutUpdateNotes();
+  });
+  $("fNutri").goal_type.addEventListener("change", function () { setRateOptions(this.value, null); });
+  ["target_kcal", "target_protein", "target_carb", "target_fat"].forEach(function (n) { $("fNutri")[n].addEventListener("input", nutUpdateNotes); });
+  $("fNutri").addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!coachTarget) return toast("اختار عميل الأول", true);
+    var f = e.target;
+    sb.from("profiles").update({
+      goal_type: f.goal_type.value, bulk_pct: Number(f.bulk_pct.value), training_level: f.training_level.value, rate_choice: num(f.rate_choice.value),
+      target_kcal: num(f.target_kcal.value), target_protein: num(f.target_protein.value),
+      target_carb: num(f.target_carb.value), target_fat: num(f.target_fat.value)
+    }).eq("id", coachTarget).then(function (r) { r.error ? fail(r.error) : toast("اتحفظت الأهداف"); });
+  });
 
   function delBtn(table, id) {
     var b = el("button", { class: "link-btn danger", type: "button", text: "حذف" });
@@ -1514,7 +2803,8 @@
       start_weight: num(f.start_weight.value),
       goal_weight: num(f.goal_weight.value),
       subscription_start_date: f.subscription_start_date.value || null,
-      subscription_end_date: f.subscription_end_date.value || null
+      subscription_end_date: f.subscription_end_date.value || null,
+      height_cm: num(f.height_cm.value), age: num(f.age.value), sex: f.sex.value, activity: f.activity.value
     }).eq("id", coachTarget).then(function (r) { r.error ? fail(r.error) : (toast("اتحفظ"), loadClients()); });
   });
 
@@ -1691,7 +2981,8 @@
           sb.from("plan_exercises").delete().eq("client_id", cid),
           sb.from("videos").delete().eq("client_id", cid),
           sb.from("documents").delete().eq("client_id", cid),
-          sb.from("reviews").delete().eq("client_id", cid)
+          sb.from("reviews").delete().eq("client_id", cid),
+          sb.from("food_submissions").delete().eq("client_id", cid)
         ]).then(function () {
           return sb.from("profiles").delete().eq("id", cid);
         }).then(function (r2) {
