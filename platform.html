@@ -1302,6 +1302,43 @@
     node.appendChild(el("p", { class: "sub", style: "margin:4px 0 0;font-size:.8rem", text: "الكلام بيتحوّل لكتابة عن طريق خدمة المتصفح (في Chrome بتتم على سيرفرات جوجل). راجع النص وعدّله قبل ما تبعته." }));
     return { node: node, stop: stop };
   }
+  /* ---------- بعد الإرسال: أسئلة قصيرة للعميل على الكلمات العامة بس (سمك، فراخ...) واختياراته بتتحفظ له هو ---------- */
+  function askChoices(text) {
+    loadFoodData(function () {
+      if (FP.err || !FP.loaded) return loadFood();   /* العميل مش قادر يقرا جدول الأصناف: نكمل من غير أسئلة */
+      sb.from("client_food_choices").select("*").eq("client_id", profile.id).then(function (cr) {
+        FP.choices = {};
+        if (!cr.error) (cr.data || []).forEach(function (c) { FP.choices[c.phrase] = c.food_id; });
+        var qs = [], seen = {};
+        analyzeText(text).forEach(function (i) { if (i.m.kind === "multi" && !seen[i.m.q]) { seen[i.m.q] = 1; qs.push(i); } });
+        if (!qs.length) return loadFood();
+        var body = $("foodBody"); clear(body);
+        body.appendChild(el("h3", { text: "تمام، باقي حاجة بسيطة", style: "margin:0 0 6px" }));
+        body.appendChild(el("p", { class: "sub", text: "كتبت أصناف عامة. اختار النوع اللي بتاكله عشان الكابتن يظبط لك الخطة على أكلك بالظبط." }));
+        var left = qs.length, done = el("button", { class: "btn", type: "button", text: "تم", style: "margin-top:14px" });
+        done.addEventListener("click", loadFood);
+        qs.forEach(function (it) {
+          var m = it.m, row = el("div", { class: "box", style: "max-width:720px;margin-bottom:14px" }, [el("strong", { text: it.phrase })]);
+          var acts = el("div", { style: "display:flex;flex-wrap:wrap;gap:8px;margin-top:10px" });
+          m.cands.forEach(function (f) {
+            var b = el("button", { type: "button", class: "btn btn-sm fp-ghost", text: f.name_ar || f.name_en });
+            b.addEventListener("click", function () {
+              acts.querySelectorAll("button").forEach(function (x) { x.disabled = true; });
+              sb.from("client_food_choices").upsert({ client_id: profile.id, phrase: m.q, food_id: f.id }, { onConflict: "client_id,phrase" }).then(function (r) {
+                if (r.error) { acts.querySelectorAll("button").forEach(function (x) { x.disabled = false; }); return fail(r.error); }
+                clear(acts); acts.appendChild(el("span", { class: "sub", text: "✓ " + (f.name_ar || f.name_en) }));
+              });
+            });
+            acts.appendChild(b);
+          });
+          var skip = el("button", { type: "button", class: "btn btn-sm fp-ghost", text: "مش فارق / أكتر من نوع" });
+          skip.addEventListener("click", function () { clear(acts); acts.appendChild(el("span", { class: "sub", text: "تمام، الكابتن هيسألك" })); });
+          acts.appendChild(skip); row.appendChild(acts); body.appendChild(row);
+        });
+        body.appendChild(done);
+      });
+    });
+  }
   function loadFood() {
     var body = $("foodBody"); showLoading("foodBody");
     sb.from("food_submissions").select("*").eq("client_id", profile.id).order("created_at", { ascending: false }).then(function (r) {
@@ -1335,7 +1372,7 @@
           btn.disabled = false;
           if (res.error) return fail(res.error);
           toast("اتبعت للكابتن. تقدر تزوّد عليه في أي وقت");
-          loadFood();
+          askChoices(a);
         });
       });
       body.appendChild(el("div", { class: "box", style: "max-width:720px;margin-bottom:28px" }, [form]));
@@ -1348,13 +1385,13 @@
     });
   }
   /* ---------- تحليل أكل العميل (الكابتن بس): مطابقة الكلام بجدول foods + تصحيحات food_aliases ---------- */
-  var FP = { vocab: {}, loaded: false, foods: [], byId: {}, exact: {}, aliasMap: {}, subs: [], err: null };
-  var QTY_WORDS = { "طبق": 1, "اطباق": 1, "رغيف": 1, "رغيفين": 1, "ارغفه": 1, "معلقه": 1, "معالق": 1, "ملعقه": 1, "ملاعق": 1, "كوبايه": 1, "كوب": 1, "قطعه": 1, "قطع": 1, "حبه": 1, "حبات": 1, "علبه": 1, "شويه": 1, "حاجه": 1, "جرام": 1, "جم": 1, "كيلو": 1 };
+  var FP = { choices: {}, vocab: {}, loaded: false, foods: [], byId: {}, exact: {}, aliasMap: {}, subs: [], err: null };
+  var QTY_WORDS = { "طبق": 1, "اطباق": 1, "رغيف": 1, "رغيفين": 1, "ارغفه": 1, "معلقه": 1, "معالق": 1, "ملعقه": 1, "ملاعق": 1, "كوبايه": 1, "كوب": 1, "قطعه": 1, "قطع": 1, "حبه": 1, "حبات": 1, "علبه": 1, "شويه": 1, "حاجه": 1, "جرام": 1, "جم": 1, "كيلو": 1, "واحد": 1, "واحده": 1, "اتنين": 1, "اثنين": 1, "تلات": 1, "ثلاث": 1, "تلاته": 1, "ثلاثه": 1, "اربع": 1, "اربعه": 1, "خمس": 1, "خمسه": 1, "نص": 1, "نصف": 1, "ربع": 1 };
   /* كلام زيادة بيقوله الناس قبل الأكل (بيتشال قبل المطابقة) */
-  var STOP = {}; "طيب طب يعني انا اني انه باكل بكل اكل ياكل باكله باكلها بياكل هاكل اكلت بحب ممكن مثلا زي كده كدا كل دايما غالبا احيانا بس علي علشان عشان في من مع لي هو هي ده دي دا دول غدا فطار عشا سحور وجبه وجبات عادي تقريبا كمان بعدين شويه حاجه حاليا يوميا لما لو يا".split(" ").forEach(function (w) { STOP[w] = 1; });
+  var STOP = {}; "طيب طب يعني انا اني انه باكل بكل اكل ياكل باكله باكلها بياكل هاكل اكلت بحب ممكن مثلا زي كده كدا كل دايما غالبا احيانا بس علي علشان عشان في من مع لي هو هي ده دي دا دول غدا فطار عشا سحور وجبه وجبات عادي تقريبا كمان بعدين شويه حاجه حاليا يوميا لما لو يا ال كتير جدا اكلات اكله شعبيه حاجات شي ثم تاني تانيه اللي".split(" ").forEach(function (w) { STOP[w] = 1; });
   /* اختلافات الكتابة المصرية */
   var DISH = { "محشي": 1, "محاشي": 1, "حشو": 1, "ملفوف": 1 };
-  var SYN = { "بتنجان": "بازنجان", "بيتنجان": "بازنجان", "بتنجانه": "بازنجان", "بطاطا": "بطاطس", "دجاج": "فراخ" };
+  var SYN = { "بتنجان": "بازنجان", "بيتنجان": "بازنجان", "بتنجانه": "بازنجان", "بطاطا": "بطاطس", "دجاج": "فراخ", "بيضه": "بيض", "بيضات": "بيض" };
   function normAr(s) {
     s = String(s == null ? "" : s).toLowerCase()
       .replace(/[\u064B-\u0652\u0640]/g, "")
@@ -1371,6 +1408,8 @@
   function stemTok(t) {
     if (FP.vocab[t]) return t;
     var c = [];
+    if (/تين$/.test(t) && t.length > 5) { c.push(t.slice(0, -3)); c.push(t.slice(0, -3) + "ه"); }   /* بيضتين، رغيفين... */
+    if (/ات$/.test(t) && t.length > 4) { c.push(t.slice(0, -2)); c.push(t.slice(0, -2) + "ه"); }
     if (/^(بال|وال)/.test(t) && t.length > 4) c.push(t.slice(3));
     if (/^[بولف]/.test(t) && t.length > 3) c.push(t.slice(1));
     for (var i = 0; i < c.length; i++) { var x = c[i]; if (x === "رز") x = "ارز"; if (SYN[x]) x = SYN[x]; if (FP.vocab[x]) return x; }
@@ -1410,12 +1449,26 @@
   function pickBest(list) { return list.slice().sort(function (a, b) { return foodRank(b) - foodRank(a); })[0]; }
   function matchPhrase(raw) {
     var q = cleanPhrase(raw); if (!q) return null;
+    var ch = FP.choices && FP.choices[q];
+    if (ch != null && FP.byId[String(ch)]) return { kind: "choice", food: FP.byId[String(ch)], q: q };
     var a = FP.aliasMap[q];
     if (a && FP.byId[String(a.foodId)]) return { kind: "alias", food: FP.byId[String(a.foodId)], q: q };
     var ex = FP.exact[q];
     if (ex && ex.length) return { kind: "exact", food: pickBest(ex), q: q };
     var qt = q.split(" ").filter(function (t) { return FP.vocab[t]; });
     if (!qt.length) return { kind: "none", food: null, q: q };
+    /* كلمة عامة (سمك، فراخ، بيض...) بتنطبق على أكتر من صنف مختلف: ما نختارش واحد بالنيابة عن الكابتن، نعرض الأنواع ويختار */
+    var groups = {}, gKeys = [];
+    FP.foods.forEach(function (f) {
+      if (!f._keys.some(function (k) { var kt = k.split(" "); return qt.every(function (t) { return kt.indexOf(t) > -1; }); })) return;
+      var nk = normAr(f.name_ar || f.name_en);
+      if (!groups[nk]) { groups[nk] = []; gKeys.push(nk); }
+      groups[nk].push(f);
+    });
+    if (gKeys.length > 1) {
+      var cands = gKeys.map(function (k) { return pickBest(groups[k]); }).sort(function (a, b) { return foodRank(b) - foodRank(a) || String(a.name_ar).length - String(b.name_ar).length; });
+      return { kind: "multi", food: null, q: q, cands: cands.slice(0, 10), total: cands.length };
+    }
     var best = null, bestSc = 0, sp = " " + qt.join(" ") + " ";   /* الكلمات اللي مش في قاعدة الأكل (زي "خميس") بتتشال */
     FP.foods.forEach(function (f) {
       f._keys.forEach(function (k) {
@@ -1429,7 +1482,7 @@
     if (best && bestSc >= 0.3) return { kind: "guess", food: best, q: q };
     return { kind: "none", food: null, q: q };
   }
-  function isSure(m) { return m && (m.kind === "alias" || m.kind === "exact" || m.kind === "found"); }
+  function isSure(m) { return m && (m.kind === "alias" || m.kind === "exact" || m.kind === "found" || m.kind === "choice"); }
   /* بيدوّر جوه الجملة على أسماء أصناف موجودة (حتى لو الجملة فيها كلام زيادة، أو صنفين مع بعض) */
   function extractFoods(toks) {
     var present = {}, byKey = {}, cands = [];
@@ -1456,32 +1509,67 @@
   var IGN_KEY = "rg_food_ignore";
   function getIgn() { try { return JSON.parse(localStorage.getItem(IGN_KEY) || "[]"); } catch (e) { return []; } }
   function addIgn(chunk) { try { var a = getIgn(), n = normAr(chunk); if (n && a.indexOf(n) < 0) a.push(n); localStorage.setItem(IGN_KEY, JSON.stringify(a)); return true; } catch (e) { return false; } }
+  /* كلمات بتفصل بين صنف وصنف في الكلام المنطوق (التسجيل الصوتي مفيهوش فواصل): "باكل سمك باكل فول" = صنفين */
+  var SEP = {}; "باكل باكلها باكله بياكل بحب كمان زي مثل مثلا او وبعدين بعدين ثم و".split(" ").forEach(function (w) { SEP[w] = 1; });
+  function splitSegments(chunk) {
+    var segs = [], cur = [];
+    chunk.split(/\s+/).forEach(function (w) {
+      if (!w) return;
+      var nw = normAr(w);
+      if (SEP[nw]) { if (cur.length) segs.push(cur.join(" ")); cur = []; return; }
+      /* "وفراخ" = "و" + "فراخ" (الواو ملزوقة): نفصلها إلا لو الكلمة نفسها صنف معروف */
+      if (/^و/.test(nw) && nw.length > 3 && !FP.vocab[nw]) { if (cur.length) segs.push(cur.join(" ")); cur = []; w = w.replace(/^و/, ""); }
+      cur.push(w);
+    });
+    if (cur.length) segs.push(cur.join(" "));
+    return segs;
+  }
+  /* قاعدة الأمان: ما نقولش "فهمت" إلا لو كل كلمة في الجملة اتفسّرت. أي كلمة فاضلة = اقتراح محتاج تأكيد، ومش بنسيبها تتشال في صمت */
+  function analyzeSeg(chunk, out) {
+    var whole = matchPhrase(chunk);
+    if (isSure(whole)) { out.push({ phrase: chunk, m: whole }); return; }
+    var variants = [chunk.split(/\s+و\s+/), chunk.split(/\s+و(?=\S)/)];
+    for (var i = 0; i < variants.length; i++) {
+      var parts = variants[i].map(function (p) { return p.trim(); }).filter(Boolean);
+      if (parts.length < 2) continue;
+      var ms = parts.map(matchPhrase);
+      if (ms.every(isSure)) { parts.forEach(function (p, j) { out.push({ phrase: p, m: ms[j] }); }); return; }
+    }
+    var toks = phraseTokens(chunk), dishes = [];
+    /* أكلات مركبة (محشي...) مش موجودة في قاعدة الأكل: ما نخدش جزء من اسمها (زي "عنب") على إنه الأكلة */
+    for (var di = 0; di < toks.length; di++) {
+      if (DISH[toks[di]] && !FP.vocab[toks[di]]) {
+        var dn = toks.slice(di, di + 3); toks.splice(di, 3);
+        dishes.push({ phrase: dn.join(" "), m: { kind: "none", food: null, q: dn.join(" ") } }); di--;
+      }
+    }
+    dishes.forEach(function (d) { out.push(d); });
+    var ex = extractFoods(toks);
+    if (!ex.length && dishes.length) return;
+    if (ex.length) {
+      var used = {}; ex.forEach(function (e) { e.key.split(" ").forEach(function (t) { used[t] = 1; }); });
+      var left = toks.filter(function (t) { return !used[t]; });
+      if (!left.length) { ex.forEach(function (e) { out.push({ phrase: ex.length > 1 ? e.key : chunk, m: { kind: "found", food: e.food, q: e.key } }); }); return; }
+      var note = left.join(" ");
+      ex.forEach(function (e) { out.push({ phrase: ex.length > 1 ? e.key : chunk, m: { kind: "guess", food: e.food, q: ex.length > 1 ? e.key : cleanPhrase(chunk), note: note } }); });
+      return;
+    }
+    if (whole && whole.kind !== "none") { out.push({ phrase: chunk, m: whole }); return; }
+    /* كذا صنف ورا بعض من غير فاصل ومفيش اسم واحد بيجمعهم: كل كلمة تتطابق لوحدها (ولو اقتراح) بدل ما الكل يضيع */
+    var COOK = { "مقلي": 1, "مقليه": 1, "مشوي": 1, "مشويه": 1, "مسلوق": 1, "مسلوقه": 1, "مطبوخ": 1, "مطبوخه": 1, "ني": 1, "محمر": 1, "محمره": 1, "مشوح": 1 };
+    var kept = toks.filter(function (t) { return !COOK[t]; });
+    if (kept.length > 1) { kept.forEach(function (t) { var mt = matchPhrase(t); if (mt) out.push({ phrase: t, m: mt }); }); return; }
+    if (kept.length === 1 && toks.length > 1) { var m1 = matchPhrase(chunk); if (m1) out.push({ phrase: chunk, m: m1 }); return; }
+    if (whole) out.push({ phrase: chunk, m: whole });
+  }
   function analyzeText(text) {
     var out = [], ign = getIgn();
-    String(text || "").split(/[\n\r,،؛;\/+]+/).map(function (x) { return x.trim(); }).filter(Boolean).forEach(function (chunk) {
+    String(text || "").split(/[\n\r,،؛;\/+.؟?!]+/).map(function (x) { return x.trim(); }).filter(Boolean).forEach(function (chunk) {
       if (ign.indexOf(normAr(chunk)) > -1) return;
-      var whole = matchPhrase(chunk);
-      if (isSure(whole)) { out.push({ phrase: chunk, m: whole }); return; }
-      var variants = [chunk.split(/\s+و\s+/), chunk.split(/\s+و(?=\S)/)];
-      for (var i = 0; i < variants.length; i++) {
-        var parts = variants[i].map(function (p) { return p.trim(); }).filter(Boolean);
-        if (parts.length < 2) continue;
-        var ms = parts.map(matchPhrase);
-        if (ms.every(isSure)) { parts.forEach(function (p, j) { out.push({ phrase: p, m: ms[j] }); }); return; }
-      }
-      var toks = phraseTokens(chunk), dishes = [];
-      /* أكلات مركبة (محشي...) مش موجودة في قاعدة الأكل: ما نخدش جزء من اسمها (زي "عنب") على إنه الأكلة */
-      for (var di = 0; di < toks.length; di++) {
-        if (DISH[toks[di]] && !FP.vocab[toks[di]]) {
-          var dn = toks.slice(di, di + 3); toks.splice(di, 3);
-          dishes.push({ phrase: dn.join(" "), m: { kind: "none", food: null, q: dn.join(" ") } }); di--;
-        }
-      }
-      dishes.forEach(function (d) { out.push(d); });
-      var ex = extractFoods(toks);
-      if (!ex.length && dishes.length) return;
-      if (ex.length) { ex.forEach(function (e) { out.push({ phrase: ex.length > 1 ? e.key : chunk, m: { kind: "found", food: e.food, q: e.key } }); }); return; }
-      if (whole) out.push({ phrase: chunk, m: whole });
+      var segs = splitSegments(chunk);
+      if (!segs.length) return;
+      if (segs.length === 1) return analyzeSeg(segs[0], out);
+      segs.forEach(function (sg) { if (ign.indexOf(normAr(sg)) > -1) return; analyzeSeg(sg, out); });
     });
     return out;
   }
@@ -1575,14 +1663,25 @@
           var m = it.m, sure = isSure(m);
           var row = el("div", { class: "fp-row" + (sure ? "" : " warn") });
           var head = el("div", { class: "fp-head" }, [el("strong", { text: it.phrase })]);
-          var tag = m.kind === "guess" ? "اقتراح" : (m.kind === "none" ? "ما فهمتش" : (m.kind === "alias" ? "متعلّم" : ""));
+          var tag = m.kind === "multi" ? "أكتر من نوع — اختار" : m.kind === "guess" ? "اقتراح" : (m.kind === "none" ? "ما فهمتش" : (m.kind === "alias" ? "متعلّم" : (m.kind === "choice" ? "اختيار العميل" : "")));
           if (m.food) head.appendChild(el("span", { class: "fp-arrow", text: "←" })), head.appendChild(el("span", { text: foodLabel(m.food) }));
           if (tag) head.appendChild(el("span", { class: "fp-tag", text: tag }));
+          if (m.note) head.appendChild(el("span", { class: "fp-tag", text: "كلمة مش فاهمها: " + m.note }));
           row.appendChild(head);
           var acts = el("div", { class: "fp-acts" });
           function openPicker() {
             acts.hidden = true;
             row.appendChild(foodPicker(it, function (f) { saveAlias(m.q, f, renderFoodAnalysis); }));
+          }
+          if (m.kind === "multi") {
+            var cw = el("div", { class: "fp-acts", style: "flex-wrap:wrap" });
+            m.cands.forEach(function (f) {
+              var cb = el("button", { type: "button", class: "btn btn-sm fp-ghost", text: foodLabel(f) });
+              cb.addEventListener("click", function () { cb.disabled = true; saveAlias(m.q, f, renderFoodAnalysis); });
+              cw.appendChild(cb);
+            });
+            row.appendChild(cw);
+            if (m.total > m.cands.length) row.appendChild(el("div", { class: "sub", style: "font-size:.8rem", text: "فيه " + (m.total - m.cands.length) + " نوع تاني — دوس \"غيّر\" وابحث بالاسم" }));
           }
           if (m.kind === "guess") {
             var ok = el("button", { type: "button", class: "btn btn-sm", text: "أكّد" });
@@ -1631,7 +1730,11 @@
       if (r.error) return fail(r.error);
       if (cid !== coachTarget) return;
       FP.subs = r.data || [];
-      loadFoodData(function () { if (cid === coachTarget) renderFoodAnalysis(); });
+      FP.choices = {};
+      sb.from("client_food_choices").select("*").eq("client_id", cid).then(function (cr) {
+        if (!cr.error) (cr.data || []).forEach(function (c) { FP.choices[c.phrase] = c.food_id; });   /* لو الجدول لسه ما اتعملش: نكمل عادي */
+        loadFoodData(function () { if (cid === coachTarget) renderFoodAnalysis(); });
+      });
     });
   }
 
