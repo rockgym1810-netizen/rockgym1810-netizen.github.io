@@ -296,6 +296,35 @@
   .pl-t{ border:1px solid var(--line); border-radius:8px; padding:8px 14px; display:flex; flex-direction:column; align-items:center; gap:2px; min-width:96px; font-size:.85rem; color:var(--muted); }
   .pl-t strong{ color:var(--ink); font-size:1rem; }
   .pl-t.off{ border-color:#6b5a1e; } .pl-t.off strong{ color:#f5c451; }
+
+/* ===== Rock Kitchen ===== */
+.kt-sec{ margin-bottom:34px; }
+.kt-sec h3{ font-size:1.2rem; font-weight:900; margin:0 0 14px; padding-bottom:8px; border-bottom:1px solid var(--line); }
+.kt-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px; }
+.kt-card{ background:var(--bg-alt); border:1px solid var(--line); border-radius:10px; overflow:hidden; cursor:pointer; transition:transform .2s, border-color .2s; text-align:start; padding:0; color:var(--ink); font-family:inherit; }
+.kt-card:hover{ transform:translateY(-3px); border-color:var(--accent); }
+.kt-img{ width:100%; aspect-ratio:4/3; object-fit:cover; display:block; background:#1b1b1e; }
+.kt-miss{ display:block; direction:ltr; font-size:.7rem; color:var(--muted); text-align:center; }
+.kt-ph{ width:100%; aspect-ratio:4/3; display:grid; place-items:center; align-content:center; gap:6px; background:#1b1b1e; color:var(--muted); font-size:2rem; }
+.kt-body{ padding:12px 14px 14px; }
+.kt-ar{ font-weight:800; font-size:1rem; line-height:1.5; margin:0; }
+.kt-en{ color:var(--muted); font-size:.85rem; margin:2px 0 8px; direction:ltr; text-align:start; }
+.kt-meta{ color:var(--accent); font-weight:700; font-size:.88rem; }
+.kt-hero{ display:inline-block; font-size:.72rem; font-weight:800; color:#0c0c0d; background:var(--accent); border-radius:4px; padding:2px 7px; margin-bottom:6px; }
+.kt-back{ background:transparent; border:1px solid var(--line); color:var(--ink); border-radius:6px; padding:8px 16px; cursor:pointer; font-family:inherit; margin-bottom:18px; }
+.kt-detail{ max-width:720px; }
+.kt-detail h3{ font-size:1.4rem; font-weight:900; margin:14px 0 2px; }
+.kt-detail h4{ font-size:1.05rem; font-weight:800; margin:24px 0 8px; }
+.kt-detail .kt-en{ font-size:.95rem; margin-bottom:16px; }
+.kt-detail .kt-img{ border-radius:10px; aspect-ratio:16/10; }
+.kt-macros{ display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+.kt-macros div{ padding:12px 6px; text-align:center; background:var(--bg); border-inline-end:1px solid var(--line); }
+.kt-macros div:last-child{ border-inline-end:0; }
+.kt-macros b{ display:block; font-size:1.3rem; font-weight:900; }
+.kt-macros span{ color:var(--muted); font-size:.75rem; }
+.kt-list{ margin:0; padding-inline-start:20px; line-height:1.9; }
+.kt-list li small{ color:var(--muted); direction:ltr; unicode-bidi:plaintext; }
+.kt-note{ color:var(--muted); font-size:.82rem; margin-top:10px; }
 </style>
 </head>
 <body>
@@ -2099,12 +2128,12 @@
   function wkAutoScale() {
     var k = WK.tgt.k, warn = [];
     WK.days.forEach(function (d, i) {
-      var raw = 0; d.forEach(function (ml) { var r = WK.rById[ml.rid]; if (r) raw += Number(r.kcal) || 0; });
+      var raw = 0, lk = 0; d.forEach(function (ml) { var r = WK.rById[ml.rid]; if (!r) return; if (ml.locked) lk += (Number(r.kcal) || 0) * ml.mult; else raw += Number(r.kcal) || 0; });
       if (!raw) return;
-      var f = k / raw, c = Math.min(2, Math.max(0.5, f));
+      var f = (k - lk) / raw, c = Math.min(2, Math.max(0.5, f));
       if (c !== f) warn.push("اليوم " + (i + 1));
       f = Math.round(c * 20) / 20;
-      d.forEach(function (ml) { ml.mult = f; });
+      d.forEach(function (ml) { if (!ml.locked) ml.mult = f; });
     });
     return warn;
   }
@@ -2128,12 +2157,83 @@
     var w = wkAutoScale(); if (w.length) notes.push("سعرات الأيام دي بعيدة عن الهدف حتى بعد أقصى تكبير/تصغير للكميات: " + w.join("، "));
     WK.notes = notes; WK.tplId = tpl.id; WK.open = 0;
   }
+  /* ===== طلبات الوصفات: المنصة بتحطها في الخطة الأسبوعية بنفسها، بأسباب واضحة ===== */
+  var WK_LBL = { fish: "سمك", shrimp: "جمبري", tuna: "تونة", egg: "بيض", dairy: "ألبان", liver: "كبدة", beef: "لحمة", chicken: "فراخ", legumes: "بقوليات", gluten: "جلوتين", nuts: "مكسرات" };
+  function wkWhyBlocked(r) {
+    var out = []; (r.contains || []).forEach(function (c) { if (WK.tags[c]) out.push(WK_LBL[c] || c); });
+    return out.length ? out.join(" و") : "صنف مكتوب في \"مش باكل\"";
+  }
+  function wkSortMeals(ms) { return ms.sort(function (a, b) { return WK_SLOTS.indexOf(a.slot) - WK_SLOTS.indexOf(b.slot); }); }
+  function wkSimDay(day, slot, r) {   /* بيجرّب يحط الوصفة في اليوم ده من غير ما يغيّر الخطة الفعلية */
+    var T = WK.tgt, old = null, meals = [];
+    day.forEach(function (m) { if (m.slot === slot) old = m; else meals.push({ slot: m.slot, rid: m.rid, mult: m.mult, locked: !!m.locked, swapped: m.swapped, blocked: m.blocked }); });
+    if (old && old.locked) return null;
+    meals.push({ slot: slot, rid: r.id, mult: 1, locked: true, swapped: false, blocked: false });
+    var lk = 0, raw = 0;
+    meals.forEach(function (m) { var x = WK.rById[m.rid]; if (!x) return; if (m.locked) lk += (Number(x.kcal) || 0) * m.mult; else raw += Number(x.kcal) || 0; });
+    var f = 1, ok = true;
+    if (raw) {
+      var need = T.k - lk; f = need / raw;
+      if (f < 0.65 || f > 1.4) ok = false;
+      f = Math.round(Math.min(1.4, Math.max(0.65, f)) * 20) / 20;
+      meals.forEach(function (m) { if (!m.locked) m.mult = f; });
+    } else if (Math.abs(lk - T.k) > 0.15 * T.k) ok = false;
+    wkSortMeals(meals);
+    return { meals: meals, old: old, f: f, ok: ok, tot: wkDayTot(meals) };
+  }
+  function wkPlaceRequest(rid) {
+    var r = WK.rById[rid], T = WK.tgt, pre = [];
+    if (!r) return { ok: false, lines: ["الوصفة دي مش موجودة في قاعدة الوصفات."] };
+    if (wkBlocked(r)) return { ok: false, lines: ["ما ضفتهاش: الوصفة فيها (" + wkWhyBlocked(r) + ") والعميل كاتب إنه مش بيأكله."] };
+    if (WK_SLOTS.indexOf(r.slot) < 0) return { ok: false, lines: ["ما ضفتهاش: نوع الوجبة (" + r.slot + ") مش من وجبات الخطة (فطار/غداء/عشاء/سناك)."] };
+    var kc = Number(r.kcal) || 0;
+    if (kc > 0.5 * T.k) return { ok: false, lines: ["ما ضفتهاش: الوجبة لوحدها " + Math.round(kc) + " سعر، يعني أكتر من نص سعرات اليوم (" + T.k + ")، ومش هينفع نوزّع باقي اليوم صح."] };
+    if (!WK.days) {
+      var best = wkScoreTemplates(); if (!best) return { ok: false, lines: ["مفيش قوالب نبني منها الخطة."] };
+      wkBuild(best); pre.push("ماكانش فيه خطة أسبوعية، فبنيتها الأول من أنسب قالب (" + best.name + ").");
+    }
+    if (WK.days.some(function (d) { return d.some(function (m) { return m.rid === r.id && m.locked; }); })) return { ok: false, lines: ["الوصفة دي متضافة في الخطة فعلاً."] };
+    var cands = [], n = WK.days.length, src = String(r.protein_source || "");
+    WK.days.forEach(function (day, i) {
+      var sim = wkSimDay(day, r.slot, r); if (!sim || !sim.ok) return;
+      var t = sim.tot, e = { k: Math.abs(t.k - T.k) / T.k, p: Math.abs(t.p - T.p) / T.p, c: Math.abs(t.c - T.c) / T.c, f: Math.abs(t.f - T.f) / T.f };
+      var pen = 0, tags = [];
+      var same = sim.meals.filter(function (m) { var x = WK.rById[m.rid]; return m.rid !== r.id && x && src && String(x.protein_source || "") === src; });
+      if (same.length) pen += 0.12 * same.length; else tags.push("src");
+      var others = day.filter(function (m) { return m.locked && m.slot !== r.slot; }).length;
+      if (others) pen += 0.12 * others; else tags.push("spread");
+      [i - 1, i + 1].forEach(function (j) { var d2 = WK.days[(j + n) % n]; if (d2 && d2 !== day && d2.some(function (m) { return m.rid === r.id; })) pen += 0.2; });
+      if (r.slot === "عشاء" && kc > 0.35 * T.k) pen += 0.08;
+      pen += Math.abs(1 - sim.f) * 0.5;
+      cands.push({ i: i, sim: sim, e: e, pen: pen, same: same.length, tags: tags, score: e.k * 3 + e.p * 2 + e.c * 0.7 + e.f * 0.7 + pen });
+    });
+    if (!cands.length) return { ok: false, lines: pre.concat(["ما لقيتش يوم ينفع: في كل الأيام لو حطيت الوصفة دي في (" + r.slot + ") باقي الوجبات هتتكبّر أو تتصغّر أكتر من الحد المعقول (من 0.65 لـ 1.4 من الكمية) عشان سعرات اليوم تفضل على الهدف " + T.k + "."]) };
+    cands.sort(function (a, b) { return a.score - b.score; });
+    var w = cands[0], d = w.sim, t = d.tot, lines = pre.slice();
+    WK.days[w.i] = d.meals; WK.open = w.i; WK.dirty = true;
+    var X = wkMac(r, 1);
+    lines.push("اتحطت \"" + r.name + "\" في يوم " + (w.i + 1) + " (" + r.slot + ") زي ما هي بالظبط: " + Math.round(X.k) + " سعر — بروتين " + Math.round(X.p) + " — كارب " + Math.round(X.c) + " — دهون " + Math.round(X.f) + ". أرقامها ما اتغيرتش، وباقي اليوم اتظبط حواليها.");
+    lines.push("ليه اليوم ده؟");
+    var oldR = d.old && WK.rById[d.old.rid];
+    lines.push(oldR ? "• كان في نفس الوجبة \"" + oldR.name + "\" (" + Math.round(wkMac(oldR, d.old.mult).k) + " سعر)، فبدّلتها بدل ما أزوّد وجبة زيادة." : "• اليوم ده ماكانش فيه " + r.slot + "، فاتضافت.");
+    lines.push("• بعد ما ظبطت باقي الوجبات (الكمية × " + d.f + ") اليوم بقى " + Math.round(t.k) + " سعر — بروتين " + Math.round(t.p) + " — كارب " + Math.round(t.c) + " — دهون " + Math.round(t.f) + "، مقابل الهدف " + T.k + " / " + T.p + " / " + T.c + " / " + T.f + ".");
+    lines.push("• قارنت " + cands.length + " من " + n + " أيام ينفعوا، وده الأقرب للهدف (فرق السعرات " + Math.round(w.e.k * 100) + "%، البروتين " + Math.round(w.e.p * 100) + "%) مع مراعاة التكرار.");
+    if (!w.same) lines.push(src ? "• مفيش وجبة تانية في اليوم ده بنفس مصدر البروتين (" + src + ")، فمفيش تكرار." : "• مفيش تكرار في مصدر البروتين.");
+    else lines.push("• تنبيه: فيه وجبة تانية في اليوم ده بنفس مصدر البروتين (" + src + ")، ولقيت ده أحسن الموجود.");
+    if (w.tags.indexOf("spread") < 0) lines.push("• تنبيه: فيه وصفة تانية من طلبات العميل في نفس اليوم، ولقيت ده أحسن الموجود.");
+    if (d.f > 1.25 || d.f < 0.8) lines.push("• تنبيه: باقي وجبات اليوم اتضربت × " + d.f + " عشان السعرات تفضل على الهدف، راجع الكميات.");
+    if (w.tags.indexOf("spread") > -1) lines.push("• مفيش وصفة تانية من طلبات العميل في اليوم ده، عشان الطلبات تتوزّع على الأسبوع.");
+    if (w.e.k > 0.05) lines.push("• تنبيه: سعرات اليوم بعيدة عن الهدف بـ " + Math.round(w.e.k * 100) + "%.");
+    if (w.e.p > 0.1) lines.push("• تنبيه: البروتين في اليوم ده " + (t.p < T.p ? "أقل" : "أكتر") + " من الهدف بـ " + Math.abs(Math.round(t.p - T.p)) + " جم، راجعه قبل ما تعتمد.");
+    lines.push("الخطة لسه مسودة. راجعها واضغط \"اعتماد وإظهار للعميل\" عشان العميل يشوفها.");
+    return { ok: true, lines: lines, day: w.i };
+  }
   function wkSnap() {
     var days = WK.days.map(function (d) {
       var meals = d.map(function (ml) {
         var r = WK.rById[ml.rid], x = wkMac(r, ml.mult);
         return {
-          slot: ml.slot, rid: r.id, name: r.name, mult: ml.mult,
+          slot: ml.slot, rid: r.id, name: r.name, mult: ml.mult, req: ml.locked ? 1 : 0,
           k: Math.round(x.k), p: Math.round(x.p), c: Math.round(x.c), f: Math.round(x.f),
           ings: (r.ings || []).map(function (i) { return { n: i.name_ar, g: r5(Number(i.grams) * ml.mult, 0, 2000) }; }),
           steps: Array.isArray(r.steps) ? r.steps.filter(function (s) { return typeof s === "string"; }) : []
@@ -2154,6 +2254,13 @@
     sb.from("weekly_plans").upsert(row, { onConflict: "client_id,status" }).then(function (r) {
       if (r.error) return fail(r.error);
       WK[status === "approved" ? "approved" : "draft"] = row; WK.work = status; WK.dirty = false;
+      var pid = Object.keys(WK.reqPlaced || {});
+      if (status === "approved" && pid.length) {
+        sb.from("recipe_requests").update({ status: "done" }).in("id", pid).then(function (q) {
+          if (q.error) return fail(q.error);
+          WK.reqs = (WK.reqs || []).filter(function (x) { return !WK.reqPlaced[x.id]; }); WK.reqPlaced = {}; renderWeek(); setTimeout(loadNotifications, 300);
+        });
+      }
       toast(status === "approved" ? "اتعتمدت. العميل بيشوفها دلوقتي" : "اتحفظت كمسودة (العميل مش شايفها)");
       renderWeek();
     });
@@ -2161,7 +2268,7 @@
   function wkLoadSaved(row) {   /* بيرجّع خطة محفوظة للشاشة (بالوصفات الحالية، والكميات اللي اتحفظت) */
     WK.tplId = row.template_id;
     WK.days = (row.days || []).map(function (d) {
-      return (d.meals || []).filter(function (ml) { return WK.rById[ml.rid]; }).map(function (ml) { return { slot: ml.slot, rid: ml.rid, mult: Number(ml.mult) || 1, swapped: false, blocked: wkBlocked(WK.rById[ml.rid]) }; });
+      return (d.meals || []).filter(function (ml) { return WK.rById[ml.rid]; }).map(function (ml) { return { slot: ml.slot, rid: ml.rid, mult: Number(ml.mult) || 1, locked: !!ml.req, swapped: false, blocked: wkBlocked(WK.rById[ml.rid]) }; });
     });
     WK.work = row.status; WK.open = 0; WK.notes = [];
   }
@@ -2179,13 +2286,41 @@
     if (!t.k || !t.p || t.c == null || t.f == null) { body.appendChild(emptyBox("اكتب الأهداف (سعرات وماكروز) واحفظها في كارت \"التغذية والأهداف\" الأول، وبعدين اختار العميل تاني.")); return; }
     if (!WK.recipes.length || !WK.templates.length) { body.appendChild(emptyBox("الوصفات أو القوالب مش موجودة في Supabase. شغّل ملفّي supabase_recipes.sql و supabase_plan_templates.sql.")); return; }
     body.appendChild(el("p", { class: "sub", style: "margin:0 0 6px", text: "هدف اليوم المعتمد: " + t.k + " سعر — بروتين " + t.p + " — كارب " + t.c + " — دهون " + t.f }));
-    var avTxt = Object.keys(WK.tags).length || (WK.av && WK.av.qs.length) ? " — ممنوعات العميل متحسوبة (وجبات فيها حاجة ممنوعة بتتبدّل)" : " — العميل ما كتبش ممنوعات";
+    var avTxt = Object.keys(WK.tags).length || (WK.av && WK.av.qs.length) ? " — المنصة بتتجنب الأكل اللي العميل كاتبه \"مش باكل\" وبتبدّل أي وجبة فيها حاجة منه" : " — العميل ما كتبش ممنوعات";
     body.appendChild(el("p", { class: "sub", style: "margin:0 0 14px", text: "فهمت من أكله " + Object.keys(WK.poolIds).length + " صنف" + avTxt }));
+    if ((WK.reqs || []).length) {
+      var rb = el("div", { class: "pl-meal", style: "margin-bottom:14px" }, [el("h4", { text: "🍴 طلبات الوصفات من المطبخ" })]);
+      WK.reqs.forEach(function (q) {
+        var placed = !!(WK.reqPlaced && WK.reqPlaced[q.id]), rr = WK.rById[q.recipe_id];
+        var line = el("div", { class: "pl-it", style: "display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between" });
+        line.appendChild(el("span", { text: (rr ? rr.name : q.recipe_name || q.recipe_id) + (placed ? " — اتضافت للمسودة، اعتمد الخطة عشان تظهر للعميل" : "") }));
+        var acts = el("span", { style: "display:flex;gap:6px" });
+        var add = el("button", { type: "button", class: "btn btn-sm", text: "ضيفها للخطة تلقائيًا" }); add.disabled = placed;
+        add.addEventListener("click", function () {
+          var res = wkPlaceRequest(q.recipe_id);
+          WK.info = { ok: res.ok, lines: res.lines };
+          if (res.ok) { WK.reqPlaced = WK.reqPlaced || {}; WK.reqPlaced[q.id] = true; }
+          renderWeek();
+        });
+        var ig = el("button", { type: "button", class: "btn btn-sm fp-ghost", text: "تجاهل" });
+        ig.addEventListener("click", function () {
+          ig.disabled = true;
+          sb.from("recipe_requests").update({ status: "done" }).eq("id", q.id).then(function (x) { if (x.error) { ig.disabled = false; return fail(x.error); } WK.reqs = WK.reqs.filter(function (z) { return z.id !== q.id; }); renderWeek(); setTimeout(loadNotifications, 300); });
+        });
+        acts.appendChild(add); acts.appendChild(ig); line.appendChild(acts); rb.appendChild(line);
+      });
+      body.appendChild(rb);
+    }
+    if (WK.info) {
+      var ib = el("div", { class: "fp-sum", style: "margin-bottom:14px;line-height:1.9" + (WK.info.ok ? "" : ";border-color:#ff5a5a") });
+      WK.info.lines.forEach(function (ln) { ib.appendChild(el("div", { text: ln })); });
+      body.appendChild(ib);
+    }
     var best = wkScoreTemplates();
     var bar = el("div", { style: "display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px" });
     var sel = el("select", { "aria-label": "القالب" });
     WK.templates.forEach(function (tp) {
-      sel.appendChild(el("option", { value: String(tp.id), text: tp.name + " — تتبدّل " + tp._blocked + " وجبة، تطابق مع أكله " + Math.round(tp._match * 100) + "%" + (best && tp.id === best.id ? " ★ الأنسب" : "") }));
+      sel.appendChild(el("option", { value: String(tp.id), text: tp.name + " — " + tp._blocked + " وجبة فيها حاجة ممنوعة هتتبدل، وتطابق أكل العميل " + Math.round(tp._match * 100) + "%" + (best && tp.id === best.id ? " ★ الأنسب" : "") }));
     });
     sel.value = String(WK.tplId != null ? WK.tplId : (best ? best.id : WK.templates[0].id));
     bar.appendChild(sel);
@@ -2193,7 +2328,7 @@
     build.addEventListener("click", function () {
       if (WK.days && !confirm("ده هيمسح تعديلاتك الحالية ويبني من القالب من الأول. متأكد؟")) return;
       var tp = WK.templates.filter(function (x) { return String(x.id) === sel.value; })[0];
-      wkBuild(tp); WK.dirty = true; renderWeek();
+      wkBuild(tp); WK.info = null; WK.dirty = true; renderWeek();
     });
     bar.appendChild(build);
     if (WK.days) {
@@ -2238,7 +2373,7 @@
     updDay(); dayBox.appendChild(dayTot);
     day.forEach(function (ml) {
       var r = WK.rById[ml.rid];
-      var box = el("div", { class: "pl-meal" }, [el("h4", { text: ml.slot + (ml.swapped ? " (اتبدّلت عشان الممنوعات)" : "") + (ml.blocked ? " — فيها حاجة ممنوعة!" : "") })]);
+      var box = el("div", { class: "pl-meal" }, [el("h4", { text: ml.slot + (ml.locked ? " ⭐ طلب العميل" : "") + (ml.swapped ? " (اتبدّلت عشان الممنوعات)" : "") + (ml.blocked ? " — فيها حاجة ممنوعة!" : "") })]);
       var row = el("div", { class: "pl-it" });
       var rs = el("select", { "aria-label": "الوصفة", style: "flex:1 1 220px;max-width:100%" });
       WK.recipes.filter(function (x) { return x.slot === ml.slot && x.type === r.type && (x.id === ml.rid || !wkBlocked(x)); })
@@ -2250,7 +2385,7 @@
       function upd() { var x = wkMac(WK.rById[ml.rid], ml.mult); mac.textContent = Math.round(x.k) + " سعر — ب " + Math.round(x.p) + " — ك " + Math.round(x.c) + " — د " + Math.round(x.f); }
       upd();
       mi.addEventListener("input", function () { var v = num(mi.value); ml.mult = v == null || v < 0 ? 0 : v; upd(); updDay(); updWeek(); WK.dirty = true; });
-      rs.addEventListener("change", function () { ml.rid = rs.value; ml.swapped = false; ml.blocked = wkBlocked(WK.rById[ml.rid]); WK.dirty = true; renderWeek(); });
+      rs.addEventListener("change", function () { ml.rid = rs.value; ml.locked = false; ml.swapped = false; ml.blocked = wkBlocked(WK.rById[ml.rid]); WK.dirty = true; renderWeek(); });
       row.appendChild(rs); row.appendChild(el("span", { class: "u", text: "× الكمية" })); row.appendChild(mi); row.appendChild(mac);
       box.appendChild(row);
       var det = el("details", { style: "margin-top:6px" }, [el("summary", { text: "المكونات بالجرام (للحصة دي)", style: "cursor:pointer;color:var(--muted);font-size:.88rem" })]);
@@ -2269,10 +2404,12 @@
       sb.from("weekly_plans").select("*").eq("client_id", cid),
       sb.from("food_submissions").select("*").eq("client_id", cid).order("created_at", { ascending: false }),
       sb.from("recipes").select("*"),
-      sb.from("meal_plan_templates").select("*").order("id")
+      sb.from("meal_plan_templates").select("*").order("id"),
+      sb.from("recipe_requests").select("id,recipe_id,recipe_name,created_at").eq("client_id", cid).eq("status", "new").order("created_at")
     ]).then(function (rs) {
       if (cid !== coachTarget) return;
       if (rs[0].error) return fail(rs[0].error);
+      WK.reqs = rs[5] && !rs[5].error ? (rs[5].data || []) : []; WK.reqPlaced = {}; WK.info = null;
       if (rs[2].error) return fail(rs[2].error);
       var p = rs[0].data || {};
       WK.cid = cid; WK.tgt = { k: p.target_kcal, p: p.target_protein, c: p.target_carb, f: p.target_fat };
@@ -2312,7 +2449,7 @@
         });
         var d = days[open] || { meals: [], totals: {} };
         (d.meals || []).forEach(function (m) {
-          var b = el("div", { class: "pl-meal" }, [el("h4", { text: m.slot + ": " + m.name })]);
+          var b = el("div", { class: "pl-meal" }, [el("h4", { text: m.slot + ": " + m.name + (m.req ? " ⭐" : "") })]);
           b.appendChild(el("div", { class: "pl-it" }, [el("span", { class: "m", text: m.k + " سعر — ب " + m.p + " — ك " + m.c + " — د " + m.f })]));
           b.appendChild(el("div", { class: "sub", style: "margin:6px 0 0;font-size:.92rem", text: (m.ings || []).map(function (i) { return i.n + " " + i.g + " جم"; }).join(" — ") }));
           if ((m.steps || []).length) {
@@ -2635,7 +2772,7 @@
       var byClient = {};
       ((rs[1].error ? [] : rs[1].data) || []).forEach(function (f) { if (seen.indexOf(f.id) < 0 && nm[f.client_id]) { (byClient[f.client_id] = byClient[f.client_id] || []).push(f.id); } });
       Object.keys(byClient).forEach(function (cid) {
-        items.push({ icon: "🍽️", text: (nm[cid].full_name || nm[cid].username) + " بعت أكله", sub: byClient[cid].length > 1 ? byClient[cid].length + " رسايل جديدة" : "جديد", cid: cid, seenIds: byClient[cid] });
+        items.push({ kind: "food", cid: cid, seenIds: byClient[cid] });
       });
       var lastRev = {}, lastIn = {};
       ((rs[2].error ? [] : rs[2].data) || []).forEach(function (r) { if (!lastRev[r.client_id]) lastRev[r.client_id] = r.created_at; });
@@ -2645,16 +2782,36 @@
       Object.keys(nm).forEach(function (cid) {
         var lr = lastRev[cid], ci = lastIn[cid];
         if (ci && (!lr || ci > new Date(lr)) && (!lr || Math.round((today - new Date(lr)) / DAY_MS) >= REVIEW_DUE_DAYS)) {
-          items.push({ icon: "📋", text: (nm[cid].full_name || nm[cid].username) + " جاهز للمراجعة", sub: "بعت صورة أو وزن جديد", cid: cid });
+          items.push({ kind: "review", cid: cid });
         }
         var end = nm[cid].subscription_end_date;
-        if (end) { var left = Math.round((toDate(end) - today) / DAY_MS); if (left >= 0 && left <= 3) items.push({ icon: "⏳", text: (nm[cid].full_name || nm[cid].username) + " اشتراكه قرب ينتهي", sub: "باقي " + left + " يوم", cid: cid }); }
+        if (end) { var left = Math.round((toDate(end) - today) / DAY_MS); if (left >= 0 && left <= 3) items.push({ kind: "sub", cid: cid, left: left }); }
       });
       ((rs[5] && !rs[5].error ? rs[5].data : []) || []).forEach(function (q) {
-        if (nm[q.client_id]) items.push({ icon: "🍴", text: (nm[q.client_id].full_name || nm[q.client_id].username) + " طلب وصفة من المطبخ", sub: q.recipe_name || q.recipe_id, cid: q.client_id, reqId: q.id });
+        if (nm[q.client_id]) items.push({ kind: "recipe", cid: q.client_id, reqId: q.id, rname: q.recipe_name || q.recipe_id });
       });
-      renderNotifications(items);
+      renderNotifications(groupNotifications(items, nm));
     }).catch(function () {});
+  }
+  /* إشعار واحد لكل عميل: بيجمّع (طلب وصفات + أكل + مراجعة + اشتراك) في جملة واحدة */
+  function groupNotifications(items, nm) {
+    var order = [], g = {};
+    items.forEach(function (it) {
+      if (!g[it.cid]) { g[it.cid] = { cid: it.cid, food: [], rec: [], reqIds: [], review: false, left: null }; order.push(it.cid); }
+      var x = g[it.cid];
+      if (it.kind === "food") x.food = x.food.concat(it.seenIds || []);
+      if (it.kind === "review") x.review = true;
+      if (it.kind === "sub") x.left = it.left;
+      if (it.kind === "recipe") { x.rec.push(it.rname); x.reqIds.push(it.reqId); }
+    });
+    return order.map(function (cid) {
+      var x = g[cid], c = nm[cid] || {}, name = c.full_name || c.username || "", parts = [];
+      if (x.rec.length) { var n = x.rec.length; parts.push("طلب " + (n === 1 ? "وصفة" : n === 2 ? "وصفتين" : n <= 10 ? n + " وصفات" : n + " وصفة") + " من المطبخ"); }
+      if (x.food.length) parts.push("بعت أكله");
+      if (x.review) parts.push("جاهز للمراجعة");
+      if (x.left != null) parts.push("اشتراكه قرب ينتهي (باقي " + x.left + " يوم)");
+      return { icon: "👤", text: name + " " + parts.join(" و"), sub: x.rec.length ? x.rec.join(" · ") : (x.review ? "بعت صورة أو وزن جديد" : ""), cid: cid, seenIds: x.food.length ? x.food : null, reqIds: x.reqIds.length ? x.reqIds : null };
+    });
   }
   function renderNotifications(items, clientMode) {
     var n = $("bellN"), p = $("bellPanel"); if (!n || !p) return;
@@ -2668,9 +2825,9 @@
       var go = el("button", { type: "button", class: "btn btn-sm", text: "افتح" });
       go.addEventListener("click", function () { if (it.tab) { $("bellPanel").hidden = true; selectTab(it.tab); return; } if (it.seenIds) markFoodSeen(it.seenIds); $("bellPanel").hidden = true; openClientInAdmin(it.cid); setTimeout(loadNotifications, 600); });
       var acts = el("div", { style: "display:flex;gap:6px" }); acts.appendChild(go);
-      if (it.reqId) {
-        var dn = el("button", { type: "button", class: "btn btn-sm", text: "تمت" });
-        dn.addEventListener("click", function () { dn.disabled = true; sb.from("recipe_requests").update({ status: "done" }).eq("id", it.reqId).then(function (r) { if (r.error) { dn.disabled = false; return fail(r.error); } loadNotifications(); }); });
+      if (it.reqIds) {
+        var dn = el("button", { type: "button", class: "btn btn-sm", text: it.reqIds.length > 1 ? "الوصفات تمت" : "تمت" });
+        dn.addEventListener("click", function () { dn.disabled = true; sb.from("recipe_requests").update({ status: "done" }).in("id", it.reqIds).then(function (r) { if (r.error) { dn.disabled = false; return fail(r.error); } loadNotifications(); }); });
         acts.appendChild(dn);
       }
       row.appendChild(acts); p.appendChild(row);
@@ -2716,6 +2873,132 @@
     fn();
     notifTimer = setInterval(fn, 60000);
     if (!window.__rgVis) { window.__rgVis = 1; document.addEventListener("visibilitychange", function () { if (!document.hidden && profile) (profile.is_admin ? loadNotifications : loadClientNotifications)(); }); }
+  }
+
+
+  /* ================= ROCK KITCHEN (client tab) ================= */
+  var KITCHEN = {
+    R120: "Crispy Chicken Ranch Sandwich", R124: "Healthy Hawawshi with Tahini Sauce", R149: "Healthy Kebab Rolls with Protein Tahini",
+    R119: "Healthy Alexandrian Liver (Sandwich)", R117: "Steak & Cheese Sandwich (Gouda & Emmental) on Ciabatta", R118: "Double Garlic Parmesan Dip Burger",
+    R121: "Creamy Chicken & Mushroom Pasta", R133: "Chicken Tenders with Hot Honey Sauce", R167: "Breakfast Sandwich: Ground Beef, Egg & Cream Cheese (40g+ protein)",
+    R178: "Healthy Butter Chicken", R147: "Caramel Diet Cake (Piece)", R148: "Konafa Pecan Cheesecake (Piece)", R150: "Healthy Carrot Cake (Piece)",
+    R151: "Chocolate Skillet Cookie (Quarter)", R152: "Raffaello Milk Cake (Piece)", R153: "Mini Cinnamon Rolls (One)", R154: "Protein Brookies (Piece)",
+    R164: "Tiramisu French Toast (Piece)", R165: "Blueberry Lemon Muffins (One)"
+  };
+  /* لإضافة أكلة جديدة: حط رقمها هنا + صورتها R###.jpg في فولدر recipes + اسمها الإنجليزي فوق في KITCHEN */
+  var KITCHEN_LIVE = ["R120", "R124", "R149", "R119", "R117", "R118", "R121", "R133", "R167", "R178", "R147", "R148", "R150", "R151", "R152", "R153", "R154", "R164", "R165"];
+  var KT = { rows: null, req: {} };
+
+  function ktJson(v, d) { if (v == null) return d; if (typeof v === "string") { try { return JSON.parse(v); } catch (e) { return d; } } return v; }
+  function ktName(r) { return String(r.name || r.name_ar || r.id).replace(/\s*\(\s*\d+\s*سعر\s*\)/, ""); }
+  function ktMac(r) {
+    var m = ktJson(r.macros, {}) || {};
+    function pick(a, b) { var v = num(r[a]); return v != null ? v : (m[b] != null ? m[b] : 0); }
+    return { k: pick("kcal", "k"), p: pick("protein", "p"), c: pick("carb", "c"), f: pick("fat", "f") };
+  }
+  function ktImg(id, cls) {
+    var img = el("img", { class: cls || "kt-img", src: "recipes/" + id + ".jpg", alt: "", loading: "lazy" });
+    img.addEventListener("error", function () { var ph = el("div", { class: "kt-ph" }, [el("span", { text: "🍽️" }), el("small", { class: "kt-miss", text: "recipes/" + id + ".jpg" })]); if (img.parentNode) img.parentNode.replaceChild(ph, img); });
+    return img;
+  }
+  function loadKitchen() {
+    var body = $("kitchenBody"); if (!body) return;
+    showLoading("kitchenBody");
+    Promise.all([
+      sb.from("recipes").select("*").in("id", KITCHEN_LIVE),
+      sb.from("recipe_requests").select("recipe_id").eq("client_id", profile.id)
+    ]).then(function (rs) {
+      if (rs[0].error) { clear(body); body.appendChild(emptyBox("مش قادر أحمّل الأكلات دلوقتي · Couldn't load the dishes right now")); return fail(rs[0].error); }
+      KT.rows = rs[0].data || [];
+      KT.req = {}; (rs[1].error ? [] : (rs[1].data || [])).forEach(function (x) { KT.req[x.recipe_id] = true; });
+      renderKitchenGrid();
+    }).catch(fail);
+  }
+  /* أقسام المطبخ. القسم الفاضي (مفيش فيه أكلات ليها صور) مش بيظهر. لإضافة أكلة: حط رقمها في القسم المناسب هنا وفي KITCHEN_LIVE */
+  var KITCHEN_CATS = [
+    { t: "ساندوتشات وبرجر · Sandwiches & Burgers", ids: ["R120", "R117", "R118", "R167"] },
+    { t: "أكل شعبي · Egyptian Favorites", ids: ["R124", "R119", "R149"] },
+    { t: "أطباق رئيسية · Main Dishes", ids: ["R121", "R133", "R178"] },
+    { t: "فطار وعشاء · Breakfast & Dinner", ids: [] },
+    { t: "ديزرت وحلويات · Desserts", ids: ["R164", "R153", "R165", "R147", "R150", "R151", "R152", "R154"] },
+    { t: "🌙 رمضان · Ramadan", ids: ["R148"] }
+  ];
+  function ktCard(r) {
+    var m = ktMac(r);
+    var card = el("button", { class: "kt-card", type: "button" }, [
+      ktImg(r.id),
+      el("div", { class: "kt-body" }, [
+        r.marketing === "hero" ? el("span", { class: "kt-hero", text: "⭐ مميزة · Top pick" }) : null,
+        el("p", { class: "kt-ar", text: ktName(r) }),
+        el("p", { class: "kt-en", text: KITCHEN[r.id] || "" }),
+        el("div", { class: "kt-meta", dir: "ltr", text: Math.round(m.k) + " kcal · " + Math.round(m.p) + "g protein" })
+      ])
+    ]);
+    card.addEventListener("click", function () { renderKitchenDetail(r); });
+    return card;
+  }
+  function renderKitchenGrid() {
+    var body = $("kitchenBody"); clear(body);
+    var rows = KT.rows || [], byId = {}, used = {};
+    rows.forEach(function (r) { byId[r.id] = r; });
+    if (!rows.length) { body.appendChild(emptyBox("لسه مفيش أكلات هنا · No dishes yet")); return; }
+    function section(title, list) {
+      list = list.filter(function (r) { return r; });
+      if (!list.length) return;
+      list.sort(function (a, b) { return (a.marketing === "hero" ? 0 : 1) - (b.marketing === "hero" ? 0 : 1); });
+      var sec = el("div", { class: "kt-sec" }, [el("h3", { text: title })]);
+      var grid = el("div", { class: "kt-grid" });
+      list.forEach(function (r) { grid.appendChild(ktCard(r)); });
+      sec.appendChild(grid); body.appendChild(sec);
+    }
+    KITCHEN_CATS.forEach(function (c) { section(c.t, c.ids.map(function (id) { used[id] = 1; return byId[id]; })); });
+    section("أكلات تانية · More", rows.filter(function (r) { return !used[r.id]; }));
+  }
+  function renderKitchenDetail(r) {
+    var body = $("kitchenBody"); clear(body); window.scrollTo(0, 0);
+    var m = ktMac(r), box = el("div", { class: "kt-detail" });
+    var back = el("button", { class: "kt-back", type: "button", text: "→ رجوع · Back" });
+    back.addEventListener("click", renderKitchenGrid);
+    box.appendChild(back);
+    box.appendChild(ktImg(r.id));
+    box.appendChild(el("h3", { text: ktName(r) }));
+    box.appendChild(el("p", { class: "kt-en", text: KITCHEN[r.id] || "" }));
+    function mc(v, l) { return el("div", null, [el("b", { text: String(Math.round(v)) }), el("span", { text: l })]); }
+    box.appendChild(el("div", { class: "kt-macros" }, [mc(m.k, "سعرات · kcal"), mc(m.p, "بروتين · Protein"), mc(m.c, "كارب · Carbs"), mc(m.f, "دهون · Fat")]));
+    var ings = ktJson(r.ings, []) || [];
+    if (ings.length) {
+      box.appendChild(el("h4", { text: "المكونات · Ingredients" }));
+      var ul = el("ul", { class: "kt-list" });
+      ings.forEach(function (i) {
+        var li = el("li", { text: (i.name_ar || i.name_en || "") + (i.grams ? " — " + i.grams + " g" : "") });
+        if (i.name_en && i.name_ar) li.appendChild(el("small", { text: "  (" + i.name_en + ")" }));
+        ul.appendChild(li);
+      });
+      box.appendChild(ul);
+    }
+    var sea = ktJson(r.seasonings, []) || [];
+    if (sea.length) { box.appendChild(el("h4", { text: "التتبيلة · Seasoning" })); box.appendChild(el("p", { text: sea.join("، ") })); }
+    var steps = ktJson(r.steps, []) || [];
+    if (steps.length) {
+      box.appendChild(el("h4", { text: "طريقة التحضير · Method" }));
+      var ol = el("ol", { class: "kt-list" });
+      steps.forEach(function (s) { ol.appendChild(el("li", { text: s })); });
+      box.appendChild(ol);
+    }
+    var done = !!KT.req[r.id];
+    var btn = el("button", { class: "btn btn-full", type: "button", style: "margin-top:26px", text: done ? "تم الطلب · Requested ✓" : "ضيفها لخطتي · Add to my plan" });
+    btn.disabled = done;
+    btn.addEventListener("click", function () {
+      btn.disabled = true;
+      sb.from("recipe_requests").insert({ client_id: profile.id, recipe_id: r.id, recipe_name: ktName(r) }).then(function (res) {
+        if (res.error && res.error.code !== "23505") { btn.disabled = false; return fail(res.error); }
+        KT.req[r.id] = true; btn.textContent = "تم الطلب · Requested ✓";
+        toast("اتبعت للكابتن · Sent to your coach");
+      });
+    });
+    box.appendChild(btn);
+    box.appendChild(el("p", { class: "kt-note", text: "الكابتن هو اللي بيقرر ويعتمد الخطة · Your coach decides and approves your plan." }));
+    body.appendChild(box);
   }
 
   /* ================= COACH PANEL ================= */
