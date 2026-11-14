@@ -414,7 +414,7 @@
     </section>
 
     <section id="p-kitchen" role="tabpanel" hidden>
-      <h2>مطبخ روك جيم · Rock Kitchen</h2>
+      <h2>مطبخ روك · Rock Kitchen</h2>
       <p class="sub">أكلات "مستحيل تبقى دايت" بنسخة هيلثي. اختار اللي عجبك واطلبها لخطتك · "Can't be diet" dishes, healthy versions. Pick one and request it for your plan.</p>
       <div id="kitchenBody"></div>
     </section>
@@ -1097,7 +1097,7 @@
     }).catch(fail);
   }
   /* ---------- tabs ---------- */
-  var CLIENT_TABS = [["videos", "فيديوهاتي"], ["plans", "أنظمتي"], ["progress", "تطوري"], ["food", "أكلي"], ["kitchen", "مطبخ روك جيم · Rock Kitchen"], ["history", "تاريخي مع روك جيم"]];
+  var CLIENT_TABS = [["videos", "فيديوهاتي"], ["plans", "أنظمتي"], ["progress", "تطوري"], ["food", "أكلي"], ["kitchen", "مطبخ روك · Rock Kitchen"], ["history", "تاريخي مع روك جيم"]];
   var ALL_PANELS = ["videos", "plans", "progress", "food", "kitchen", "history", "daily", "today", "admin", "expired"];
   function buildTabs() {
     startNotifications();
@@ -2883,10 +2883,47 @@
     R121: "Creamy Chicken & Mushroom Pasta", R133: "Chicken Tenders with Hot Honey Sauce", R167: "Breakfast Sandwich: Ground Beef, Egg & Cream Cheese (40g+ protein)",
     R178: "Healthy Butter Chicken", R147: "Caramel Diet Cake (Piece)", R148: "Konafa Pecan Cheesecake (Piece)", R150: "Healthy Carrot Cake (Piece)",
     R151: "Chocolate Skillet Cookie (Quarter)", R152: "Raffaello Milk Cake (Piece)", R153: "Mini Cinnamon Rolls (One)", R154: "Protein Brookies (Piece)",
-    R164: "Tiramisu French Toast (Piece)", R165: "Blueberry Lemon Muffins (One)"
+    R164: "Tiramisu French Toast (Piece)", R165: "Blueberry Lemon Muffins (One)",
+    R125: "Healthy Big Mac Tacos",
+    R126: "Healthy Chicken Quesadilla (One Whole)",
+    R127: "Quick Chicken Quesadilla",
+    R128: "Healthy Big Mac Burger",
+    R129: "Loaded Big Mac Fries (Half Family Size)",
+    R130: "Healthy Tuna Pasta",
+    R131: "Cajun Shrimp Pasta (One Plate)",
+    R134: "Healthy Beef Shawarma",
+    R135: "Chicken Fajita Wrap",
+    R136: "Egg Quesadilla (4 Eggs)",
+    R137: "Tuna Burger (4 Patties)",
+    R138: "Turkey & Cheese Pancakes",
+    R139: "Cottage Cheese Pancakes",
+    R141: "Biscoff Protein Oatmeal",
+    R142: "Bounty Chocolate Oatmeal",
+    R144: "Protein Hot Chocolate",
+    R146: "Cookie Dough for Weight Gain",
+    R156: "Protein Lava Cake",
+    R157: "Brownie Balls (One)",
+    R158: "Healthy Basbousa (Piece)",
+    R159: "High-Protein Carrot Cake (Piece)",
+    R160: "Banana Biscoff Cheesecake",
+    R161: "Oat & Banana Cookie Skillet (Piece)",
+    R162: "Invisible Apple Cake (Piece)",
+    R163: "Oat & Banana Cookies (One)",
+    R170: "Hash Browns with Egg & Mozzarella (Piece)",
+    R171: "Beef Piccata with Mushrooms",
+    R172: "Steak & Mushroom Pasta",
+    R173: "Suhoor Labneh with Roasted Cherry Tomatoes",
+    R174: "Berry Yogurt Ice Cream Bites (One)",
+    R176: "Scrambled Eggs with Ground Beef & Cheese",
+    R179: "Tuna Salad with Yogurt & Corn Dressing",
+    R184: "High-Protein Big Mac Pizza (Slice)",
+    R185: "Protein Brownies (Piece)",
+    R186: "Cherry & Dark Chocolate Cloud Oatmeal",
+    R187: "Pre-Workout Oatmeal",
+    R188: "Chocolate Stuffed Pancakes (Piece)"
   };
   /* لإضافة أكلة جديدة: حط رقمها هنا + صورتها R###.jpg في فولدر recipes + اسمها الإنجليزي فوق في KITCHEN */
-  var KITCHEN_LIVE = ["R120", "R124", "R149", "R119", "R117", "R118", "R121", "R133", "R167", "R178", "R147", "R148", "R150", "R151", "R152", "R153", "R154", "R164", "R165"];
+  var KITCHEN_LIVE = ["R120", "R117", "R118", "R167", "R128", "R125", "R135", "R134", "R126", "R127", "R137", "R124", "R119", "R149", "R121", "R133", "R178", "R131", "R172", "R130", "R171", "R129", "R184", "R179", "R176", "R136", "R170", "R138", "R139", "R188", "R141", "R142", "R186", "R187", "R164", "R165", "R147", "R150", "R159", "R162", "R160", "R152", "R185", "R157", "R151", "R161", "R163", "R154", "R146", "R153", "R156", "R174", "R144", "R148", "R158", "R173"];
   var KT = { rows: null, req: {} };
 
   function ktJson(v, d) { if (v == null) return d; if (typeof v === "string") { try { return JSON.parse(v); } catch (e) { return d; } } return v; }
@@ -2897,7 +2934,7 @@
     return { k: pick("kcal", "k"), p: pick("protein", "p"), c: pick("carb", "c"), f: pick("fat", "f") };
   }
   function ktImg(id, cls) {
-    var img = el("img", { class: cls || "kt-img", src: "recipes/" + id + ".jpg", alt: "", loading: "lazy" });
+    var img = el("img", { class: cls || "kt-img", src: "recipes/" + id + ".jpg", alt: "", loading: "lazy", decoding: "async" });
     img.addEventListener("error", function () { var ph = el("div", { class: "kt-ph" }, [el("span", { text: "🍽️" }), el("small", { class: "kt-miss", text: "recipes/" + id + ".jpg" })]); if (img.parentNode) img.parentNode.replaceChild(ph, img); });
     return img;
   }
@@ -2916,12 +2953,13 @@
   }
   /* أقسام المطبخ. القسم الفاضي (مفيش فيه أكلات ليها صور) مش بيظهر. لإضافة أكلة: حط رقمها في القسم المناسب هنا وفي KITCHEN_LIVE */
   var KITCHEN_CATS = [
-    { t: "ساندوتشات وبرجر · Sandwiches & Burgers", ids: ["R120", "R117", "R118", "R167"] },
+    { t: "ساندوتشات وراب وبرجر · Sandwiches, Wraps & Burgers", ids: ["R120", "R117", "R118", "R167", "R128", "R125", "R135", "R134", "R126", "R127", "R137"] },
     { t: "أكل شعبي · Egyptian Favorites", ids: ["R124", "R119", "R149"] },
-    { t: "أطباق رئيسية · Main Dishes", ids: ["R121", "R133", "R178"] },
-    { t: "فطار وعشاء · Breakfast & Dinner", ids: [] },
-    { t: "ديزرت وحلويات · Desserts", ids: ["R164", "R153", "R165", "R147", "R150", "R151", "R152", "R154"] },
-    { t: "🌙 رمضان · Ramadan", ids: ["R148"] }
+    { t: "أطباق رئيسية · Main Dishes", ids: ["R121", "R133", "R178", "R131", "R172", "R130", "R171", "R129", "R184", "R179"] },
+    { t: "فطار وسناكس · Breakfast & Snacks", ids: ["R176", "R136", "R170", "R138", "R139", "R188", "R141", "R142", "R186", "R187"] },
+    { t: "ديزرت وحلويات · Desserts", ids: ["R164", "R165", "R147", "R150", "R159", "R162", "R160", "R152"] },
+    { t: "كوكيز وبراونيز · Cookies & Brownies", ids: ["R185", "R157", "R151", "R161", "R163", "R154", "R146", "R153", "R156", "R174", "R144"] },
+    { t: "🌙 رمضان · Ramadan", ids: ["R148", "R158", "R173"] }
   ];
   function ktCard(r) {
     var m = ktMac(r);
