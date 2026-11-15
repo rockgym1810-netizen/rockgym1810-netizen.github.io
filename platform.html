@@ -116,6 +116,73 @@
   .playlist .d{ color:var(--muted); font-size:.85rem; white-space:nowrap; }
   .group-h{ padding:10px 16px; background:var(--bg-alt); color:var(--muted); font-size:.85rem; font-weight:700; border-bottom:1px solid var(--line); }
 
+  /* Videos by day + exercise library */
+  .vdays{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; }
+  .vday{ text-align:start; background:var(--bg-alt); border:1px solid var(--line); border-radius:10px; color:var(--ink); padding:18px 16px; cursor:pointer; display:flex; flex-direction:column; gap:4px; transition:border-color .2s, transform .2s; }
+  .vday:hover{ border-color:var(--accent); transform:translateY(-2px); }
+  .vday .n{ font-weight:900; font-size:1.15rem; }
+  .vday .l{ color:var(--accent); font-weight:700; }
+  .vday .c{ color:var(--muted); font-size:.85rem; }
+  .vback{ background:transparent; border:0; color:var(--muted); cursor:pointer; font-size:1rem; padding:6px 0; margin-bottom:6px; }
+  .vback:hover{ color:var(--ink); }
+  .vday-h{ margin:0 0 18px; font-size:1.3rem; font-weight:800; }
+  .vex{ margin:0 0 24px; max-width:720px; }
+  .vex h4{ margin:0 0 8px; font-size:1.05rem; font-weight:800; }
+  .vposter{ position:relative; display:grid; place-items:center; width:100%; aspect-ratio:16/9; border:1px solid var(--line); border-radius:8px; overflow:hidden; cursor:pointer; padding:0; color:var(--ink);
+    background:radial-gradient(circle at 50% 42%, rgba(255,78,44,.2), rgba(255,78,44,0) 62%), linear-gradient(160deg,#17171a,#0c0c0d); }
+  .vposter .play{ width:64px; height:64px; border-radius:50%; border:2px solid var(--accent); background:rgba(255,78,44,.12); display:grid; place-items:center; transition:box-shadow .25s, transform .25s; }
+  .vposter .play::after{ content:""; width:0; height:0; border-style:solid; border-width:11px 0 11px 18px; border-color:transparent transparent transparent var(--accent); transform:translateX(2px); }
+  .vposter:hover .play{ box-shadow:0 0 28px 2px var(--accent-glow); transform:scale(1.06); }
+  .vposter .brand{ position:absolute; top:10px; inset-inline-start:12px; font-weight:900; letter-spacing:.5px; font-size:.8rem; direction:ltr; }
+  .vposter .brand span{ color:var(--accent); }
+  .vposter .dur{ position:absolute; bottom:10px; inset-inline-end:12px; font-size:.8rem; color:var(--muted); direction:ltr; }
+  .vposter .soon-t{ position:absolute; bottom:10px; inset-inline-start:12px; font-size:.85rem; color:var(--muted); }
+  .vposter.soon{ cursor:default; }
+  .vposter.soon .play{ border-color:var(--line); background:transparent; }
+  .vposter.soon .play::after{ border-left-color:var(--muted); }
+  .vposter.soon:hover .play{ box-shadow:none; transform:none; }
+  .vplayer{ aspect-ratio:16/9; background:#000; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  .vplayer video{ width:100%; height:100%; display:block; background:#000; object-fit:contain; }
+  .exlib summary{ cursor:pointer; font-weight:800; font-size:1.1rem; }
+  .exlib summary span{ color:var(--muted); font-weight:600; font-size:.9rem; }
+  .exrow{ padding:12px 0; border-bottom:1px solid var(--line); }
+  .exrow .nm{ font-weight:700; direction:ltr; text-align:left; display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .exrow .in{ display:grid; grid-template-columns:1fr 110px auto; gap:8px; align-items:center; }
+  .exrow input{ background:transparent; border:0; border-bottom:1.5px solid var(--line); color:var(--ink); padding:6px 2px; min-width:0; outline:none; }
+  .exrow input:focus{ border-color:var(--accent); }
+  .exrow .dot{ width:9px; height:9px; border-radius:50%; background:var(--line); display:inline-block; flex:none; }
+  .exrow .dot.on{ background:#2ecc71; }
+  @media (max-width:520px){ .exrow .in{ grid-template-columns:1fr 1fr; } .exrow .in input:first-child{ grid-column:1/-1; } }
+
+  /* InBody + supplements */
+  .ib-up{ display:flex; gap:10px; align-items:center; margin-bottom:18px; flex-wrap:wrap; }
+  .ib-up input[type=file]{ color:var(--muted); font-size:.85rem; max-width:100%; }
+  .ib-up input[type=date]{ background:transparent; border:0; border-bottom:1.5px solid var(--line); color:var(--ink); padding:6px 2px; color-scheme:dark; }
+  .ib-card .cap{ gap:8px; }
+  .ib-card .cap a{ color:var(--accent); font-weight:700; }
+  .supp-note{ color:var(--muted); font-size:.9rem; margin:0 0 18px; }
+  .supp{ border:1px solid var(--line); border-radius:10px; background:var(--bg-alt); padding:16px; margin-bottom:12px; max-width:720px; }
+  .supp-h{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .supp-h b{ font-size:1.1rem; }
+  .supp-h .en{ color:var(--muted); font-size:.85rem; }
+  .supp-p{ margin:6px 0 0; color:var(--muted); font-size:.95rem; }
+  .supp-q{ display:flex; align-items:center; gap:10px; margin-top:14px; }
+  .supp-q > span{ font-weight:700; }
+  .yn{ background:transparent; color:var(--ink); border:1.5px solid var(--line); border-radius:6px; padding:8px 22px; cursor:pointer; font-weight:800; }
+  .yn:hover{ border-color:var(--accent); }
+  .yn.on{ background:var(--accent); border-color:var(--accent); color:#0c0c0d; }
+  .yn.on.no{ background:#3a3a3f; border-color:#3a3a3f; color:var(--ink); }
+  .yn:disabled{ opacity:.6; cursor:wait; }
+  .srow{ padding:14px 0; border-bottom:1px solid var(--line); display:grid; gap:8px; }
+  .srow .r1{ display:grid; grid-template-columns:120px 1fr 1fr; gap:8px; }
+  .srow input[type=text], .srow select{ background:transparent; border:0; border-bottom:1.5px solid var(--line); color:var(--ink); padding:6px 2px; min-width:0; outline:none; width:100%; }
+  .srow input[type=text]:focus, .srow select:focus{ border-color:var(--accent); }
+  .srow select option{ background:#131315; }
+  .srow .r4{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  .srow .r4 label{ color:var(--muted); display:flex; gap:6px; align-items:center; }
+  .srow.is-off{ opacity:.6; }
+  @media (max-width:520px){ .srow .r1{ grid-template-columns:1fr; } }
+
   /* Docs */
   .docs{ border:1px solid var(--line); border-radius:8px; overflow:hidden; max-width:720px; }
   .doc{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 20px; border-bottom:1px solid var(--line); background:var(--bg); }
@@ -389,7 +456,7 @@
     <!-- Client panels -->
     <section id="p-videos" role="tabpanel" hidden>
       <h2>فيديوهاتي</h2>
-      <p class="sub">شروحات التمارين اللي كابتنك اختارها لخطتك.</p>
+      <p class="sub">اختار اليوم وشوف شروحات تمارينه.</p>
       <div id="videosBody"></div>
     </section>
 
@@ -405,6 +472,24 @@
       <div id="progressBody"></div>
       <div id="liftsBody" class="lifts"></div>
       <div id="photosBody" class="photos"></div>
+    </section>
+
+    <section id="p-inbody" role="tabpanel" hidden>
+      <h2>InBody</h2>
+      <p class="sub">ارفع صورة قياس الـ InBody وحدد تاريخ القياس. الكابتن بيشوفها في صفحتك.</p>
+      <div id="inbodyBody"></div>
+    </section>
+
+    <section id="p-payments" role="tabpanel" hidden>
+      <h2>مدفوعاتي</h2>
+      <p class="sub">احتفظ هنا بصور تحويلاتك للاشتراك (أول اشتراك، تجديد، قسط). مفيش حد غيرك بيشوفها، ولو احتجت ترجع لدفعة تلاقيها هنا.</p>
+      <div id="paymentsBody"></div>
+    </section>
+
+    <section id="p-supps" role="tabpanel" hidden>
+      <h2>المكملات</h2>
+      <p class="sub">اختار اللي محتاجه، والكابتن هيحدد لك الجرعة والمواعيد.</p>
+      <div id="suppsBody"></div>
     </section>
 
     <section id="p-food" role="tabpanel" hidden>
@@ -445,6 +530,28 @@
       <div class="how">
         <b>عميل جديد؟</b> اعمله حساب من Supabase: Authentication ← Users ← Add user، والإيميل يبقى <b>اسمه@rockgym.app</b> وحدد Auto Confirm. هيظهر هنا لوحده في القايمة.
       </div>
+      <details class="box exlib" id="exLibBox" style="margin-bottom:22px">
+        <summary>📚 مكتبة فيديوهات التمارين <span id="exLibCount"></span></summary>
+        <p class="sub" style="margin:10px 0 14px">الصق لينك كل تمرين مرة واحدة. الفيديو بيظهر لكل عميل عنده التمرين ده في نظامه، تحت اليوم بتاعه.</p>
+        <label class="field" style="margin-bottom:10px"><input id="exLibSearch" type="search" placeholder="ابحث باسم التمرين (بالإنجليزي)" dir="ltr" style="text-align:right" autocomplete="off"></label>
+        <div id="exLibList"></div>
+      </details>
+      <details class="box exlib" id="suppAdminBox" style="margin-bottom:22px">
+        <summary>💊 إدارة المكملات والفيتامينات <span id="suppAdminCount"></span></summary>
+        <p class="sub" style="margin:10px 0 14px">اللي بتكتبه هنا هو اللي بيظهر للعميل في تاب المكملات: اسم المكمل وبيعمل إيه وطريقة استخدامه. الجرعات من كلامك أنت.</p>
+        <button type="button" class="btn btn-sm" id="suppAddBtn">＋ إضافة مكمل</button>
+        <div id="suppAdminList" style="margin-top:12px"></div>
+      </details>
+      <details class="box exlib" id="payBox" style="margin-bottom:22px">
+        <summary>💰 الدفعات والاسترجاع <span id="payCount"></span></summary>
+        <p class="sub" style="margin:10px 0 14px">اختار العميل، والصق رسالة التحويل اللي وصلتلك على موبايلك (فودافون كاش أو إنستاباي)، وبعدين دوس "اقرأ الرسالة". رقم العملية مبيتكررش، واشتراك العميل بيتفعّل من هنا بس.</p>
+        <label class="field">العميل<select id="payClient"></select></label>
+        <label class="field">رسالة التحويل<textarea id="payMsg" rows="4" placeholder="الصق الرسالة اللي وصلتلك هنا"></textarea></label>
+        <button type="button" class="btn btn-sm" id="payReadBtn">اقرأ الرسالة</button>
+        <div id="payParsed" style="margin-top:12px"></div>
+        <h3 style="margin:18px 0 8px">آخر الدفعات</h3>
+        <div id="payList"></div>
+      </details>
       <label class="field admin-pick">ابحث بكود العميل
         <input id="clientSearch" type="text" dir="ltr" style="text-align:right" placeholder="رقم الكود (26 001 09) أو الاسم، وبعدين Enter" autocomplete="off">
         <div id="clientSearchRes" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px"></div>
@@ -466,6 +573,7 @@
               </div>
               <a id="waBtn" class="link-btn" href="#" target="_blank" rel="noopener" hidden>واتساب</a>
             </div>
+            <p class="sub" id="dupPhoneNote" hidden style="color:#f5b942;font-weight:700;margin:0 0 10px"></p>
             <form id="fProfile">
               <label class="field">الاسم اللي هيظهر له<input name="full_name" type="text"></label>
               <label class="field">كود العميل (فريد، للبحث السريع)
@@ -487,6 +595,7 @@
                 <label class="field">بداية الاشتراك<input name="subscription_start_date" type="date"></label>
                 <label class="field">تاريخ انتهاء الاشتراك<input name="subscription_end_date" type="date"></label>
               </div>
+              <label class="field" style="display:flex;align-items:center;gap:8px"><input name="is_trial" type="checkbox" style="width:auto"> 🎁 تجربة مجانية (اشتراكه 3 أيام مثلًا)</label>
               <div class="row2">
                 <label class="field">الطول (سم)<input name="height_cm" type="number" step="1" inputmode="numeric"></label>
                 <label class="field">السن<input name="age" type="number" step="1" inputmode="numeric"></label>
@@ -588,6 +697,16 @@
             <h3>صور العميل — اختار صورة "قبل" وصورة "بعد"</h3>
             <p class="sub" style="margin:-8px 0 14px">هتتعرض الاتنين بارزين فوق في صفحة "تطوري" بتاعة العميل، وباقي الصور تفضل تحت زي ما هي.</p>
             <div id="adminPhotosBody"></div>
+          </div>
+
+          <div class="box" style="grid-column:1/-1">
+            <h3>InBody العميل</h3>
+            <div id="adminInbodyBody"></div>
+          </div>
+
+          <div class="box">
+            <h3>المكملات اللي العميل اختارها</h3>
+            <div id="adminSuppsBody"></div>
           </div>
 
           <div class="box">
@@ -788,6 +907,19 @@
         { id: "v2", title: "تمرين رجل", group_name: "رجل", duration: "8:05", url: placeholderVideoCard("معاينة تجريبية للفيديو"), created_at: daysAgo(10) },
         { id: "v3", title: "تعريف عام بالنظام", group_name: "عام (تعريف عام)", duration: "3:40", url: placeholderVideoCard("معاينة تجريبية للفيديو"), created_at: daysAgo(20) }
       ],
+      supplement_items: [
+        { id: "s1", section: "supplement", name_ar: "بروتين", name_en: "Whey Protein", purpose: "بيساعد في تغطية احتياجك اليومي من البروتين", how_to_take: null, sort_order: 10, active: true },
+        { id: "s2", section: "supplement", name_ar: "كرياتين", name_en: "Creatine", purpose: null, how_to_take: "الكابتن هيحدد لك الجرعة", sort_order: 20, active: true },
+        { id: "s3", section: "vitamin", name_ar: "أوميجا 3", name_en: "Omega-3", purpose: null, how_to_take: null, sort_order: 50, active: true }
+      ],
+      client_supplements: [],
+      inbody_scans: [],
+      client_payment_proofs: [],
+      payments: [],
+      exercise_videos: [
+        { exercise_key: "Incline Dumbbell Press", exercise_name: "Incline Dumbbell Press", url: "https://example.com/incline.mp4", duration: "0:45" },
+        { exercise_key: "Chest Dips", exercise_name: "Chest Dips", url: "https://example.com/dips-page", duration: null }
+      ],
       documents: [
         { id: "d1", title: "نظام محمد السيد - الأسبوع الأول", note: "نظامك الحالي", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", created_at: daysAgo(20) },
         { id: "d2", title: "نظام التغذية - محمد السيد", note: "السعرات والماكروز", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", created_at: daysAgo(18) }
@@ -808,8 +940,16 @@
     function builder(table) {
       var single = false;
       var b = {
-        select: function () { return b; }, eq: function () { return b; }, order: function () { return b; },
+        select: function () { return b; }, eq: function () { return b; }, "in": function () { return b; }, order: function () { return b; },
         single: function () { single = true; return b; }, update: function () { return b; }, delete: function () { return b; },
+        upsert: function (vals) {
+          var rows = Array.isArray(vals) ? vals : [vals], arr = DEMO[table] = DEMO[table] || [];
+          rows.forEach(function (row) {
+            var i = -1; arr.forEach(function (x, ix) { if (x.client_id === row.client_id && x.item_id === row.item_id) i = ix; });
+            if (i >= 0) arr[i] = Object.assign({}, arr[i], row); else { row.id = table + "-" + Date.now(); arr.push(row); }
+          });
+          return Promise.resolve({ data: rows, error: null });
+        },
         insert: function (vals) {
           var rows = Array.isArray(vals) ? vals : [vals];
           rows.forEach(function (row) {
@@ -873,7 +1013,15 @@
     var t = $("toast"); t.textContent = msg; t.className = "toast" + (bad ? " bad" : ""); t.hidden = false;
     clearTimeout(tt); tt = setTimeout(function () { t.hidden = true; }, 2600);
   }
-  function fail(e) { console.error(e); toast("حصلت مشكلة: " + ((e && e.message) || "جرّب تاني"), true); }
+  var TECH_ERR = /schema cache|could not find|relation|does not exist|PGRST|violates|permission denied|row-level|policy|JWT|failed to fetch|networkerror|bucket|storage|syntax|column|constraint|duplicate key|TypeError|undefined|null/i;
+  function fail(e) {
+    console.error(e);
+    var m = (e && e.message) || "";
+    var isAdm = (typeof profile !== "undefined") && profile && profile.is_admin;
+    if (isAdm) return toast("حصلت مشكلة: " + (m || "جرّب تاني"), true);
+    toast(!m || TECH_ERR.test(m) ? "حصلت مشكلة مؤقتة، جرّب تاني بعد شوية" : "حصلت مشكلة: " + m, true);
+  }
+  function softEmpty(id, txt) { var b = $(id); if (!b) return; clear(b); b.appendChild(emptyBox(txt)); }
   function num(v) { var n = parseFloat(v); return isNaN(n) ? null : n; }
   function fmt(n) { return (Math.round(n * 10) / 10).toString(); }
   function fmtDate(s) { try { return new Date(s).toLocaleDateString("ar-EG", { day: "numeric", month: "long" }); } catch (e) { return s; } }
@@ -1097,8 +1245,8 @@
     }).catch(fail);
   }
   /* ---------- tabs ---------- */
-  var CLIENT_TABS = [["videos", "فيديوهاتي"], ["plans", "أنظمتي"], ["progress", "تطوري"], ["food", "أكلي"], ["kitchen", "مطبخ روك · Rock Kitchen"], ["history", "تاريخي مع روك جيم"]];
-  var ALL_PANELS = ["videos", "plans", "progress", "food", "kitchen", "history", "daily", "today", "admin", "expired"];
+  var CLIENT_TABS = [["videos", "فيديوهاتي"], ["plans", "أنظمتي"], ["progress", "تطوري"], ["inbody", "InBody"], ["food", "أكلي"], ["kitchen", "مطبخ روك · Rock Kitchen"], ["supps", "المكملات"], ["payments", "مدفوعاتي"], ["history", "تاريخي مع روك جيم"]];
+  var ALL_PANELS = ["videos", "plans", "progress", "inbody", "food", "kitchen", "supps", "payments", "history", "daily", "today", "admin", "expired"];
   function buildTabs() {
     startNotifications();
     var bar = $("tabsBar"); clear(bar);
@@ -1127,17 +1275,104 @@
   /* ================= CLIENT VIEWS ================= */
   function loadClientData(k) {
     var id = profile.id;
-    if (k === "videos") { showLoading("videosBody"); sb.from("videos").select("*").eq("client_id", id).order("created_at").then(function (r) { r.error ? fail(r.error) : renderVideos(r.data); }); }
+    if (k === "videos") {
+      showLoading("videosBody");
+      Promise.all([
+        sb.from("plan_exercises").select("*").eq("client_id", id).order("position"),
+        sb.from("exercise_videos").select("*"),
+        sb.from("videos").select("*").eq("client_id", id).order("created_at")
+      ]).then(function (rs) {
+        if (rs[0].error) return fail(rs[0].error);
+        if (rs[2].error) return fail(rs[2].error);
+        if (rs[1].error) console.warn("exercise_videos:", rs[1].error.message);
+        renderVideos(rs[0].data || [], rs[1].error ? [] : (rs[1].data || []), rs[2].data || []);
+      }).catch(fail);
+    }
     if (k === "plans") { showLoading("plansBody"); sb.from("documents").select("*").eq("client_id", id).order("created_at", { ascending: false }).then(function (r) { r.error ? fail(r.error) : renderPlans(r.data); }); }
     if (k === "progress") { showLoading("progressBody"); showLoading("liftsBody"); showLoading("photosBody"); loadLifts(); loadPhotos(); sb.from("measurements").select("*").eq("client_id", id).order("week_date").then(function (r) { r.error ? fail(r.error) : renderProgress(r.data); }); }
+    if (k === "inbody") loadInbody();
+    if (k === "supps") loadSupps();
+    if (k === "payments") loadMyPayments();
     if (k === "food") loadFood();
     if (k === "kitchen") loadKitchen();
     if (k === "history") { showLoading("historyBody"); sb.from("reviews").select("*").eq("client_id", id).order("created_at", { ascending: false }).then(function (r) { r.error ? fail(r.error) : renderHistory(r.data); }); }
   }
 
-  function renderVideos(rows) {
+  /* ---------- فيديوهاتي: أيام النظام + مكتبة التمارين ---------- */
+  function exKey(n) { return String(n || "").replace(/\s*\([^)]*[\u0600-\u06FF][^)]*\)/g, "").replace(/\s+/g, " ").trim(); }
+  function safeHttpUrl(u) { u = String(u || "").trim(); return /^https?:\/\//i.test(u) ? u : ""; }
+  function dayTitle(i) { var o = ["الأول", "الثاني", "الثالث", "الرابع", "الخامس", "السادس", "السابع"]; return "اليوم " + (o[i] || (i + 1)); }
+  function exCountText(n) { return n === 1 ? "تمرين واحد" : n === 2 ? "تمرينين" : (n >= 3 && n <= 10) ? n + " تمارين" : n + " تمرين"; }
+  function renderVideos(plan, lib, custom) {
     var body = $("videosBody"); clear(body);
-    if (!rows.length) { body.appendChild(emptyBox("لسه مفيش فيديوهات. الكابتن هيضيفلك فيديوهات خطتك هنا.")); return; }
+    if (!plan.length) {
+      if (!custom.length) { body.appendChild(emptyBox("لسه مفيش فيديوهات. الكابتن هيضيفلك فيديوهات خطتك هنا.")); return; }
+      renderCustomVideos(custom, body); return;
+    }
+    var libMap = {};
+    lib.forEach(function (r) { libMap[r.exercise_key] = r; });
+    var days = [], byDay = {};
+    plan.slice().sort(function (a, b) { return (a.position || 0) - (b.position || 0); }).forEach(function (p) {
+      var d = p.day_label || "—";
+      if (!byDay[d]) { byDay[d] = []; days.push(d); }
+      byDay[d].push(p);
+    });
+    var hub = el("div"), customBox = el("div", { style: "margin-top:32px" });
+    body.appendChild(hub); body.appendChild(customBox);
+    if (custom.length) {
+      customBox.appendChild(el("h3", { text: "فيديوهات خاصة بيك", style: "margin:0 0 12px;font-size:1.1rem" }));
+      var cInner = el("div"); customBox.appendChild(cInner); renderCustomVideos(custom, cInner);
+    }
+    function poster(name, row) {
+      var url = row ? safeHttpUrl(row.url) : "";
+      var dur = row && row.duration ? row.duration : "";
+      var slot = el("div");
+      var b = el("button", { type: "button", class: "vposter" + (url ? "" : " soon"), "aria-label": url ? "تشغيل فيديو " + name : "الفيديو قريبًا" }, [
+        el("span", { class: "brand" }, [document.createTextNode("ROCK"), el("span", { text: "GYM" })]),
+        el("span", { class: "play" }),
+        dur ? el("span", { class: "dur", text: dur }) : null,
+        url ? null : el("span", { class: "soon-t", text: "الفيديو قريبًا" })
+      ]);
+      slot.appendChild(b);
+      if (url) b.addEventListener("click", function () {
+        if (!isVideoFile(url)) { window.open(url, "_blank", "noopener"); return; }
+        [].forEach.call(hub.querySelectorAll("video"), function (x) { x.pause(); });
+        var v = el("video", { controls: "", playsinline: "", preload: "metadata", src: url });
+        clear(slot); slot.appendChild(el("div", { class: "vplayer" }, [v]));
+        var pr = v.play(); if (pr && pr.catch) pr.catch(function () {});
+      });
+      return slot;
+    }
+    function showDays() {
+      clear(hub); customBox.hidden = false;
+      var grid = el("div", { class: "vdays" });
+      days.forEach(function (d, i) {
+        var b = el("button", { type: "button", class: "vday" }, [
+          el("span", { class: "n", text: dayTitle(i) }),
+          el("span", { class: "l", text: d, dir: "auto" }),
+          el("span", { class: "c", text: exCountText(byDay[d].length) })
+        ]);
+        b.addEventListener("click", function () { showDay(i); });
+        grid.appendChild(b);
+      });
+      hub.appendChild(grid);
+    }
+    function showDay(i) {
+      clear(hub); customBox.hidden = true;
+      var d = days[i];
+      var back = el("button", { type: "button", class: "vback", text: "→ رجوع للأيام" });
+      back.addEventListener("click", showDays);
+      hub.appendChild(back);
+      hub.appendChild(el("h3", { class: "vday-h", text: dayTitle(i) + " · " + d, dir: "auto" }));
+      byDay[d].forEach(function (p) {
+        var k = exKey(p.exercise);
+        hub.appendChild(el("div", { class: "vex" }, [el("h4", { text: k, dir: "auto" }), poster(k, libMap[k])]));
+      });
+      window.scrollTo(0, 0);
+    }
+    showDays();
+  }
+  function renderCustomVideos(rows, body) {
     var player = el("div", { class: "player" });
     var nowT = el("p", { class: "now" }), nowS = el("p", { class: "now-sub" });
     var list = el("ul", { class: "playlist" });
@@ -2599,6 +2834,377 @@
   })();
 
 
+    /* coach: مكتبة فيديوهات التمارين (لينك كل تمرين مرة واحدة، بيظهر عند كل عميل عنده التمرين) */
+  (function () {
+    var box = $("exLibBox"), listEl = $("exLibList"), search = $("exLibSearch"), countEl = $("exLibCount");
+    if (!box) return;
+    var names = [], seen = {}, rows = {}, loaded = false;
+    Object.keys(SYSTEMS).forEach(function (s) { SYSTEMS[s].forEach(function (d) { d.ex.forEach(function (e) {
+      var k = exKey(e); if (!seen[k]) { seen[k] = 1; names.push(k); } }); }); });
+    names.sort(function (a, b) { a = a.toLowerCase(); b = b.toLowerCase(); return a < b ? -1 : a > b ? 1 : 0; });
+    function updateCount() {
+      var n = 0; names.forEach(function (k) { if (rows[k] && rows[k].url) n++; });
+      countEl.textContent = "(" + n + " من " + names.length + " فيها فيديو)";
+    }
+    function row(k) {
+      var r = rows[k] || {};
+      var urlIn = el("input", { type: "url", dir: "ltr", placeholder: "https://res.cloudinary.com/...", "aria-label": "لينك فيديو " + k });
+      urlIn.value = r.url || "";
+      var durIn = el("input", { type: "text", dir: "ltr", placeholder: "المدة 0:45", "aria-label": "مدة " + k });
+      durIn.value = r.duration || "";
+      var dot = el("span", { class: "dot" + (r.url ? " on" : "") });
+      var btn = el("button", { type: "button", class: "btn btn-sm", text: "حفظ" });
+      btn.addEventListener("click", function () {
+        var u = urlIn.value.trim();
+        if (u && !/^https?:\/\//i.test(u)) return toast("اللينك لازم يبدأ بـ https://", true);
+        var vals = { url: u || null, duration: durIn.value.trim() || null };
+        btn.disabled = true;
+        var req = rows[k] ? sb.from("exercise_videos").update(vals).eq("exercise_key", k)
+                          : sb.from("exercise_videos").insert({ exercise_key: k, exercise_name: k, url: vals.url, duration: vals.duration });
+        req.then(function (res) {
+          btn.disabled = false;
+          if (res.error) return fail(res.error);
+          rows[k] = { exercise_key: k, exercise_name: k, url: vals.url, duration: vals.duration };
+          dot.className = "dot" + (vals.url ? " on" : "");
+          updateCount(); toast("اتحفظ");
+        }, function (e) { btn.disabled = false; fail(e); });
+      });
+      return el("div", { class: "exrow", "data-k": k.toLowerCase() }, [
+        el("div", { class: "nm" }, [dot, document.createTextNode(k)]),
+        el("div", { class: "in" }, [urlIn, durIn, btn])
+      ]);
+    }
+    function filter() {
+      var q = search.value.trim().toLowerCase();
+      [].forEach.call(listEl.children, function (r) { r.hidden = !!q && r.getAttribute("data-k").indexOf(q) === -1; });
+    }
+    function render() {
+      clear(listEl);
+      names.forEach(function (k) { listEl.appendChild(row(k)); });
+      filter(); updateCount();
+    }
+    search.addEventListener("input", filter);
+    box.addEventListener("toggle", function () {
+      if (!box.open || loaded) return;
+      showLoading("exLibList");
+      sb.from("exercise_videos").select("*").then(function (r) {
+        if (r.error) { clear(listEl); listEl.appendChild(emptyBox("جدول المكتبة مش موجود لسه. شغّل ملف SQL بتاع المكتبة الأول.")); return; }
+        loaded = true; rows = {};
+        (r.data || []).forEach(function (x) { rows[x.exercise_key] = x; });
+        render();
+      }, fail);
+    });
+  })();
+
+  /* ================= INBODY (العميل بيرفع صورة + تاريخ القياس) ================= */
+  var IB_BUCKET = "inbody-scans";
+  function fmtDateY(s) { try { return new Date(s + "T00:00:00").toLocaleDateString("ar-EG", { day: "numeric", month: "long", year: "numeric" }); } catch (e) { return s; } }
+  function loadInbody() {
+    showLoading("inbodyBody");
+    sb.from("inbody_scans").select("*").eq("client_id", profile.id).order("measured_on", { ascending: false }).then(function (r) {
+      if (r.error) { console.error(r.error); return softEmpty("inbodyBody", "التاب ده مش متاح دلوقتي. جرّب بعد شوية."); }
+      renderInbody(r.data || []);
+    }).catch(function (e) { console.error(e); softEmpty("inbodyBody", "التاب ده مش متاح دلوقتي. جرّب بعد شوية."); });
+  }
+  function inbodyCard(r, withDelete) {
+    var card = el("div", { class: "photo-card ib-card" });
+    var img = el("img", { alt: "InBody " + fmtDateY(r.measured_on) });
+    var openA = el("a", { target: "_blank", rel: "noopener", text: "فتح", hidden: "" });
+    sb.storage.from(IB_BUCKET).createSignedUrl(r.photo_path, 3600).then(function (s) {
+      if (!s.error && s.data) { img.src = s.data.signedUrl; openA.href = s.data.signedUrl; openA.hidden = false; }
+    });
+    var kids = [el("b", { text: fmtDateY(r.measured_on) }), openA];
+    if (withDelete) {
+      var del = el("button", { class: "del", type: "button", text: "حذف" });
+      del.addEventListener("click", function () {
+        if (!confirm("متأكد عايز تمسح صورة الـ InBody دي؟")) return;
+        sb.storage.from(IB_BUCKET).remove([r.photo_path]).then(function () {
+          sb.from("inbody_scans").delete().eq("id", r.id).then(function (res) { res.error ? fail(res.error) : loadInbody(); });
+        });
+      });
+      kids.push(del);
+    }
+    card.appendChild(img);
+    card.appendChild(el("div", { class: "cap" }, kids));
+    return card;
+  }
+  function renderInbody(rows) {
+    var body = $("inbodyBody"); clear(body);
+    var up = el("div", { class: "ib-up" });
+    var inp = el("input", { type: "file", accept: "image/*", "aria-label": "صورة InBody" });
+    var dateIn = el("input", { type: "date", max: todayStr(), "aria-label": "تاريخ القياس" }); dateIn.value = todayStr();
+    var btn = el("button", { class: "btn btn-sm", type: "button", text: "رفع الصورة" });
+    btn.addEventListener("click", function () {
+      var file = inp.files && inp.files[0];
+      if (!file) return toast("اختار صورة الـ InBody الأول", true);
+      if (!file.type || file.type.indexOf("image/") !== 0) return toast("لازم الملف يبقى صورة", true);
+      if (!dateIn.value) return toast("حدد تاريخ القياس", true);
+      if (dateIn.value > todayStr()) return toast("تاريخ القياس مينفعش يبقى في المستقبل", true);
+      if (file.size > 15 * 1024 * 1024) return toast("الصورة كبيرة أوي (حد أقصى 15MB)", true);
+      btn.disabled = true;
+      compressImage(file, 2000, 0.85).then(function (blob) {
+        var path = profile.id + "/" + Date.now() + ".jpg";
+        return sb.storage.from(IB_BUCKET).upload(path, blob, { contentType: "image/jpeg" }).then(function (u) {
+          if (u.error) throw u.error;
+          return sb.from("inbody_scans").insert({ client_id: profile.id, measured_on: dateIn.value, photo_path: path }).then(function (res) {
+            if (res.error) { sb.storage.from(IB_BUCKET).remove([path]); throw res.error; }
+          });
+        });
+      }).then(function () { btn.disabled = false; toast("اتحفظت الصورة"); loadInbody(); }, function (e) { btn.disabled = false; fail(e); });
+    });
+    up.appendChild(inp); up.appendChild(dateIn); up.appendChild(btn);
+    body.appendChild(up);
+    if (!rows.length) { body.appendChild(emptyBox("لسه مفيش قياسات InBody. ارفع أول صورة.")); return; }
+    var grid = el("div", { class: "photo-grid" });
+    rows.forEach(function (r) { grid.appendChild(inbodyCard(r, true)); });
+    body.appendChild(grid);
+  }
+  function loadAdminInbody(cid) {
+    var b = $("adminInbodyBody"); if (!b) return;
+    showLoading("adminInbodyBody");
+    sb.from("inbody_scans").select("*").eq("client_id", cid).order("measured_on", { ascending: false }).then(function (r) {
+      clear(b);
+      if (r.error) { b.appendChild(emptyBox("جدول InBody مش موجود لسه. شغّل ملف SQL الأول.")); return; }
+      if (!(r.data || []).length) { b.appendChild(emptyBox("العميل ده لسه مرفعش InBody.")); return; }
+      var grid = el("div", { class: "photo-grid" });
+      r.data.forEach(function (x) { grid.appendChild(inbodyCard(x, false)); });
+      b.appendChild(grid);
+    }, fail);
+  }
+
+
+  /* ================= مدفوعاتي (العميل بيحتفظ بصور تحويلاته) ================= */
+  var PP_BUCKET = "payment-proofs";
+  var PP_KIND = { "new": "اشتراك جديد", renewal: "تجديد", installment: "قسط" };
+  var PP_ST = { confirmed: "✅ مؤكدة", refunded: "🔁 مسترجعة", reversed: "🔁 مسترجعة" };
+  function loadMyPayments() {
+    showLoading("paymentsBody");
+    Promise.all([
+      sb.from("client_payment_proofs").select("*").eq("client_id", profile.id).order("paid_on", { ascending: false }),
+      sb.from("payments").select("*").eq("client_id", profile.id).order("paid_on", { ascending: false })
+    ]).then(function (rs) {
+      if (rs[0].error) { console.error(rs[0].error); return softEmpty("paymentsBody", "التاب ده مش متاح دلوقتي. جرّب بعد شوية."); }
+      if (rs[1].error) console.warn("payments:", rs[1].error.message);
+      renderMyPayments(rs[0].data || [], rs[1].error ? [] : (rs[1].data || []));
+    }).catch(function (e) { console.error(e); softEmpty("paymentsBody", "التاب ده مش متاح دلوقتي. جرّب بعد شوية."); });
+  }
+  function proofCard(r) {
+    var card = el("div", { class: "photo-card ib-card" });
+    var img = el("img", { alt: "تحويل بتاريخ " + fmtDateY(r.paid_on) });
+    var openA = el("a", { target: "_blank", rel: "noopener", text: "فتح", hidden: "" });
+    sb.storage.from(PP_BUCKET).createSignedUrl(r.photo_path, 3600).then(function (s) {
+      if (!s.error && s.data) { img.src = s.data.signedUrl; openA.href = s.data.signedUrl; openA.hidden = false; }
+    });
+    var del = el("button", { class: "del", type: "button", text: "حذف" });
+    del.addEventListener("click", function () {
+      if (!confirm("متأكد عايز تمسح صورة التحويل دي؟ لو مسحتها مش هتقدر ترجعها.")) return;
+      sb.from("client_payment_proofs").delete().eq("id", r.id).then(function (res) {
+        if (res.error) return fail(res.error);
+        sb.storage.from(PP_BUCKET).remove([r.photo_path]).then(function () { loadMyPayments(); }, function () { loadMyPayments(); });
+      });
+    });
+    var title = fmtDateY(r.paid_on) + (r.amount ? " · " + r.amount + " جنيه" : "");
+    card.appendChild(img);
+    card.appendChild(el("div", { class: "cap" }, [el("b", { text: title }), openA, del]));
+    if (r.note) card.appendChild(el("div", { class: "cap", style: "padding-top:0" }, [el("span", { text: r.note })]));
+    return card;
+  }
+  function recordedCard(p) {
+    var line = (p.amount != null ? p.amount + " جنيه" : "") + (PP_KIND[p.kind] ? " · " + PP_KIND[p.kind] : "") + (p.paid_on ? " · " + fmtDateY(p.paid_on) : "");
+    var kids = [el("b", { text: line }), el("p", { class: "sub", style: "margin:4px 0", text: PP_ST[p.status] || "" })];
+    if (p.ref_number) kids.push(el("p", { class: "sub", dir: "ltr", style: "margin:2px 0;text-align:right", text: "# " + p.ref_number }));
+    if (p.status !== "confirmed" && p.refund_amount) kids.push(el("p", { class: "sub", style: "margin:2px 0", text: "اتسترجع لك " + p.refund_amount + " جنيه" }));
+    return el("div", { class: "doc", style: "display:block;margin-bottom:10px" }, kids);
+  }
+  function renderMyPayments(proofs, recorded) {
+    var body = $("paymentsBody"); clear(body);
+    var up = el("div", { class: "ib-up" });
+    var inp = el("input", { type: "file", accept: "image/*", "aria-label": "صورة التحويل" });
+    var dateIn = el("input", { type: "date", max: todayStr(), "aria-label": "تاريخ التحويل" }); dateIn.value = todayStr();
+    var amt = el("input", { type: "number", min: "1", step: "any", inputmode: "decimal", placeholder: "المبلغ (اختياري)", "aria-label": "المبلغ", style: "width:130px" });
+    var note = el("input", { type: "text", maxlength: "120", placeholder: "ملاحظة (اختياري) مثلًا: أول اشتراك", "aria-label": "ملاحظة", style: "min-width:180px" });
+    var btn = el("button", { class: "btn btn-sm", type: "button", text: "حفظ الصورة" });
+    btn.addEventListener("click", function () {
+      var file = inp.files && inp.files[0];
+      if (!file) return toast("اختار صورة التحويل الأول", true);
+      if (!file.type || file.type.indexOf("image/") !== 0) return toast("لازم الملف يبقى صورة", true);
+      if (!dateIn.value) return toast("حدد تاريخ التحويل", true);
+      if (dateIn.value > todayStr()) return toast("تاريخ التحويل مينفعش يبقى في المستقبل", true);
+      if (file.size > 15 * 1024 * 1024) return toast("الصورة كبيرة أوي (حد أقصى 15MB)", true);
+      var a = null;
+      if (amt.value !== "") {
+        a = parseFloat(amt.value);
+        if (!isFinite(a) || a <= 0 || a > 1000000) return toast("المبلغ مش مظبوط", true);
+      }
+      btn.disabled = true;
+      compressImage(file, 2000, 0.85).then(function (blob) {
+        var path = profile.id + "/" + Date.now() + ".jpg";
+        return sb.storage.from(PP_BUCKET).upload(path, blob, { contentType: "image/jpeg" }).then(function (u) {
+          if (u.error) throw u.error;
+          var row = { client_id: profile.id, paid_on: dateIn.value, photo_path: path };
+          if (a !== null) row.amount = a;
+          if (note.value.trim()) row.note = note.value.trim().slice(0, 120);
+          return sb.from("client_payment_proofs").insert(row).then(function (res) {
+            if (res.error) { sb.storage.from(PP_BUCKET).remove([path]); throw res.error; }
+          });
+        });
+      }).then(function () { btn.disabled = false; toast("اتحفظت الصورة"); loadMyPayments(); }, function (e) { btn.disabled = false; fail(e); });
+    });
+    [inp, dateIn, amt, note, btn].forEach(function (x) { up.appendChild(x); });
+    body.appendChild(up);
+
+    body.appendChild(el("h3", { class: "sec", text: "صور تحويلاتي" }));
+    if (!proofs.length) body.appendChild(emptyBox("لسه مرفعتش أي صورة. ارفع صورة أول تحويل عملته."));
+    else {
+      var grid = el("div", { class: "photo-grid" });
+      proofs.forEach(function (r) { grid.appendChild(proofCard(r)); });
+      body.appendChild(grid);
+    }
+
+    if (recorded.length) {
+      body.appendChild(el("h3", { class: "sec", style: "margin-top:24px", text: "اللي الكابتن سجّله لك" }));
+      recorded.forEach(function (p) { body.appendChild(recordedCard(p)); });
+    }
+  }
+
+  /* ================= المكملات (العميل بيختار: أيوه / لا) ================= */
+  var SUPP_SECTIONS = [["supplement", "سبلمنتس · Supplements"], ["vitamin", "فيتامينات · Vitamins"]];
+  function loadSupps() {
+    showLoading("suppsBody");
+    Promise.all([
+      sb.from("supplement_items").select("*").eq("active", true).order("sort_order").order("created_at"),
+      sb.from("client_supplements").select("*").eq("client_id", profile.id)
+    ]).then(function (rs) {
+      if (rs[0].error || rs[1].error) { console.error(rs[0].error || rs[1].error); return softEmpty("suppsBody", "التاب ده مش متاح دلوقتي. جرّب بعد شوية."); }
+      renderSupps(rs[0].data || [], rs[1].data || []);
+    }).catch(function (e) { console.error(e); softEmpty("suppsBody", "التاب ده مش متاح دلوقتي. جرّب بعد شوية."); });
+  }
+  function renderSupps(items, mine) {
+    var body = $("suppsBody"); clear(body);
+    if (!items.length) { body.appendChild(emptyBox("الكابتن لسه ما ضافش مكملات هنا.")); return; }
+    var pick = {};
+    mine.forEach(function (m) { pick[m.item_id] = m.choice; });
+    body.appendChild(el("p", { class: "supp-note", text: "المكملات اختيارية. استشر طبيبك قبل ما تبدأ لو عندك حالة صحية أو بتاخد أدوية." }));
+    SUPP_SECTIONS.forEach(function (s) {
+      var list = items.filter(function (i) { return i.section === s[0]; });
+      if (!list.length) return;
+      body.appendChild(el("h3", { class: "sec", text: s[1] }));
+      list.forEach(function (it) { body.appendChild(suppCard(it, pick)); });
+    });
+  }
+  function suppCard(it, pick) {
+    var card = el("div", { class: "supp" });
+    card.appendChild(el("div", { class: "supp-h" }, [el("b", { text: it.name_ar }), it.name_en ? el("span", { class: "en", dir: "ltr", text: it.name_en }) : null]));
+    if (it.purpose) card.appendChild(el("p", { class: "supp-p", text: it.purpose }));
+    if (it.how_to_take) card.appendChild(el("p", { class: "supp-p", text: "طريقة الاستخدام: " + it.how_to_take }));
+    var yes = el("button", { type: "button", class: "yn", text: "أيوه" });
+    var no = el("button", { type: "button", class: "yn", text: "لا" });
+    function paint() {
+      var c = pick[it.id];
+      yes.className = "yn" + (c === "want" ? " on" : ""); yes.setAttribute("aria-pressed", c === "want" ? "true" : "false");
+      no.className = "yn" + (c === "no" ? " on no" : ""); no.setAttribute("aria-pressed", c === "no" ? "true" : "false");
+    }
+    function setChoice(choice) {
+      var cur = pick[it.id], req;
+      yes.disabled = true; no.disabled = true;
+      if (cur === choice) req = sb.from("client_supplements").delete().eq("client_id", profile.id).eq("item_id", it.id);
+      else req = sb.from("client_supplements").upsert({ client_id: profile.id, item_id: it.id, choice: choice, updated_at: new Date().toISOString() }, { onConflict: "client_id,item_id" });
+      req.then(function (r) {
+        yes.disabled = false; no.disabled = false;
+        if (r.error) return fail(r.error);
+        if (cur === choice) delete pick[it.id]; else pick[it.id] = choice;
+        paint(); toast("اتسجّل اختيارك");
+      }, function (e) { yes.disabled = false; no.disabled = false; fail(e); });
+    }
+    yes.addEventListener("click", function () { setChoice("want"); });
+    no.addEventListener("click", function () { setChoice("no"); });
+    paint();
+    card.appendChild(el("div", { class: "supp-q" }, [el("span", { text: "عايزه؟" }), yes, no]));
+    return card;
+  }
+  function loadAdminSupps(cid) {
+    var b = $("adminSuppsBody"); if (!b) return;
+    showLoading("adminSuppsBody");
+    Promise.all([
+      sb.from("supplement_items").select("*").order("sort_order"),
+      sb.from("client_supplements").select("*").eq("client_id", cid)
+    ]).then(function (rs) {
+      clear(b);
+      if (rs[0].error || rs[1].error) { b.appendChild(emptyBox("جداول المكملات مش موجودة لسه. شغّل ملف SQL الأول.")); return; }
+      var byId = {}, want = [], no = [];
+      (rs[0].data || []).forEach(function (i) { byId[i.id] = i; });
+      (rs[1].data || []).forEach(function (m) { var it = byId[m.item_id]; if (it) (m.choice === "want" ? want : no).push(it.name_ar); });
+      if (!want.length && !no.length) { b.appendChild(emptyBox("العميل لسه ما اختارش حاجة.")); return; }
+      if (want.length) b.appendChild(el("p", { style: "margin:0 0 8px" }, [el("b", { text: "عايز: " }), document.createTextNode(want.join("، "))]));
+      if (no.length) b.appendChild(el("p", { class: "sub", style: "margin:0" }, [document.createTextNode("مش عايز: " + no.join("، "))]));
+    }, fail);
+  }
+
+  /* coach: إدارة المكملات والفيتامينات (اللي بيظهر للعميل في تاب المكملات) */
+  (function () {
+    var box = $("suppAdminBox"), listEl = $("suppAdminList"), addBtn = $("suppAddBtn"), countEl = $("suppAdminCount");
+    if (!box) return;
+    var loaded = false, items = [];
+    function rowFor(it) {
+      var isNew = !it.id;
+      var sec = el("select", { "aria-label": "القسم" }, [el("option", { value: "supplement", text: "سبلمنتس" }), el("option", { value: "vitamin", text: "فيتامينات" })]);
+      sec.value = it.section || "supplement";
+      var ar = el("input", { type: "text", placeholder: "الاسم بالعربي (مطلوب)", "aria-label": "الاسم بالعربي" }); ar.value = it.name_ar || "";
+      var en = el("input", { type: "text", dir: "ltr", placeholder: "English name", "aria-label": "الاسم بالإنجليزي" }); en.value = it.name_en || "";
+      var pur = el("input", { type: "text", placeholder: "بيعمل إيه (كلامك أنت)", "aria-label": "بيعمل إيه" }); pur.value = it.purpose || "";
+      var how = el("input", { type: "text", placeholder: "طريقة الاستخدام والجرعة (كلامك أنت)", "aria-label": "طريقة الاستخدام" }); how.value = it.how_to_take || "";
+      var act = el("input", { type: "checkbox" }); act.checked = it.active !== false;
+      var save = el("button", { type: "button", class: "btn btn-sm", text: "حفظ" });
+      var del = el("button", { type: "button", class: "link-btn", text: isNew ? "إلغاء" : "مسح" });
+      var row = el("div", { class: "srow" + (it.active === false ? " is-off" : "") }, [
+        el("div", { class: "r1" }, [sec, ar, en]), pur, how,
+        el("div", { class: "r4" }, [el("label", null, [act, document.createTextNode("ظاهر للعملاء")]), save, del])
+      ]);
+      save.addEventListener("click", function () {
+        var nm = ar.value.trim();
+        if (!nm) return toast("اكتب اسم المكمل بالعربي", true);
+        var vals = { section: sec.value, name_ar: nm, name_en: en.value.trim() || null, purpose: pur.value.trim() || null, how_to_take: how.value.trim() || null, active: act.checked };
+        save.disabled = true;
+        var req = isNew ? sb.from("supplement_items").insert(Object.assign({ sort_order: (items.length + 1) * 10 }, vals))
+                        : sb.from("supplement_items").update(vals).eq("id", it.id);
+        req.then(function (r) {
+          save.disabled = false;
+          if (r.error) return fail(r.error);
+          toast("اتحفظ"); load();
+        }, function (e) { save.disabled = false; fail(e); });
+      });
+      del.addEventListener("click", function () {
+        if (isNew) { if (row.parentNode) row.parentNode.removeChild(row); return; }
+        if (!confirm("مسح \"" + it.name_ar + "\" نهائي؟ اختيارات العملاء ليه هتتمسح كمان.")) return;
+        sb.from("supplement_items").delete().eq("id", it.id).then(function (r) {
+          if (r.error) return fail(r.error);
+          toast("اتمسح"); load();
+        }, fail);
+      });
+      return row;
+    }
+    function render() {
+      clear(listEl);
+      items.forEach(function (it) { listEl.appendChild(rowFor(it)); });
+      countEl.textContent = "(" + items.length + ")";
+      if (!items.length) listEl.appendChild(emptyBox("مفيش مكملات لسه. دوس \"إضافة مكمل\"."));
+    }
+    function load() {
+      showLoading("suppAdminList");
+      sb.from("supplement_items").select("*").order("sort_order").order("created_at").then(function (r) {
+        if (r.error) { clear(listEl); listEl.appendChild(emptyBox("جدول المكملات مش موجود لسه. شغّل ملف SQL الأول.")); return; }
+        loaded = true; items = r.data || []; render();
+      }, fail);
+    }
+    addBtn.addEventListener("click", function () {
+      if (!loaded) return toast("استنى التحميل يخلص الأول", true);
+      var blank = rowFor({});
+      listEl.insertBefore(blank, listEl.firstChild);
+      var first = blank.querySelector("input[type=text]"); if (first) first.focus();
+    });
+    box.addEventListener("toggle", function () { if (box.open && !loaded) load(); });
+  })();
+
   /* ================= PROGRESS PHOTOS ================= */
   function weekLabel(firstDate, thisDate) {
     var d0 = new Date(firstDate + "T00:00:00").getTime(), d1 = new Date(thisDate + "T00:00:00").getTime();
@@ -2759,7 +3365,7 @@
     if (!sb || !profile || !profile.is_admin) return;
     ensureBell();
     Promise.all([
-      sb.from("profiles").select("id,username,full_name,subscription_end_date").eq("is_admin", false),
+      sb.from("profiles").select("*").eq("is_admin", false),
       sb.from("food_submissions").select("id,client_id,created_at").order("created_at", { ascending: false }).limit(60),
       sb.from("reviews").select("client_id,created_at").order("created_at", { ascending: false }),
       sb.from("progress_photos").select("client_id,taken_at").order("taken_at", { ascending: false }),
@@ -2805,11 +3411,11 @@
       if (it.kind === "recipe") { x.rec.push(it.rname); x.reqIds.push(it.reqId); }
     });
     return order.map(function (cid) {
-      var x = g[cid], c = nm[cid] || {}, name = c.full_name || c.username || "", parts = [];
+      var x = g[cid], c = nm[cid] || {}, name = (c.is_trial ? "🎁 تجربة: " : "") + (c.full_name || c.username || ""), parts = [];
       if (x.rec.length) { var n = x.rec.length; parts.push("طلب " + (n === 1 ? "وصفة" : n === 2 ? "وصفتين" : n <= 10 ? n + " وصفات" : n + " وصفة") + " من المطبخ"); }
       if (x.food.length) parts.push("بعت أكله");
       if (x.review) parts.push("جاهز للمراجعة");
-      if (x.left != null) parts.push("اشتراكه قرب ينتهي (باقي " + x.left + " يوم)");
+      if (x.left != null) parts.push(c.is_trial ? "تجربته المجانية قربت تخلص (باقي " + x.left + " يوم). اعرض عليه الاشتراك" : "اشتراكه قرب ينتهي (باقي " + x.left + " يوم)");
       return { icon: "👤", text: name + " " + parts.join(" و"), sub: x.rec.length ? x.rec.join(" · ") : (x.review ? "بعت صورة أو وزن جديد" : ""), cid: cid, seenIds: x.food.length ? x.food : null, reqIds: x.reqIds.length ? x.reqIds : null };
     });
   }
@@ -3127,6 +3733,19 @@
     $("nextIdHint").textContent = "كود العميل الجديد المقترح: RG" + yy + "-" + seq + "-" + mm;
   }
   $("clientSel").addEventListener("change", onClientChange);
+  var TRIAL_COL = false;
+  function checkDupPhone(c) {
+    var n = $("dupPhoneNote"); if (!n) return; n.hidden = true;
+    var d = String(c.phone || "").replace(/\D/g, "").slice(-10);
+    if (d.length < 10) return;
+    sb.from("profiles").select("id,full_name,username,is_admin").like("phone", "%" + d).neq("id", c.id).then(function (r) {
+      if (r.error || !r.data) return;
+      var o = r.data.filter(function (x) { return !x.is_admin; });
+      if (!o.length) return;
+      n.textContent = "⚠️ الرقم ده مسجل كمان عند: " + o.map(function (x) { return x.full_name || x.username; }).join("، ") + ". اتأكد إنه مش واحد خد تجربة قبل كده.";
+      n.hidden = false;
+    });
+  }
   function onClientChange() {
     coachTarget = $("clientSel").value || null;
     $("adminBody").hidden = !coachTarget;
@@ -3140,6 +3759,8 @@
       f.goal_weight.value = r.data.goal_weight != null ? r.data.goal_weight : "";
       f.subscription_start_date.value = r.data.subscription_start_date || "";
       f.subscription_end_date.value = r.data.subscription_end_date || "";
+      TRIAL_COL = ("is_trial" in r.data); f.is_trial.checked = !!r.data.is_trial;
+      checkDupPhone(r.data);
       var wa = $("waBtn"), link = waLink(r.data.phone);
       if (link) { wa.href = link; wa.hidden = false; wa.textContent = "واتساب " + (r.data.full_name || r.data.username); }
       else { wa.hidden = true; }
@@ -3338,6 +3959,8 @@
       if (!r.error) fillList("listReview", "reviews", r.data, function (v) { return v.title; }, function (v) { return v.week_label || ""; });
     });
     loadAdminPhotos(cid);
+    loadAdminInbody(cid);
+    loadAdminSupps(cid);
   }
 
   function bindForm(id, table, build, after) {
@@ -3363,7 +3986,7 @@
     e.preventDefault();
     if (!coachTarget) return;
     var f = e.target;
-    sb.from("profiles").update({
+    var upd = {
       full_name: f.full_name.value.trim() || null,
       client_code: f.client_code.value.trim() || null,
       start_weight: num(f.start_weight.value),
@@ -3371,7 +3994,9 @@
       subscription_start_date: f.subscription_start_date.value || null,
       subscription_end_date: f.subscription_end_date.value || null,
       height_cm: num(f.height_cm.value), age: num(f.age.value), sex: f.sex.value, activity: f.activity.value
-    }).eq("id", coachTarget).then(function (r) { r.error ? fail(r.error) : (toast("اتحفظ"), loadClients()); });
+    };
+    if (TRIAL_COL || f.is_trial.checked) upd.is_trial = f.is_trial.checked;
+    sb.from("profiles").update(upd).eq("id", coachTarget).then(function (r) { r.error ? fail(r.error) : (toast("اتحفظ"), loadClients()); });
   });
 
   /* ---------- daily WhatsApp follow-up (coach) ---------- */
@@ -3519,7 +4144,7 @@
   /* ---------- expired subscriptions (coach) ---------- */
   function loadExpiredClients() {
     showLoading("expiredBody");
-    sb.from("profiles").select("id,username,full_name,subscription_end_date,phone").eq("is_admin", false)
+    sb.from("profiles").select("*").eq("is_admin", false)
       .not("subscription_end_date", "is", null).then(function (r) {
         if (r.error) return fail(r.error);
         var today = todayMid();
@@ -3563,12 +4188,298 @@
       var link = waLink(c.phone);
       if (link) actions.insertBefore(el("a", { class: "link-btn", href: link, target: "_blank", rel: "noopener", text: "واتساب" }), del);
       box.appendChild(el("div", { class: "doc" }, [
-        el("div", null, [ el("h3", { text: c.full_name || c.username }), pTag ]),
+        el("div", null, [ el("h3", { text: (c.is_trial ? "🎁 تجربة: " : "") + (c.full_name || c.username) }), pTag ]),
         actions
       ]));
     });
     body.appendChild(box);
   }
+
+  /* ================= الدفعات والاسترجاع (الكابتن) ================= */
+  var PAY_BUCKET = "refund-receipts";
+  var PAY = { clients: [], byId: {}, loaded: false };
+  var PAY_SRC = { vodafone_cash: "فودافون كاش", instapay: "إنستاباي" };
+  var PAY_KIND = { "new": "اشتراك جديد", renewal: "تجديد", installment: "قسط" };
+  var PAY_ST = { confirmed: "✅ مؤكدة", refunded: "🔁 مسترجعة", reversed: "🔁 العميل استرجعها" };
+
+  function arDigits(s) {
+    return String(s || "")
+      .replace(/[٠-٩]/g, function (d) { return "٠١٢٣٤٥٦٧٨٩".indexOf(d); })
+      .replace(/[۰-۹]/g, function (d) { return "۰۱۲۳۴۵۶۷۸۹".indexOf(d); })
+      .replace(/٫/g, ".").replace(/٬/g, ",");
+  }
+  function last10(p) { var d = String(p || "").replace(/\D/g, ""); return d.slice(-10); }
+  function ymd(d) { return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
+  function addMonths(d, m) {
+    var x = new Date(d.getTime()), day = x.getDate();
+    x.setMonth(x.getMonth() + m);
+    if (x.getDate() !== day) x.setDate(0);
+    return x;
+  }
+  /* بيقرأ رسالة فودافون كاش أو إنستاباي. لو مش فاهمها بيرجّع null والكابتن يكتب بإيده */
+  function parsePayMsg(raw) {
+    var t = arDigits(raw).replace(/\s+/g, " ").trim();
+    if (!t) return null;
+    var out = { source: null, ref: "", amount: null, payerPhone: "", payerName: "", paidOn: "" }, m;
+    if (/رقم العملية/.test(t)) out.source = "vodafone_cash";
+    else if (/رقم المعاملة/.test(t)) out.source = "instapay";
+    else return null;
+    function iso(y, mo, d) { y = +y; if (y < 100) y += 2000; return y + "-" + pad2(+mo) + "-" + pad2(+d); }
+    if (out.source === "vodafone_cash") {
+      if ((m = t.match(/رقم العملية\s*[:：]?\s*(\d{6,})/))) out.ref = m[1];
+      if ((m = t.match(/مبلغ\s*([\d.,]+)\s*جنيه/))) out.amount = parseFloat(m[1].replace(/,/g, ""));
+      if ((m = t.match(/من\s*(0?1\d{9}|201\d{9})/))) out.payerPhone = m[1];
+      if ((m = t.match(/ب[إا]سم\s+(.+?)\s+على رقم/))) out.payerName = m[1];
+      if ((m = t.match(/بتاريخ\s*\d{1,2}:\d{2}\s+(\d{2,4})-(\d{1,2})-(\d{1,2})/))) out.paidOn = iso(m[1], m[2], m[3]);
+    } else {
+      if ((m = t.match(/رقم المعاملة\s*[:：]?\s*([A-Za-z0-9]{4,})/))) out.ref = m[1];
+      if ((m = t.match(/مبلغ\s*([\d.,]+)\s*(?:جم|جنيه|ج\.م)/))) out.amount = parseFloat(m[1].replace(/,/g, ""));
+      if ((m = t.match(/من\s+(.+?)\s+يوم/))) out.payerName = m[1];
+      if ((m = t.match(/يوم\s*(\d{1,2})\/(\d{1,2})\/(\d{2,4})/))) {
+        var a = +m[1], b = +m[2];
+        out.paidOn = a > 12 ? iso(m[3], b, a) : iso(m[3], a, b);
+      }
+    }
+    out.ref = out.ref.toLowerCase();
+    if (out.amount != null && isNaN(out.amount)) out.amount = null;
+    return out;
+  }
+  function nameOverlap(a, b) {
+    var ta = String(a || "").split(/\s+/).filter(function (x) { return x.length > 2; });
+    var tb = String(b || "").split(/\s+/).filter(function (x) { return x.length > 2; });
+    return ta.some(function (x) { return tb.indexOf(x) > -1; });
+  }
+
+  var payBuilt = false;
+  function payLoad() {
+    sb.from("profiles").select("id,username,full_name,client_code,phone,subscription_end_date").eq("is_admin", false).order("full_name").then(function (r) {
+      if (r.error) return fail(r.error);
+      PAY.clients = r.data || []; PAY.byId = {};
+      var sel = $("payClient"), keep = sel.value; clear(sel);
+      sel.appendChild(el("option", { value: "", text: "اختار العميل" }));
+      PAY.clients.forEach(function (c) {
+        PAY.byId[c.id] = c;
+        sel.appendChild(el("option", { value: c.id, text: (c.client_code ? c.client_code + " — " : "") + (c.full_name || c.username) }));
+      });
+      sel.value = keep || "";
+      PAY.loaded = true;
+      loadPayList();
+    });
+  }
+  function payName(id) { var c = PAY.byId[id]; return c ? (c.full_name || c.username) : "عميل محذوف"; }
+
+  function buildPayForm() {
+    if (payBuilt) return; payBuilt = true;
+    var box = $("payParsed"); clear(box);
+    var src = el("select", { id: "payF_src", "aria-label": "المصدر" }, [el("option", { value: "vodafone_cash", text: "فودافون كاش" }), el("option", { value: "instapay", text: "إنستاباي" })]);
+    var ref = el("input", { id: "payF_ref", type: "text", dir: "ltr", style: "text-align:right", autocomplete: "off" });
+    var amt = el("input", { id: "payF_amt", type: "number", step: "0.01", inputmode: "decimal" });
+    var who = el("input", { id: "payF_who", type: "text", autocomplete: "off" });
+    var dt = el("input", { id: "payF_dt", type: "date" });
+    var kind = el("select", { id: "payF_kind" }, [el("option", { value: "new", text: "اشتراك جديد" }), el("option", { value: "renewal", text: "تجديد" }), el("option", { value: "installment", text: "قسط" })]);
+    var mon = el("select", { id: "payF_mon" }, [el("option", { value: "1", text: "يمدّ الاشتراك شهر" }), el("option", { value: "2", text: "يمدّه شهرين" }), el("option", { value: "3", text: "يمدّه 3 شهور" }), el("option", { value: "0", text: "من غير تمديد (قسط)" })]);
+    function lab(t, inp) { return el("label", { class: "field" }, [document.createTextNode(t), inp]); }
+    box.appendChild(el("div", { class: "row2" }, [lab("المصدر", src), lab("رقم العملية / المعاملة", ref)]));
+    box.appendChild(el("div", { class: "row2" }, [lab("المبلغ (جنيه)", amt), lab("اسم أو رقم اللي حوّل", who)]));
+    box.appendChild(el("div", { class: "row2" }, [lab("تاريخ التحويل", dt), lab("نوع الدفعة", kind)]));
+    box.appendChild(lab("التمديد", mon));
+    box.appendChild(el("div", { id: "payChecks", style: "margin:8px 0 12px" }));
+    var ok = el("button", { type: "button", class: "btn btn-sm", id: "payConfirmBtn", text: "تأكيد الدفعة" }); ok.disabled = true;
+    ok.addEventListener("click", payConfirm);
+    box.appendChild(ok);
+    [src, ref, amt, who, dt].forEach(function (x) { x.addEventListener("input", payRefresh); x.addEventListener("change", payRefresh); });
+    kind.addEventListener("change", function () { mon.value = kind.value === "installment" ? "0" : (mon.value === "0" ? "1" : mon.value); });
+    $("payClient").addEventListener("change", payRefresh);
+  }
+  function payRead() {
+    buildPayForm();
+    var parsed = parsePayMsg($("payMsg").value);
+    buildPayForm();
+    if (!parsed) {
+      toast("مقدرتش أقرأ الرسالة. اكتب رقم العملية والمبلغ بإيدك", true);
+      $("payF_ref").focus();
+    } else {
+      $("payF_src").value = parsed.source;
+      $("payF_ref").value = parsed.ref;
+      $("payF_amt").value = parsed.amount != null ? parsed.amount : "";
+      $("payF_who").value = parsed.payerPhone || parsed.payerName || "";
+      $("payF_dt").value = parsed.paidOn || "";
+      if (!parsed.ref) toast("مالقيتش رقم العملية في الرسالة، اكتبه بإيدك", true);
+    }
+    payRefresh();
+  }
+  var payTok = 0;
+  function payRefresh() {
+    if (!payBuilt) return;
+    var tok = ++payTok;
+    var cid = $("payClient").value, c = PAY.byId[cid];
+    var source = $("payF_src").value, ref = $("payF_ref").value.trim().toLowerCase();
+    var amount = parseFloat($("payF_amt").value), who = $("payF_who").value.trim();
+    var checks = $("payChecks"), btn = $("payConfirmBtn");
+    var lines = [], block = false;
+    if (!cid) { lines.push(["bad", "اختار العميل الأول"]); block = true; }
+    if (!ref) { lines.push(["bad", "رقم العملية ناقص"]); block = true; }
+    if (!(amount > 0)) { lines.push(["bad", "المبلغ ناقص"]); block = true; }
+    function paint() {
+      if (tok !== payTok) return;
+      clear(checks);
+      lines.forEach(function (l) {
+        checks.appendChild(el("p", { style: "margin:4px 0;font-weight:700;color:" + (l[0] === "bad" ? "#ff6b5a" : l[0] === "warn" ? "#f5b942" : "#4cc38a"), text: (l[0] === "bad" ? "❌ " : l[0] === "warn" ? "⚠️ " : "✅ ") + l[1] }));
+      });
+      btn.disabled = block;
+    }
+    if (c && who) {
+      if (source === "vodafone_cash" && /\d{9,}/.test(who.replace(/\D/g, "")) && c.phone) {
+        if (last10(who) === last10(c.phone)) lines.push(["ok", "اللي حوّل هو نفس رقم العميل"]);
+        else lines.push(["warn", "رقم اللي حوّل (" + who + ") مش نفس رقم العميل المسجل. اتأكد إنه قريبه أو إنه استثناء مقبول"]);
+      } else if (source === "instapay" && c.full_name) {
+        if (nameOverlap(who, c.full_name)) lines.push(["ok", "اسم اللي حوّل فيه جزء من اسم العميل"]);
+        else lines.push(["warn", "اسم اللي حوّل (" + who + ") مش شبه اسم العميل. اتأكد إنه قريبه"]);
+      }
+    }
+    if (!ref) { paint(); return; }
+    sb.from("payments").select("client_id,amount,paid_on,status").eq("source", source).eq("ref_number", ref).then(function (r) {
+      if (tok !== payTok) return;
+      if (!r.error && r.data && r.data.length) {
+        var d = r.data[0];
+        lines.unshift(["bad", "الرقم ده اتسجّل قبل كده لـ " + payName(d.client_id) + (d.paid_on ? " بتاريخ " + fmtDate(d.paid_on) : "") + " (" + (PAY_ST[d.status] || d.status) + "). متفعّلش اشتراك بيه"]);
+        block = true;
+      } else if (r.error) {
+        lines.unshift(["bad", "مقدرتش أراجع الدفتر. اتأكد إنك شغّلت ملف SQL بتاع الدفعات"]);
+        block = true;
+      } else if (ref) {
+        lines.unshift(["ok", "رقم العملية جديد ومتكررش"]);
+      }
+      paint();
+    }, function () { lines.unshift(["bad", "مقدرتش أراجع الدفتر"]); block = true; paint(); });
+  }
+  function payConfirm() {
+    var cid = $("payClient").value, btn = $("payConfirmBtn");
+    var months = parseInt($("payF_mon").value, 10) || 0;
+    var source = $("payF_src").value, ref = $("payF_ref").value.trim().toLowerCase();
+    var amount = parseFloat($("payF_amt").value), who = $("payF_who").value.trim();
+    if (!cid || !ref || !(amount > 0)) return;
+    btn.disabled = true;
+    var isPhone = /^\+?\d[\d\s-]{8,}$/.test(who);
+    sb.from("profiles").select("*").eq("id", cid).single().then(function (pr) {
+      if (pr.error) throw pr.error;
+      var p = pr.data, today = todayMid(), endD = p.subscription_end_date ? toDate(p.subscription_end_date) : null;
+      var active = !!(endD && endD >= today && !p.is_trial);
+      var base = active ? endD : today;
+      var newEnd = months ? addMonths(base, months) : null;
+      var daysAdded = months ? Math.round((newEnd - base) / DAY_MS) : 0;
+      var row = {
+        client_id: cid, source: source, ref_number: ref, amount: amount,
+        payer_phone: isPhone ? who.replace(/\D/g, "") : null, payer_name: isPhone ? null : (who || null),
+        paid_on: $("payF_dt").value || null, kind: $("payF_kind").value, months: months, days_added: daysAdded,
+        status: "confirmed", raw_message: ($("payMsg").value || "").slice(0, 2000) || null
+      };
+      return sb.from("payments").insert(row).then(function (ins) {
+        if (ins.error) {
+          if (ins.error.code === "23505") { toast("الرقم ده اتسجّل قبل كده. متفعّلش اشتراك بيه", true); return null; }
+          throw ins.error;
+        }
+        var upd = {};
+        if (months) { upd.subscription_end_date = ymd(newEnd); if (!active || !p.subscription_start_date) upd.subscription_start_date = todayStr(); }
+        if ("is_trial" in p && p.is_trial) upd.is_trial = false;
+        if (!Object.keys(upd).length) return "done";
+        return sb.from("profiles").update(upd).eq("id", cid).then(function (u) {
+          if (u.error) { toast("اتسجّلت الدفعة بس اشتراك العميل ما اتعدّلش. عدّله من بيانات العميل", true); console.error(u.error); return null; }
+          return "done";
+        });
+      });
+    }).then(function (res) {
+      btn.disabled = false;
+      if (res === "done") {
+        toast("اتأكدت الدفعة واشتراك العميل اتحدّث");
+        $("payMsg").value = ""; $("payF_ref").value = ""; $("payF_amt").value = ""; $("payF_who").value = ""; $("payF_dt").value = "";
+        payRefresh(); loadPayList();
+        if (coachTarget === cid) onClientChange();
+      }
+    }, function (e) { btn.disabled = false; fail(e); });
+  }
+
+  function loadPayList() {
+    var list = $("payList"); if (!list) return;
+    showLoading("payList");
+    sb.from("payments").select("*").order("created_at", { ascending: false }).limit(40).then(function (r) {
+      clear(list);
+      if (r.error) { list.appendChild(emptyBox("جدول الدفعات مش موجود لسه. شغّل ملف SQL بتاع الدفعات الأول.")); return; }
+      $("payCount").textContent = r.data.length ? "(" + r.data.length + ")" : "";
+      if (!r.data.length) { list.appendChild(emptyBox("لسه مفيش دفعات متسجّلة.")); return; }
+      r.data.forEach(function (p) { list.appendChild(payCard(p)); });
+    }, fail);
+  }
+  function payCard(p) {
+    var head = el("div", { style: "display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap" });
+    head.appendChild(el("div", null, [
+      el("h3", { text: payName(p.client_id) + " · " + p.amount + " جنيه" }),
+      el("p", { class: "sub", style: "margin:2px 0", text: (PAY_SRC[p.source] || p.source) + " · " + (PAY_KIND[p.kind] || p.kind) + (p.paid_on ? " · " + fmtDate(p.paid_on) : "") }),
+      el("p", { class: "sub", dir: "ltr", style: "margin:2px 0;text-align:right", text: "# " + p.ref_number }),
+      el("p", { style: "margin:4px 0;font-weight:700", text: PAY_ST[p.status] || p.status })
+    ]));
+    var card = el("div", { class: "doc", style: "display:block;margin-bottom:10px" }, [head]);
+    if (p.status !== "confirmed") {
+      var d = [];
+      if (p.refund_percent) d.push("استرجاع " + p.refund_percent + "% = " + p.refund_amount + " جنيه");
+      if (p.refund_note) d.push(p.refund_note);
+      if (d.length) card.appendChild(el("p", { class: "sub", style: "margin:6px 0", text: d.join(" · ") }));
+      if (p.refund_receipt_path) {
+        var a = el("a", { class: "link-btn", target: "_blank", rel: "noopener", text: "صورة الاسترجاع", hidden: "" });
+        sb.storage.from(PAY_BUCKET).createSignedUrl(p.refund_receipt_path, 3600).then(function (s) { if (!s.error && s.data) { a.href = s.data.signedUrl; a.hidden = false; } });
+        card.appendChild(a);
+      }
+      return card;
+    }
+    var btn = el("button", { type: "button", class: "link-btn danger", text: "استرجاع" });
+    var slot = el("div");
+    btn.addEventListener("click", function () { if (slot.firstChild) { clear(slot); return; } slot.appendChild(refundForm(p, slot)); });
+    head.appendChild(btn); card.appendChild(slot);
+    return card;
+  }
+  function refundForm(p, slot) {
+    var kind = el("select", { "aria-label": "نوع الاسترجاع" }, [
+      el("option", { value: "50", text: "رجّعت له 50%" }), el("option", { value: "100", text: "رجّعت له 100%" }), el("option", { value: "reversed", text: "العميل استرجعها من البنك" })
+    ]);
+    var file = el("input", { type: "file", accept: "image/*", "aria-label": "صورة تحويل الاسترجاع" });
+    var fileLab = el("label", { class: "field" }, [document.createTextNode("صورة تحويل الاسترجاع اللي بعتّه"), file]);
+    var note = el("input", { type: "text", placeholder: "ملاحظة (اختياري)", autocomplete: "off" });
+    var stop = el("input", { type: "checkbox", style: "width:auto;margin-inline-end:8px" }); stop.checked = true;
+    var stopLab = el("label", { class: "field", style: "display:flex;align-items:center" }, [stop, document.createTextNode(p.days_added ? "شيل الأيام اللي الدفعة دي ضافتها (" + p.days_added + " يوم)" : "الدفعة دي ما مدّتش اشتراك، مفيش أيام تتشال")]);
+    if (!p.days_added) { stop.checked = false; stop.disabled = true; }
+    kind.addEventListener("change", function () { fileLab.hidden = kind.value === "reversed"; });
+    var go = el("button", { type: "button", class: "btn btn-sm", text: "سجّل الاسترجاع" });
+    go.addEventListener("click", function () {
+      var k = kind.value, isRev = k === "reversed", f = file.files && file.files[0];
+      if (!isRev && !f) return toast("ارفع صورة تحويل الاسترجاع الأول", true);
+      if (!confirm("تسجّل الاسترجاع ده؟ مش هينفع تتراجع منه من هنا.")) return;
+      go.disabled = true;
+      var path = null;
+      var up = isRev ? Promise.resolve() : compressImage(f, 2000, 0.85).then(function (blob) {
+        path = p.client_id + "/" + p.id + "-" + Date.now() + ".jpg";
+        return sb.storage.from(PAY_BUCKET).upload(path, blob, { contentType: "image/jpeg" }).then(function (u) { if (u.error) throw u.error; });
+      });
+      up.then(function () {
+        var pct = isRev ? null : parseInt(k, 10);
+        var upd = { status: isRev ? "reversed" : "refunded", refund_percent: pct, refund_amount: pct ? Math.round(p.amount * pct) / 100 : null, refund_receipt_path: path, refund_note: note.value.trim() || null, refunded_at: new Date().toISOString() };
+        return sb.from("payments").update(upd).eq("id", p.id).then(function (r) {
+          if (r.error) { if (path) sb.storage.from(PAY_BUCKET).remove([path]); throw r.error; }
+          if (!(stop.checked && p.days_added)) return;
+          return sb.from("profiles").select("subscription_end_date").eq("id", p.client_id).single().then(function (pr) {
+            if (pr.error || !pr.data || !pr.data.subscription_end_date) return;
+            var ne = new Date(toDate(pr.data.subscription_end_date).getTime() - p.days_added * DAY_MS);
+            return sb.from("profiles").update({ subscription_end_date: ymd(ne) }).eq("id", p.client_id);
+          });
+        });
+      }).then(function () { toast("اتسجّل الاسترجاع"); loadPayList(); if (coachTarget === p.client_id) onClientChange(); }, function (e) { go.disabled = false; fail(e); });
+    });
+    return el("div", { style: "margin-top:10px;padding-top:10px;border-top:1px solid var(--line)" }, [kind, fileLab, el("label", { class: "field" }, [note]), stopLab, go]);
+  }
+  (function initPay() {
+    var b = $("payBox"); if (!b) return;
+    b.addEventListener("toggle", function () { if (b.open) { payLoad(); } });
+    $("payReadBtn").addEventListener("click", payRead);
+  })();
 })();
 </script>
 </body>
