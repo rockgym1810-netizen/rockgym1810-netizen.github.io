@@ -8,7 +8,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
 <title>RockGym Fitness Coaching — منصة العملاء</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -408,6 +409,12 @@
     body.rg-client .tab .ti{ font-size:1.25rem; margin:0; line-height:1.2; } body.rg-client .tab[aria-selected="true"]{ background:rgba(255,78,44,.16); color:#fff; }
     body.rg-client .toast{ bottom:calc(86px + env(safe-area-inset-bottom,0px)); }
   }
+  /* حركة اللوجو */
+  .logo{ animation:lgIn .8s cubic-bezier(.2,.8,.2,1) both; }
+  .logo span{ animation:lgGlow 3.4s ease-in-out infinite; }
+  @keyframes lgIn{ from{ opacity:0; letter-spacing:6px; } to{ opacity:1; letter-spacing:.5px; } }
+  @keyframes lgGlow{ 0%,100%{ text-shadow:0 0 0 rgba(255,78,44,0); } 50%{ text-shadow:0 0 12px rgba(255,78,44,.75); } }
+  @media (prefers-reduced-motion:reduce){ .logo,.logo span{ animation:none; } }
   /* ===== لمسة الشكل ===== */
   body{ background:radial-gradient(900px 420px at 85% -80px,rgba(255,78,44,.16),transparent 70%),radial-gradient(700px 380px at 0% 30%,rgba(255,78,44,.06),transparent 70%),var(--bg); background-attachment:fixed; }
   .tabs{ scrollbar-width:thin; scrollbar-color:#3a3a40 transparent; } .tabs::-webkit-scrollbar{ height:5px; } .tabs::-webkit-scrollbar-thumb{ background:#3a3a40; border-radius:9px; } .tabs::-webkit-scrollbar-track{ background:transparent; }
