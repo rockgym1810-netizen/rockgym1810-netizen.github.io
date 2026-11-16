@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0c0c0d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>RockGym Fitness Coaching — منصة العملاء</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -349,6 +355,81 @@
     .who span{ display:none; }
     .doc{ flex-direction:column; align-items:flex-start; }
   }
+  /* ===== دلع العميل ===== */
+  .ib-nums{ display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; } .ib-nums input{ width:30%; min-width:70px; background:var(--bg); color:var(--ink); border:1px solid var(--line); border-radius:6px; padding:4px 6px; }
+  .ib-line{ display:block; color:var(--muted); }
+  #wkSuggest{ margin:12px 0 22px; } #wkSuggest h3{ margin:0 0 4px; }
+  .wk-row{ border:1px solid var(--line); border-radius:12px; background:var(--bg-alt); padding:12px 14px; margin-bottom:10px; }
+  .wk-head{ display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; }
+  .wk-row small{ color:var(--muted); display:block; } .wk-note{ margin:6px 0 0; font-size:.88rem; }
+  .wk-chip{ font-size:.78rem; font-weight:700; padding:2px 10px; border-radius:999px; border:1px solid var(--line); }
+  .wk-chip.ok{ border-color:#22c55e; color:#22c55e; } .wk-chip.warn{ border-color:#ff8c42; color:#ff8c42; }
+  .wk-sug{ margin-top:10px; padding:10px 12px; border:1px dashed var(--accent); border-radius:10px; } .wk-sug p{ margin:4px 0; font-size:.88rem; }
+  .wk-btns{ display:flex; gap:8px; margin-top:8px; }
+  .ins-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:14px; margin:16px 0; }
+  .ins-card{ border:1px solid var(--line); border-radius:14px; background:var(--bg-alt); padding:14px 14px 10px; }
+  .ins-head{ display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; }
+  .ins-head h3{ margin:0; font-size:1.05rem; }
+  .ins-pills{ display:flex; gap:4px; }
+  .ins-pills button{ background:transparent; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:2px 10px; font-size:.78rem; cursor:pointer; }
+  .ins-pills button.on{ background:var(--accent); border-color:var(--accent); color:#fff; font-weight:700; }
+  .ins-host svg{ width:100%; height:auto; display:block; direction:ltr; }
+  .ins-meta{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; text-align:center; margin-top:6px; }
+  .ins-meta small{ display:block; color:var(--muted); font-size:.72rem; } .ins-meta b{ font-size:.88rem; }
+  /* ===== رئيسية + تنقل + هياكل تحميل ===== */
+  .sk-wrap{ display:grid; gap:12px; padding:20px 0; } .sk{ height:70px; border-radius:12px; background:linear-gradient(90deg,#16161a 25%,#222228 50%,#16161a 75%); background-size:200% 100%; animation:skm 1.3s linear infinite; } .sk2{ height:110px; } .sk3{ height:50px; width:60%; }
+  @keyframes skm{ to{ background-position:-200% 0; } }
+  .hm-cta{ width:100%; font-size:1.15rem; padding:16px; margin-bottom:14px; box-shadow:0 12px 30px -14px var(--accent-glow); }
+  .hm-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+  .hm-card{ border:1px solid var(--line); border-radius:14px; background:var(--bg-alt); padding:16px; } .hm-card small{ color:var(--muted); display:block; } .hm-big{ display:block; font-size:1.7rem; font-weight:900; line-height:1.3; }
+  .hm-macros{ box-shadow:inset 0 0 60px -30px rgba(34,211,238,.35), 0 0 30px -18px rgba(255,78,44,.6); border-color:rgba(34,211,238,.25); grid-column:1/-1; display:flex; justify-content:space-between; align-items:center; gap:12px; } .hm-donut{ overflow:visible; width:150px; height:150px; flex:none; direction:ltr; animation:dnIn .9s cubic-bezier(.2,.8,.2,1) both; }
+  .hm-donut .neon{ filter:drop-shadow(0 0 2px var(--c)) drop-shadow(0 0 6px var(--c)); animation:dnPulse 3s ease-in-out infinite; }
+  @keyframes dnIn{ from{ opacity:0; transform:rotate(-90deg) scale(.7); } to{ opacity:1; transform:none; } }
+  @keyframes dnPulse{ 50%{ filter:drop-shadow(0 0 1px var(--c)) drop-shadow(0 0 4px var(--c)); } }
+  @media (prefers-reduced-motion:reduce){ .hm-donut,.hm-donut .neon{ animation:none; } }
+  .hm-leg{ display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:8px; } .hm-leg span{ font-size:.85rem; font-weight:700; } .hm-leg span::before{ content:""; display:inline-block; width:9px; height:9px; border-radius:50%; background:var(--c); box-shadow:0 0 8px var(--c); margin-inline-end:6px; }
+  .hm-actions{ display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin-top:14px; }
+  .hm-act{ display:flex; flex-direction:column; align-items:center; gap:6px; padding:16px 8px; border:1px solid var(--line); border-radius:14px; background:var(--bg-alt); color:var(--ink); cursor:pointer; font-size:1.6rem; transition:border-color .25s, transform .25s; }
+  .hm-act b{ font-size:.9rem; } .hm-act:hover{ border-color:var(--accent); transform:translateY(-2px); }
+  body.rg-client .topbar{ backdrop-filter:none; -webkit-backdrop-filter:none; background:rgba(12,12,13,.98); }
+  body.rg-client .tab .tl{ white-space:normal; overflow-wrap:anywhere; text-align:start; }
+  body.rg-client .tab .ti{ margin-inline-end:8px; }
+  @media (min-width:900px){
+    body.rg-client .tabs{ position:fixed; right:0; top:var(--hdr,70px); bottom:0; width:220px; max-width:none; margin:0; padding:14px 10px; flex-direction:column; gap:4px; overflow-y:auto; border-bottom:0; border-left:1px solid var(--line); background:var(--bg-alt); z-index:20; }
+    body.rg-client .tab{ text-align:start; width:100%; border-radius:10px; padding:10px 14px; border-bottom:0 !important; display:flex; align-items:center; }
+    body.rg-client .tab[aria-selected="true"]{ background:rgba(255,78,44,.16); box-shadow:inset -3px 0 0 var(--accent); color:#fff; }
+    body.rg-client main, body.rg-client .subbanner, body.rg-client .rg-greet{ margin-right:230px; }
+    body.rg-client .rg-greet{ max-width:none; margin-left:24px; } body.rg-client main{ max-width:none; }
+  }
+  @media (max-width:899px){
+    body.rg-client{ padding-bottom:calc(76px + env(safe-area-inset-bottom,0px)); }
+    body.rg-client .tabs{ position:fixed; bottom:0; left:0; right:0; max-width:none; margin:0; padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px)); gap:2px; background:rgba(19,19,21,.96); backdrop-filter:blur(10px); border-top:1px solid var(--line); border-bottom:0; z-index:40; }
+    body.rg-client .tab{ flex:0 0 auto; min-width:66px; display:flex; flex-direction:column; align-items:center; gap:0; font-size:.68rem; padding:6px 8px; border-bottom:0 !important; border-radius:10px; }
+    body.rg-client .tab .ti{ font-size:1.25rem; margin:0; line-height:1.2; } body.rg-client .tab[aria-selected="true"]{ background:rgba(255,78,44,.16); color:#fff; }
+    body.rg-client .toast{ bottom:calc(86px + env(safe-area-inset-bottom,0px)); }
+  }
+  /* ===== لمسة الشكل ===== */
+  body{ background:radial-gradient(900px 420px at 85% -80px,rgba(255,78,44,.16),transparent 70%),radial-gradient(700px 380px at 0% 30%,rgba(255,78,44,.06),transparent 70%),var(--bg); background-attachment:fixed; }
+  .tabs{ scrollbar-width:thin; scrollbar-color:#3a3a40 transparent; } .tabs::-webkit-scrollbar{ height:5px; } .tabs::-webkit-scrollbar-thumb{ background:#3a3a40; border-radius:9px; } .tabs::-webkit-scrollbar-track{ background:transparent; }
+  .rg-greet{ position:relative; overflow:hidden; padding:22px 24px; border:1px solid rgba(255,78,44,.35); background:linear-gradient(120deg,rgba(255,78,44,.22),rgba(255,78,44,.04) 55%,transparent); box-shadow:0 10px 40px -18px var(--accent-glow); }
+  .rg-greet::after{ content:""; position:absolute; inset-inline-start:0; top:0; bottom:0; width:4px; background:var(--accent); box-shadow:0 0 18px var(--accent); }
+  .rg-greet h2{ font-size:1.7rem; font-weight:900; margin:0 0 6px; letter-spacing:.2px; } .rg-name{ color:var(--accent); }
+  .rg-quote{ margin:0; direction:ltr; text-align:right; font-weight:800; font-size:.95rem; letter-spacing:.14em; color:var(--muted); }
+  .ins-card,.wk-row,.photo-card,.stat{ transition:border-color .25s, box-shadow .25s, transform .25s; }
+  .ins-card:hover,.wk-row:hover,.photo-card:hover{ border-color:rgba(255,78,44,.55); box-shadow:0 12px 30px -16px var(--accent-glow); transform:translateY(-2px); }
+  .btn:hover{ box-shadow:0 0 22px var(--accent-glow); transform:translateY(-1px); }
+  h2{ letter-spacing:.2px; }
+  .rg-greet{ max-width:1100px; margin:14px auto 0; padding:16px 20px; border:1px solid var(--line); border-radius:14px;
+    background:linear-gradient(135deg,rgba(255,78,44,.14),rgba(255,78,44,.02) 60%); animation:rgIn .5s ease both; }
+  .rg-greet h2{ margin:0 0 4px; font-size:1.25rem; }
+  .rg-greet .rg-q{ margin:0; color:var(--muted); font-size:.95rem; }
+  .rg-greet .rg-q.en{ font-size:.8rem; opacity:.8; }
+  .rg-chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .rg-chip{ font-size:.82rem; font-weight:700; padding:4px 12px; border-radius:999px; border:1px solid var(--line); background:var(--bg-alt); }
+  .rg-chip.hot{ border-color:var(--accent); box-shadow:0 0 14px var(--accent-glow); }
+  .rg-chip.warn{ border-color:#ff8c42; color:#ff8c42; }
+  .rg-confetti{ position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:60; }
+  @keyframes rgIn{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:none; } }
   @media (prefers-reduced-motion:reduce){ *{ transition:none !important; } }
   .mic-on{ border-color:var(--accent); color:var(--accent); }
   .pl-meal{ border:1px solid var(--line); border-radius:8px; padding:12px 14px; background:var(--bg); margin-bottom:10px; }
@@ -454,6 +535,10 @@
 
   <main>
     <!-- Client panels -->
+    <section id="p-home" role="tabpanel" hidden>
+      <div id="homeBody"></div>
+    </section>
+
     <section id="p-videos" role="tabpanel" hidden>
       <h2>فيديوهاتي</h2>
       <p class="sub">اختار اليوم وشوف شروحات تمارينه.</p>
@@ -521,6 +606,7 @@
     <section id="p-today" role="tabpanel" hidden>
       <h2>المراجعة الأسبوعية</h2>
       <p class="sub">افتحها مرة في الأسبوع وقت ما تقعد تراجع عملاءك — مش محتاجة تتابعها يوميًا، المتابعة اليومية عندك على واتساب.</p>
+      <div id="wkSuggest"></div>
       <div id="todayBody"></div>
     </section>
 
@@ -802,7 +888,7 @@
   var SUPABASE_ANON_KEY = "sb_publishable_pQBpK-yPFTimcV021IIVpw_BFsYrBKm";
   var EMAIL_DOMAIN = "rockgym.app";
   var GRACE_DAYS = 3; /* مهلة السماح بعد انتهاء الاشتراك، بالأيام */
-  var COACH_WHATSAPP = "01xxxxxxxxx"; /* رقم واتسابك إنت (الكابتن)، عشان زرار "جدد اشتراكي" يبعت رسالة العميل ليك */
+  var COACH_WHATSAPP = "01041867696"; /* رقم واتسابك إنت (الكابتن)، عشان زرار "جدد اشتراكي" يبعت رسالة العميل ليك */
   /* ======================================================================== */
 
   var configured = SUPABASE_URL.indexOf("http") === 0 && SUPABASE_ANON_KEY.indexOf("PASTE") === -1;
@@ -988,6 +1074,7 @@
     loginView.hidden = true; appView.hidden = false;
     renderAccount();
     renderSubscriptionBanner();
+    rgDelight();
     buildTabs();
     var badge = document.createElement("div");
     badge.textContent = "وضع تجريبي — \"محمد السيد\" شخصية وهمية للعرض بس، مش عميل حقيقي، وده بس عشان نوريك شكل المتابعة بيبقى إزاي";
@@ -1010,7 +1097,7 @@
   function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); }
   var tt;
   function toast(msg, bad) {
-    var t = $("toast"); t.textContent = msg; t.className = "toast" + (bad ? " bad" : ""); t.hidden = false;
+    var t = $("toast"); if (!bad && profile && !profile.is_admin && /^(اتحفظت|اتبعت|اتسجّل|صورتك اتغيرت)/.test(String(msg))) rgConfetti(); t.textContent = msg; t.className = "toast" + (bad ? " bad" : ""); t.hidden = false;
     clearTimeout(tt); tt = setTimeout(function () { t.hidden = true; }, 2600);
   }
   var TECH_ERR = /schema cache|could not find|relation|does not exist|PGRST|violates|permission denied|row-level|policy|JWT|failed to fetch|networkerror|bucket|storage|syntax|column|constraint|duplicate key|TypeError|undefined|null/i;
@@ -1026,7 +1113,7 @@
   function fmt(n) { return (Math.round(n * 10) / 10).toString(); }
   function fmtDate(s) { try { return new Date(s).toLocaleDateString("ar-EG", { day: "numeric", month: "long" }); } catch (e) { return s; } }
   function emptyBox(t) { return el("div", { class: "empty", text: t }); }
-  function loadingBox() { return el("div", { class: "loading-wrap" }, [el("div", { class: "spinner" })]); }
+  function loadingBox() { return el("div", { class: "sk-wrap" }, [el("div", { class: "sk sk1" }), el("div", { class: "sk sk2" }), el("div", { class: "sk sk3" })]); }
   function showLoading(id) { var b = $(id); if (b) { clear(b); b.appendChild(loadingBox()); } }
   function isVideoFile(u) { return /\.(mp4|webm|mov|m4v)(\?.*)?$/i.test(u) || u.indexOf("res.cloudinary.com") > -1 && u.indexOf("/video/") > -1; }
   function isImageFile(u) { return /^data:image\//i.test(u) || /\.(png|jpe?g|webp|svg|gif)(\?.*)?$/i.test(u); }
@@ -1218,11 +1305,116 @@
       profile.phone = digits;
       $("phoneModal").hidden = true;
       renderSubscriptionBanner();
+      rgDelight();
       buildTabs();
     });
   });  $("logout").addEventListener("click", function () {
     sb.auth.signOut().then(function () { removeBells(); profile = null; appView.hidden = true; loginView.hidden = false; });
   });
+
+  /* ===== الصفحة الرئيسية للعميل + أيقونات + تخطيط ===== */
+  var RG_ICONS = { home: "🏠", videos: "🏋️", plans: "📋", progress: "📈", inbody: "📊", food: "🥗", kitchen: "🍳", supps: "💊", payments: "💰", history: "🕘" };
+  function rgDonut(p, c, f, kcal) {
+    var kp = p * 4, kc = c * 4, kf = f * 9, tot = kp + kc + kf; if (!tot) return null;
+    var R = 52, C2 = 2 * Math.PI * R, GAP = 7, NS = "http://www.w3.org/2000/svg", svg = document.createElementNS(NS, "svg"); svg.setAttribute("viewBox", "0 0 140 140"); svg.setAttribute("class", "hm-donut");
+    function ring(color, len, off, extra) {
+      var ci = document.createElementNS(NS, "circle");
+      ci.setAttribute("cx", 70); ci.setAttribute("cy", 70); ci.setAttribute("r", R); ci.setAttribute("fill", "none"); ci.setAttribute("stroke", color); ci.setAttribute("stroke-width", 11);
+      ci.setAttribute("stroke-linecap", "round"); ci.setAttribute("stroke-dasharray", Math.max(0.1, len).toFixed(1) + " " + (C2 - Math.max(0.1, len)).toFixed(1));
+      ci.setAttribute("stroke-dashoffset", (-off).toFixed(1)); ci.setAttribute("transform", "rotate(-90 70 70)"); ci.setAttribute("style", "--c:" + color); if (extra) ci.setAttribute("class", extra); svg.appendChild(ci);
+    }
+    var track = document.createElementNS(NS, "circle"); track.setAttribute("cx", 70); track.setAttribute("cy", 70); track.setAttribute("r", R); track.setAttribute("fill", "none"); track.setAttribute("stroke", "#1a1a1f"); track.setAttribute("stroke-width", 11); svg.appendChild(track);
+    var off = 0;
+    [[kp, "#ff4e2c"], [kc, "#22d3ee"], [kf, "#facc15"]].forEach(function (x) { var len = x[0] / tot * C2; ring(x[1], len - GAP, off + GAP / 2, "neon"); off += len; });
+    if (kcal != null) {
+      var t1 = document.createElementNS(NS, "text"); t1.setAttribute("x", 70); t1.setAttribute("y", 72); t1.setAttribute("text-anchor", "middle"); t1.setAttribute("fill", "#f2efe9"); t1.setAttribute("font-size", 22); t1.setAttribute("font-weight", 900); t1.textContent = fmt(kcal); svg.appendChild(t1);
+      var t2 = document.createElementNS(NS, "text"); t2.setAttribute("x", 70); t2.setAttribute("y", 90); t2.setAttribute("text-anchor", "middle"); t2.setAttribute("fill", "#9a9aa2"); t2.setAttribute("font-size", 10); t2.setAttribute("letter-spacing", 2); t2.textContent = "KCAL"; svg.appendChild(t2);
+    }
+    return svg;
+  }
+  function renderHome() {
+    var body = $("homeBody"); clear(body);
+    var tiles = el("div", { class: "hm-grid" });
+    function go(k) { selectTab(k); window.scrollTo(0, 0); }
+    var cta = el("button", { class: "btn hm-cta", type: "button", text: "🏋️ ابدأ تمرينك" }); cta.addEventListener("click", function () { go("videos"); }); body.appendChild(cta);
+    var wCard = el("div", { class: "hm-card" }, [el("small", { text: "آخر وزن" }), el("b", { class: "hm-big", text: "…" }), el("small", { class: "hm-sub", text: "" })]);
+    var dl = profile.subscription_end_date ? Math.round((toDate(profile.subscription_end_date) - todayMid()) / DAY_MS) : null;
+    var dCard = el("div", { class: "hm-card" }, [el("small", { text: "اشتراكك" }), el("b", { class: "hm-big", text: dl == null ? "—" : dl > 0 ? dl + " يوم" : "انتهى" }), el("small", { class: "hm-sub", text: dl != null && dl > 0 ? "باقي على التجديد" : "" })]);
+    tiles.appendChild(wCard); tiles.appendChild(dCard);
+    var k = profile.target_kcal, p = profile.target_protein, c = profile.target_carb, f = profile.target_fat;
+    if (k != null) {
+      var mc = el("div", { class: "hm-card hm-macros" }), left = el("div", null, [el("small", { text: "هدفك اليومي" }), el("b", { class: "hm-big", text: fmt(k) + " سعر" })]);
+      var lg = el("div", { class: "hm-leg" });
+      [["بروتين", p, "#ff4e2c"], ["كارب", c, "#22d3ee"], ["دهون", f, "#facc15"]].forEach(function (m) { if (m[1] != null) lg.appendChild(el("span", { style: "--c:" + m[2], text: m[0] + " " + fmt(m[1]) + " جم" })); });
+      left.appendChild(lg); mc.appendChild(left);
+      var dn = (p != null && c != null && f != null) ? rgDonut(Number(p), Number(c), Number(f), k) : null; if (dn) mc.appendChild(dn);
+      tiles.appendChild(mc);
+    }
+    body.appendChild(tiles);
+    var qa = el("div", { class: "hm-actions" });
+    [["food", "أكلي"], ["kitchen", "مطبخ روك"], ["progress", "تطوري"], ["inbody", "InBody"], ["supps", "المكملات"], ["plans", "أنظمتي"]].forEach(function (a) {
+      var b = el("button", { type: "button", class: "hm-act" }, [el("span", { text: RG_ICONS[a[0]] }), el("b", { text: a[1] })]); b.addEventListener("click", function () { go(a[0]); }); qa.appendChild(b); });
+    body.appendChild(qa);
+    sb.from("measurements").select("weight,week_date").eq("client_id", profile.id).order("week_date", { ascending: false }).then(function (r) {
+      if (!r.error && r.data) r.data = r.data.filter(function (x) { return x.weight != null; }).sort(function (a, b) { return a.week_date < b.week_date ? 1 : -1; }).slice(0, 2);
+      if (r.error || !r.data || !r.data.length) { wCard.children[1].textContent = "—"; wCard.children[2].textContent = "لسه مفيش قياسات"; return; }
+      wCard.children[1].textContent = fmt(r.data[0].weight) + " كجم";
+      if (r.data.length > 1) { var d = Number(r.data[0].weight) - Number(r.data[1].weight); wCard.children[2].textContent = (d > 0 ? "+" : d < 0 ? "−" : "") + fmt(Math.round(Math.abs(d) * 10) / 10) + " كجم عن القياس اللي قبله"; }
+    });
+  }
+  function rgLayout() {
+    if (!profile || profile.is_admin) return;
+    document.body.classList.add("rg-client");
+    var h = document.querySelector("header"); if (h) document.documentElement.style.setProperty("--hdr", h.offsetHeight + "px");
+  }
+  /* ===== دلع العميل: ترحيب + سلسلة أيام + شارات + كونفيتي (محلي بالكامل، مفيش أي تعديل على الداتا بيز) ===== */
+  var RG_QUOTES = ["NO EXCUSES. JUST REPS.", "BUILT, NOT BORN.", "EARN YOUR REST DAY.", "STRONGER THAN YESTERDAY.", "DISCIPLINE BEATS MOTIVATION.",
+    "ONE MORE REP.", "RISE. LIFT. REPEAT.", "THE ROCK DOESN'T QUIT.", "FUEL THE MACHINE.", "PROGRESS OVER PERFECTION.",
+    "SHOW UP. EVERY. SINGLE. DAY.", "SWEAT NOW. SHINE LATER.", "TRAIN LIKE IT MATTERS.", "PAIN IS TEMPORARY. PRIDE IS FOREVER."];
+  var RG_BADGES = [
+    [3, "🥉", "٣ أيام متتالية", "3-day streak"], [7, "🥈", "أسبوع كامل", "One full week"],
+    [14, "🥇", "أسبوعين من الالتزام", "Two weeks strong"], [30, "🏆", "شهر من الالتزام", "One month strong"],
+    [60, "💎", "شهرين من الالتزام", "Two months strong"], [100, "👑", "١٠٠ يوم", "100 days"]
+  ];
+  function rgCairoHour() {
+    try { return parseInt(new Intl.DateTimeFormat("en-GB", { hour: "numeric", hour12: false, timeZone: "Africa/Cairo" }).format(new Date()), 10) % 24; }
+    catch (e) { return new Date().getHours(); }
+  }
+  function rgStore(k, v) {
+    try { if (v === undefined) return JSON.parse(localStorage.getItem(k) || "null"); localStorage.setItem(k, JSON.stringify(v)); } catch (e) { return null; }
+  }
+  function rgConfetti() {
+    try {
+      if (window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+      var cv = document.createElement("canvas"); cv.className = "rg-confetti";
+      cv.width = innerWidth; cv.height = innerHeight; document.body.appendChild(cv);
+      var cx = cv.getContext("2d"), cols = ["#ff4e2c", "#e3b341", "#22b8cf", "#f2efe9", "#ff8c42"], ps = [], i;
+      for (i = 0; i < 90; i++) ps.push({ x: innerWidth / 2 + (Math.random() - .5) * 120, y: innerHeight * .55, vx: (Math.random() - .5) * 11, vy: -Math.random() * 13 - 4,
+        s: 5 + Math.random() * 6, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: cols[i % cols.length] });
+      var t0 = Date.now();
+      (function tick() {
+        var age = Date.now() - t0; cx.clearRect(0, 0, cv.width, cv.height);
+        ps.forEach(function (p) { p.vy += .35; p.x += p.vx; p.y += p.vy; p.r += p.vr; cx.save(); cx.translate(p.x, p.y); cx.rotate(p.r);
+          cx.globalAlpha = Math.max(0, 1 - age / 2200); cx.fillStyle = p.c; cx.fillRect(-p.s / 2, -p.s / 3, p.s, p.s / 1.6); cx.restore(); });
+        if (age < 2200) requestAnimationFrame(tick); else cv.remove();
+      })();
+    } catch (e) {}
+  }
+  function rgDelight() {
+    if (!profile || profile.is_admin) return;
+    rgLayout();
+    var old = document.getElementById("rgGreet"); if (old) old.remove();
+    var first = String(profile.full_name || profile.username || "").trim().split(/\s+/)[0];
+    var h = rgCairoHour(), hi = (h >= 5 && h < 12) ? "صباح الخير" : "مساء الخير";
+    var newBadge = null, st = { count: 0, badges: [] };
+    var q = RG_QUOTES[Math.floor(todayMid().getTime() / DAY_MS) % RG_QUOTES.length];
+    var box = el("div", { class: "rg-greet", id: "rgGreet" }), chips = el("div", { class: "rg-chips" });
+    var hh = el("h2", { text: hi + " يا " }); hh.appendChild(el("span", { class: "rg-name", text: first })); box.appendChild(hh);
+    box.appendChild(el("p", { class: "rg-quote", text: q }));
+    if (chips.children.length) box.appendChild(chips);
+    var sb2 = $("subBanner"); sb2.parentNode.insertBefore(box, sb2);
+    if (newBadge) setTimeout(function () { rgConfetti(); toast(newBadge[1] + " إنجاز جديد: " + newBadge[2] + " · " + newBadge[3]); }, 700);
+  }
 
   /* ---------- boot ---------- */
   function boot() {
@@ -1239,20 +1431,22 @@
           $("phoneModal").hidden = false;
         } else {
           renderSubscriptionBanner();
+          rgDelight();
           buildTabs();
         }
       });
     }).catch(fail);
   }
   /* ---------- tabs ---------- */
-  var CLIENT_TABS = [["videos", "فيديوهاتي"], ["plans", "أنظمتي"], ["progress", "تطوري"], ["inbody", "InBody"], ["food", "أكلي"], ["kitchen", "مطبخ روك · Rock Kitchen"], ["supps", "المكملات"], ["payments", "مدفوعاتي"], ["history", "تاريخي مع روك جيم"]];
-  var ALL_PANELS = ["videos", "plans", "progress", "inbody", "food", "kitchen", "supps", "payments", "history", "daily", "today", "admin", "expired"];
+  var CLIENT_TABS = [["home", "الرئيسية"], ["videos", "فيديوهاتي"], ["plans", "أنظمتي"], ["progress", "تطوري"], ["inbody", "InBody"], ["food", "أكلي"], ["kitchen", "مطبخ روك · Rock Kitchen"], ["supps", "المكملات"], ["payments", "مدفوعاتي"], ["history", "تاريخي مع روك جيم"]];
+  var ALL_PANELS = ["home", "videos", "plans", "progress", "inbody", "food", "kitchen", "supps", "payments", "history", "daily", "today", "admin", "expired"];
   function buildTabs() {
     startNotifications();
     var bar = $("tabsBar"); clear(bar);
     var list = profile.is_admin ? [["daily", "المتابعة اليومية (واتساب)"], ["today", "المراجعة الأسبوعية"], ["admin", "لوحة الكابتن"], ["expired", "اشتراكات منتهية"]] : CLIENT_TABS;
     list.forEach(function (t, i) {
-      var b = el("button", { class: "tab", role: "tab", "aria-selected": i === 0 ? "true" : "false", "data-k": t[0], text: t[1] });
+      var b = el("button", { class: "tab", role: "tab", "aria-selected": i === 0 ? "true" : "false", "data-k": t[0] });
+      if (!profile.is_admin) { b.appendChild(el("span", { class: "ti", text: RG_ICONS[t[0]] || "•" })); b.appendChild(el("span", { class: "tl", text: t[1] })); } else b.textContent = t[1];
       b.addEventListener("click", function () { selectTab(t[0]); });
       bar.appendChild(b);
     });
@@ -1262,12 +1456,13 @@
     [].forEach.call($("tabsBar").children, function (b) { b.setAttribute("aria-selected", b.getAttribute("data-k") === k ? "true" : "false"); });
     ALL_PANELS.forEach(function (n) { $("p-" + n).hidden = n !== k; });
     if (k === "daily") loadDailyFollowup();
-    else if (k === "today") loadTodayBoard();
+    else if (k === "today") { loadTodayBoard(); rgLoadWeekly(); }
     else if (k === "admin") loadClients();
     else if (k === "expired") loadExpiredClients();
     else loadClientData(k);
   }
 
+  if ("serviceWorker" in navigator && /^https?:/.test(location.protocol) && !DEMO_MODE) { window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); }); }
   /* ---------- boot (runs after CLIENT_TABS/ALL_PANELS/buildTabs/selectTab are defined) ---------- */
   if (DEMO_MODE) initDemoMode();
   else if (configured) boot();
@@ -1275,6 +1470,7 @@
   /* ================= CLIENT VIEWS ================= */
   function loadClientData(k) {
     var id = profile.id;
+    if (k === "home") return renderHome();
     if (k === "videos") {
       showLoading("videosBody");
       Promise.all([
@@ -1420,6 +1616,50 @@
     body.appendChild(box);
   }
 
+  /* ===== لوحة تطوري (Insights): رسومات بالتاريخ الحقيقي + مدى زمني + متوسط وأعلى وأقل ===== */
+  function rgInsightCard(rows, key, title, unit, color) {
+    var all = rows.filter(function (r) { return r[key] != null && r.week_date; }).map(function (r) { return { d: toDate(r.week_date), v: Number(r[key]) }; });
+    if (!all.length) return null;
+    var card = el("div", { class: "ins-card" }), pills = el("div", { class: "ins-pills" }), host = el("div", { class: "ins-host" }), meta = el("div", { class: "ins-meta" });
+    var ranges = [[30, "شهر"], [90, "3 شهور"], [180, "6 شهور"], [0, "الكل"]], cur = all.length > 3 ? 90 : 0;
+    function paint() {
+      var from = cur ? todayMid().getTime() - cur * DAY_MS : 0;
+      var pts = all.filter(function (p) { return p.d.getTime() >= from; });
+      if (!pts.length) pts = all.slice(-1);
+      clear(host); clear(meta);
+      var W = 520, H = 210, L = 38, R = 14, T = 14, B = 26, NS = "http://www.w3.org/2000/svg";
+      var vs = pts.map(function (p) { return p.v; }), mn = Math.min.apply(null, vs), mx = Math.max.apply(null, vs), pad = (mx - mn) * .2 || 1;
+      mn -= pad; mx += pad;
+      var t0 = pts[0].d.getTime(), t1 = pts[pts.length - 1].d.getTime(), span = (t1 - t0) || 1;
+      function X(t) { return pts.length === 1 ? (L + W - R) / 2 : L + (t - t0) / span * (W - L - R); }
+      function Y(v) { return T + (1 - (v - mn) / (mx - mn)) * (H - T - B); }
+      function mk(tag, a, txt) { var n = document.createElementNS(NS, tag); for (var k in a) n.setAttribute(k, a[k]); if (txt != null) n.textContent = txt; return n; }
+      var svg = mk("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": title }), i;
+      for (i = 0; i < 4; i++) { var gv = mn + (mx - mn) * i / 3, gy = Y(gv);
+        svg.appendChild(mk("line", { x1: L, x2: W - R, y1: gy, y2: gy, stroke: "#2a2a2e", "stroke-width": 1 }));
+        svg.appendChild(mk("text", { x: L - 6, y: gy + 4, "text-anchor": "end", fill: "#9a9aa2", "font-size": 11 }, fmt(Math.round(gv * 10) / 10))); }
+      var avg = vs.reduce(function (a, b) { return a + b; }, 0) / vs.length;
+      svg.appendChild(mk("line", { x1: L, x2: W - R, y1: Y(avg), y2: Y(avg), stroke: "#e3b341", "stroke-dasharray": "4 4", "stroke-width": 1 }));
+      var d = pts.map(function (p, j) { return (j ? "L" : "M") + X(p.d.getTime()).toFixed(1) + " " + Y(p.v).toFixed(1); }).join(" ");
+      if (pts.length > 1) {
+        svg.appendChild(mk("path", { d: d + " L" + X(t1).toFixed(1) + " " + (H - B) + " L" + X(t0).toFixed(1) + " " + (H - B) + " Z", fill: color, opacity: .12 }));
+        svg.appendChild(mk("path", { d: d, fill: "none", stroke: color, "stroke-width": 2.5, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+      }
+      pts.forEach(function (p, j) { var c = mk("circle", { cx: X(p.d.getTime()), cy: Y(p.v), r: j === pts.length - 1 ? 5 : 3, fill: color });
+        c.appendChild(mk("title", {}, ymd(p.d) + " : " + fmt(p.v) + " " + unit)); svg.appendChild(c); });
+      [pts[0], pts[pts.length - 1]].forEach(function (p, j) { if (j && pts.length === 1) return;
+        svg.appendChild(mk("text", { x: Math.min(Math.max(X(p.d.getTime()), L + 20), W - R - 20), y: H - 8, "text-anchor": "middle", fill: "#9a9aa2", "font-size": 11 }, p.d.getDate() + "/" + (p.d.getMonth() + 1))); });
+      host.appendChild(svg);
+      var ch = pts[pts.length - 1].v - pts[0].v;
+      [["الحالي", fmt(pts[pts.length - 1].v) + " " + unit], ["التغيير", (ch > 0 ? "+" : ch < 0 ? "−" : "") + fmt(Math.abs(Math.round(ch * 10) / 10)) + " " + unit], ["المتوسط", fmt(Math.round(avg * 10) / 10)], ["أقل / أعلى", fmt(Math.min.apply(null, vs)) + " / " + fmt(Math.max.apply(null, vs))]]
+        .forEach(function (m) { meta.appendChild(el("div", null, [el("small", { text: m[0] }), el("b", { text: m[1] })])); });
+      Array.prototype.forEach.call(pills.children, function (b) { b.classList.toggle("on", Number(b.getAttribute("data-r")) === cur); });
+    }
+    ranges.forEach(function (r) { var b = el("button", { type: "button", "data-r": r[0], text: r[1] }); b.addEventListener("click", function () { cur = r[0]; paint(); }); pills.appendChild(b); });
+    card.appendChild(el("div", { class: "ins-head" }, [el("h3", { text: title }), pills])); card.appendChild(host); card.appendChild(meta);
+    paint(); return card;
+  }
+
   function renderProgress(rows) {
     var body = $("progressBody"); clear(body);
     var pts = rows.filter(function (r) { return r.weight != null; });
@@ -1447,10 +1687,9 @@
       body.appendChild(achvWrap);
     }
 
-    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 640 260"); svg.setAttribute("role", "img"); svg.setAttribute("aria-label", "رسم بياني للوزن");
-    drawChart(svg, pts.map(function (r) { return Number(r.weight); }));
-    body.appendChild(el("div", { class: "chart" }, [el("h3", { text: "الوزن كل أسبوع" }), svg]));
+    var grid = el("div", { class: "ins-grid" });
+    [rgInsightCard(rows, "weight", "الوزن", "كجم", "#ff4e2c"), rgInsightCard(rows, "waist", "محيط الوسط", "سم", "#22b8cf")].forEach(function (c) { if (c) grid.appendChild(c); });
+    body.appendChild(grid);
 
     if (profile.goal_weight != null && start !== Number(profile.goal_weight)) {
       var goal = Number(profile.goal_weight);
@@ -2906,6 +3145,29 @@
       renderInbody(r.data || []);
     }).catch(function (e) { console.error(e); softEmpty("inbodyBody", "التاب ده مش متاح دلوقتي. جرّب بعد شوية."); });
   }
+  function rgInbodyCharts(rows) {
+    var m = rows.map(function (x) { return { week_date: x.measured_on, w: x.weight_kg, f: x.body_fat_pct, mu: x.muscle_kg }; });
+    var g = el("div", { class: "ins-grid" });
+    [rgInsightCard(m.map(function (x) { return { week_date: x.week_date, v: x.f }; }).map(function (x) { return { week_date: x.week_date, f: x.v }; }), "f", "نسبة الدهون", "%", "#e3b341"),
+     rgInsightCard(m.map(function (x) { return { week_date: x.week_date, mu: x.mu }; }), "mu", "الكتلة العضلية", "كجم", "#22c55e"),
+     rgInsightCard(m.map(function (x) { return { week_date: x.week_date, w: x.w }; }), "w", "وزن InBody", "كجم", "#ff4e2c")].forEach(function (c) { if (c) g.appendChild(c); });
+    return g.children.length ? g : null;
+  }
+  function inbodyNumsForm(r) {
+    var f = el("div", { class: "ib-nums" }), ins = {};
+    [["weight_kg", "وزن كجم"], ["body_fat_pct", "دهون %"], ["muscle_kg", "عضلات كجم"]].forEach(function (c) {
+      var i = el("input", { type: "number", step: "0.1", min: "0", placeholder: c[1], "aria-label": c[1] }); if (r[c[0]] != null) i.value = r[c[0]]; ins[c[0]] = i; f.appendChild(i); });
+    var b = el("button", { class: "btn btn-sm", type: "button", text: "حفظ الأرقام" });
+    b.addEventListener("click", function () {
+      var u = {}, bad = false;
+      Object.keys(ins).forEach(function (k) { var v = ins[k].value.trim(); if (v === "") { u[k] = null; return; } v = Number(v.replace(",", ".")); if (!isFinite(v) || v <= 0) bad = true; u[k] = v; });
+      if (bad) return toast("الأرقام لازم تبقى أكبر من صفر", true);
+      if (u.body_fat_pct != null && u.body_fat_pct >= 100) return toast("نسبة الدهون مش مظبوطة", true);
+      b.disabled = true;
+      sb.from("inbody_scans").update(u).eq("id", r.id).then(function (res) { b.disabled = false; if (res.error) return fail(res.error); toast("اتحفظت الأرقام"); loadAdminInbody(r.client_id); });
+    });
+    f.appendChild(b); return f;
+  }
   function inbodyCard(r, withDelete) {
     var card = el("div", { class: "photo-card ib-card" });
     var img = el("img", { alt: "InBody " + fmtDateY(r.measured_on) });
@@ -2914,6 +3176,8 @@
       if (!s.error && s.data) { img.src = s.data.signedUrl; openA.href = s.data.signedUrl; openA.hidden = false; }
     });
     var kids = [el("b", { text: fmtDateY(r.measured_on) }), openA];
+    var nl = [r.weight_kg != null ? fmt(r.weight_kg) + " كجم" : null, r.body_fat_pct != null ? "دهون " + fmt(r.body_fat_pct) + "%" : null, r.muscle_kg != null ? "عضلات " + fmt(r.muscle_kg) + " كجم" : null].filter(Boolean);
+    if (nl.length) kids.push(el("small", { class: "ib-line", text: nl.join(" · ") }));
     if (withDelete) {
       var del = el("button", { class: "del", type: "button", text: "حذف" });
       del.addEventListener("click", function () {
@@ -2926,10 +3190,12 @@
     }
     card.appendChild(img);
     card.appendChild(el("div", { class: "cap" }, kids));
+    if (!withDelete && profile && profile.is_admin) card.appendChild(inbodyNumsForm(r));
     return card;
   }
   function renderInbody(rows) {
     var body = $("inbodyBody"); clear(body);
+    var rgc = rgInbodyCharts(rows || []); if (rgc) body.appendChild(rgc);
     var up = el("div", { class: "ib-up" });
     var inp = el("input", { type: "file", accept: "image/*", "aria-label": "صورة InBody" });
     var dateIn = el("input", { type: "date", max: todayStr(), "aria-label": "تاريخ القياس" }); dateIn.value = todayStr();
@@ -2966,6 +3232,7 @@
       clear(b);
       if (r.error) { b.appendChild(emptyBox("جدول InBody مش موجود لسه. شغّل ملف SQL الأول.")); return; }
       if (!(r.data || []).length) { b.appendChild(emptyBox("العميل ده لسه مرفعش InBody.")); return; }
+      var rgc = rgInbodyCharts(r.data); if (rgc) b.appendChild(rgc);
       var grid = el("div", { class: "photo-grid" });
       r.data.forEach(function (x) { grid.appendChild(inbodyCard(x, false)); });
       b.appendChild(grid);
@@ -4070,6 +4337,102 @@
   /* ---------- weekly review board (coach) ---------- */
   var REVIEW_DUE_DAYS = 7;      /* لو فات على آخر مراجعة أكتر من كده، محتاج مراجعة جديدة */
   var SUB_SOON_DAYS = 7;        /* هيبان في "قرب ينتهي" لو باقي على انتهاء الاشتراك أقل من كده */
+  /* ===== مراجعة الأسبوع بنظرة واحدة + اقتراحات تعديل الخطة (الكابتن بس بيوافق، المنصة مش بتغيّر حاجة لوحدها) ===== */
+  var WK_REF = {
+    loss: "Helms 2014 (J Int Soc Sports Nutr 11:20) · Garthe 2011 (IJSNEM 21:97)",
+    bulk: "Iraki 2019 (Sports 7:154) · Helms 2014 (JISSN 11:20)",
+    maintain: "Helms 2014 (JISSN 11:20)"
+  };
+  function rgRate(meas) {
+    var cut = todayMid().getTime() - 28 * DAY_MS, pts = meas.filter(function (m) { return m.weight != null && toDate(m.week_date).getTime() >= cut; })
+      .map(function (m) { return { t: toDate(m.week_date).getTime() / DAY_MS, w: Number(m.weight) }; });
+    if (pts.length < 3 || pts[pts.length - 1].t - pts[0].t < 14) return null;
+    var n = pts.length, mt = 0, mw = 0, i; pts.forEach(function (p) { mt += p.t; mw += p.w; }); mt /= n; mw /= n;
+    var num = 0, den = 0; pts.forEach(function (p) { num += (p.t - mt) * (p.w - mw); den += (p.t - mt) * (p.t - mt); });
+    if (!den) return null;
+    return { pct: num / den * 7 / mw * 100, kg: num / den * 7, n: n, days: Math.round(pts[n - 1].t - pts[0].t) };
+  }
+  /* القاعدة: نطاق المعدل الأسبوعي (% من وزن الجسم) حسب الهدف. خارج النطاق = اقتراح تعديل ±150 سعر بيتاخد من/يتضاف على الكارب */
+  function rgAdvise(goal, rate, kcal, carb) {
+    var g = goal === "bulk" ? "bulk" : goal === "maintain" ? "maintain" : "loss", ok = null, d = 0, why = "";
+    var r = rate.pct;
+    if (g === "loss") {
+      if (r > -0.25) { d = -150; why = r > 0.1 ? "الوزن بيزيد رغم هدف النزول" : "النزول أبطأ من 0.25% في الأسبوع"; }
+      else if (r < -1.25) { d = 150; why = "النزول أسرع من 1.25% في الأسبوع (خطر فقد عضل)"; }
+      else ok = "المعدل ضمن النطاق المناسب (0.25–1.25% نزول أسبوعيًا)";
+    } else if (g === "bulk") {
+      if (r < 0.1) { d = 150; why = "الزيادة أقل من 0.1% في الأسبوع"; }
+      else if (r > 0.75) { d = -150; why = "الزيادة أسرع من 0.75% في الأسبوع (دهون زيادة)"; }
+      else ok = "المعدل ضمن النطاق المناسب (0.1–0.75% زيادة أسبوعيًا)";
+    } else {
+      if (r > 0.5) { d = -150; why = "الوزن بيزيد أكتر من 0.5% في الأسبوع"; }
+      else if (r < -0.5) { d = 150; why = "الوزن بينزل أكتر من 0.5% في الأسبوع"; }
+      else ok = "الوزن ثابت ضمن النطاق";
+    }
+    if (!d) return { ok: ok, ref: WK_REF[g] };
+    if (kcal == null) return { warn: why + " — اكتب سعرات العميل الأول في الأهداف.", ref: WK_REF[g] };
+    var nk = Math.round((kcal + d) / 10) * 10;
+    if (nk < 1200) return { warn: why + " — لكن التخفيض هيوصل لأقل من 1200 سعر، راجع الخطة يدويًا.", ref: WK_REF[g] };
+    return { why: why, dK: nk - kcal, kcal: nk, carb: carb != null ? Math.max(0, Math.round(carb + (nk - kcal) / 4)) : null, ref: WK_REF[g] };
+  }
+  var WK_GOAL = { loss: "خسارة وزن", cut: "تنشيف", bulk: "تضخيم", maintain: "ثبات" };
+  function rgLoadWeekly() {
+    var host = $("wkSuggest"); if (!host) return; clear(host); showLoading("wkSuggest");
+    var since = ymd(new Date(todayMid().getTime() - 60 * DAY_MS));
+    Promise.all([
+      sb.from("profiles").select("id,username,full_name,goal_type,target_kcal,target_carb,subscription_end_date").eq("is_admin", false),
+      sb.from("measurements").select("client_id,week_date,weight").gte("week_date", since).order("week_date"),
+      sb.from("reviews").select("client_id,created_at").order("created_at", { ascending: false })
+    ]).then(function (rs) {
+      clear(host); if (rs[0].error || rs[1].error) return host.appendChild(emptyBox("تعذّر تحميل ملخص الأسبوع."));
+      var meas = {}, rev = {}; (rs[1].data || []).forEach(function (m) { (meas[m.client_id] = meas[m.client_id] || []).push(m); });
+      (rs[2].data || []).forEach(function (r) { if (!rev[r.client_id]) rev[r.client_id] = r.created_at; });
+      var rows = (rs[0].data || []).map(function (c) {
+        var ms = meas[c.id] || [], last = ms.length ? ms[ms.length - 1] : null, rate = rgRate(ms);
+        return { c: c, last: last, rate: rate, since: last ? Math.round((todayMid() - toDate(last.week_date)) / DAY_MS) : null, adv: rate ? rgAdvise(c.goal_type, rate, c.target_kcal, c.target_carb) : null,
+          revDays: rev[c.id] ? Math.round((Date.now() - new Date(rev[c.id]).getTime()) / DAY_MS) : null };
+      });
+      var rank = function (x) { return x.adv && x.adv.dK ? 0 : x.adv && x.adv.warn ? 1 : x.since == null || x.since > 10 ? 2 : x.adv ? 4 : 3; };
+      rows.sort(function (a, b) { return rank(a) - rank(b); });
+      host.appendChild(el("h3", { text: "📊 ملخص العملاء بنظرة واحدة" }));
+      host.appendChild(el("p", { class: "sub", text: "المعدل = ميل خط الوزن آخر 4 أسابيع (محتاج 3 قياسات على الأقل على مدى أسبوعين). الاقتراحات مجرد توصية ومش بتتنفذ غير لما توافق." }));
+      rows.forEach(function (x) {
+        var c = x.c, card = el("div", { class: "wk-row" }), st, cls = "";
+        if (x.adv && x.adv.dK) { st = "⚠️ محتاج تعديل"; cls = "warn"; } else if (x.adv && x.adv.warn) { st = "⚠️ راجع يدويًا"; cls = "warn"; }
+        else if (x.since == null) { st = "⏳ مفيش قياسات"; } else if (x.since > 10) { st = "🔕 مفيش قياس من " + x.since + " يوم"; cls = "warn"; }
+        else if (x.adv) { st = "✅ على المسار"; cls = "ok"; } else { st = "⏳ بيانات قليلة"; }
+        var info = [WK_GOAL[c.goal_type] || "—", x.last ? "آخر وزن " + fmt(x.last.weight) + " كجم (من " + x.since + " يوم)" : null,
+          x.rate ? "المعدل " + (x.rate.pct > 0 ? "+" : x.rate.pct < 0 ? "−" : "") + fmt(Math.abs(Math.round(x.rate.pct * 100) / 100)) + "% أسبوعيًا (" + x.rate.n + " قياسات)" : null,
+          x.revDays != null ? "آخر مراجعة من " + x.revDays + " يوم" : null].filter(Boolean).join(" · ");
+        card.appendChild(el("div", { class: "wk-head" }, [el("b", { text: c.full_name || c.username }), el("span", { class: "wk-chip " + cls, text: st })]));
+        card.appendChild(el("small", { text: info }));
+        if (x.adv) {
+          if (x.adv.ok) card.appendChild(el("p", { class: "wk-note", text: x.adv.ok }));
+          if (x.adv.warn) card.appendChild(el("p", { class: "wk-note", text: x.adv.warn }));
+          if (x.adv.dK) {
+            var key = "rg_wk_" + c.id + "_" + x.last.week_date;
+            if (!rgStore(key)) {
+              var box = el("div", { class: "wk-sug" });
+              box.appendChild(el("b", { text: "اقتراح: " + (x.adv.dK > 0 ? "زوّد " : "قلّل ") + Math.abs(x.adv.dK) + " سعر → " + x.adv.kcal + " سعر/يوم" + (x.adv.carb != null ? " (الكارب " + x.adv.carb + " جم، والبروتين والدهون زي ما هم)" : "") }));
+              box.appendChild(el("p", { text: "السبب: " + x.adv.why + ". اتأكد الأول إن العميل ملتزم بالخطة وإن الأوزان مظبوطة قبل ما تعدّل." }));
+              box.appendChild(el("small", { text: "المرجع: " + x.adv.ref }));
+              var ok = el("button", { class: "btn btn-sm", type: "button", text: "أوافق وأعدّل" }), no = el("button", { class: "btn btn-sm ghost", type: "button", text: "تجاهل" });
+              ok.addEventListener("click", function () {
+                if (!confirm("تعدّل سعرات " + (c.full_name || c.username) + " من " + c.target_kcal + " إلى " + x.adv.kcal + "؟")) return;
+                var u = { target_kcal: x.adv.kcal }; if (x.adv.carb != null) u.target_carb = x.adv.carb; ok.disabled = true;
+                sb.from("profiles").update(u).eq("id", c.id).then(function (r) { if (r.error) { ok.disabled = false; return fail(r.error); } toast("اتعدّلت الأهداف. ابنِ الخطة من جديد لو محتاج"); rgLoadWeekly(); });
+              });
+              no.addEventListener("click", function () { rgStore(key, 1); rgLoadWeekly(); });
+              box.appendChild(el("div", { class: "wk-btns" }, [ok, no])); card.appendChild(box);
+            }
+          }
+        }
+        host.appendChild(card);
+      });
+      if (!rows.length) host.appendChild(emptyBox("مفيش عملاء لسه."));
+    }, fail);
+  }
+
   function loadTodayBoard() {
     showLoading("todayBody");
     Promise.all([
